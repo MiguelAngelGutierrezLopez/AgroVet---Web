@@ -5,48 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agrovet Yacuanquer - POS</title>
     <style>
+        /* ===== VARIABLES DE COLOR ===== */
+        :root {
+            --teal: #1F8A86;
+            --terracota: #C08A67;
+            --mostaza: #D9C357;
+            --turquesa: #3FA6A0;
+            --celeste-fondo: #E3F0F3;
+            --blanco-hueso: #F7F7F4;
+            --verde-oliva: #B7C3A1;
+            --rojo-rosado: #D44A5E;
+            --gris-oscuro: #2c3e50;
+            --gris-medio: #7f8c8d;
+            --gris-claro: #ecf0f1;
+            --exito: #27ae60;
+            --error: #e74c3c;
+            --advertencia: #f39c12;
+            --info: #3498db;
+        }
+        
+        /* ===== RESET Y ESTILOS BASE ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background-color: #F7F7F4;
-            color: #2c3e50;
+            background-color: var(--blanco-hueso);
+            color: var(--gris-oscuro);
             display: flex;
             min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
         }
         
         /* ===== SIDEBAR ===== */
         .sidebar {
             width: 250px;
-            background: #1F8A86;
+            background: var(--teal);
             color: white;
             padding: 20px 0;
             position: fixed;
             height: 100vh;
+            box-shadow: 3px 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
             transition: all 0.3s ease;
         }
         
         .logo-container {
             text-align: center;
-            padding: 20px 15px;
+            padding: 15px 20px;
             border-bottom: 2px solid rgba(255,255,255,0.1);
             margin-bottom: 20px;
         }
         
         .logo {
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: bold;
         }
         
         .logo-agro { color: white; }
-        .logo-vet { color: #D9C357; }
+        .logo-vet { color: var(--mostaza); }
         .slogan {
-            font-size: 11px;
-            opacity: 0.8;
+            font-size: 10px;
+            opacity: 0.7;
             margin-top: 5px;
         }
         
@@ -62,80 +86,139 @@
             color: white;
             text-decoration: none;
             border-radius: 8px;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             transition: all 0.3s;
-            background: rgba(255,255,255,0.05);
         }
         
         .nav-item:hover {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
         }
         
         .nav-item.active {
-            background: rgba(255,255,255,0.2);
-            border-left: 4px solid #D9C357;
+            background: rgba(255,255,255,0.15);
+            border-left: 3px solid var(--mostaza);
         }
         
-        .nav-icon { font-size: 18px; width: 24px; }
-        .nav-text { font-size: 15px; font-weight: 500; }
+        .nav-icon { width: 24px; font-size: 18px; }
+        .nav-text { font-size: 14px; font-weight: 500; }
         
         /* ===== CONTENIDO PRINCIPAL ===== */
         .main-content {
             flex: 1;
             margin-left: 250px;
-            padding: 30px;
+            padding: 25px;
             min-height: 100vh;
-            transition: all 0.3s ease;
         }
         
         /* ===== HEADER ===== */
-        .header {
+        .top-header {
             background: white;
             border-radius: 12px;
-            padding: 20px 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--turquesa);
         }
         
-        .header h1 {
-            color: #1F8A86;
-            font-size: 28px;
+        .top-header h1 {
+            color: var(--teal);
+            font-size: 24px;
             margin-bottom: 5px;
         }
         
-        .header p {
-            color: #7f8c8d;
-            font-size: 14px;
+        .top-header p {
+            color: var(--gris-medio);
+            font-size: 13px;
         }
         
-        /* ===== CONTENEDORES PRINCIPALES ===== */
+        /* ===== SECCIONES ===== */
         .section {
             background: white;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         
         .section-title {
             font-size: 18px;
-            color: #1F8A86;
+            color: var(--teal);
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
+        /* ===== BOTONES ===== */
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--teal) 0%, #1a7572 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(31, 138, 134, 0.2);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--exito) 0%, #219653 100%);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--advertencia) 0%, #d68910 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: var(--gris-claro);
+            color: var(--gris-oscuro);
+        }
+        
+        /* ===== PLACEHOLDER ===== */
         .placeholder {
             text-align: center;
             padding: 60px 20px;
-            color: #7f8c8d;
-            background: #F7F7F4;
+            color: var(--gris-medio);
+            background: var(--blanco-hueso);
             border-radius: 8px;
-            font-style: italic;
+            border: 1px dashed var(--gris-claro);
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- SIDEBAR -->
+    <!-- Sidebar y contenido igual que Commit 1, con las clases actualizadas -->
     <div class="sidebar">
         <div class="logo-container">
             <div class="logo">
@@ -177,38 +260,25 @@
         </nav>
     </div>
     
-    <!-- CONTENIDO PRINCIPAL -->
     <div class="main-content">
-        <div class="header">
+        <div class="top-header">
             <h1><i class="fas fa-warehouse"></i> Inventario</h1>
             <p>Gestión de stock, productos y movimientos</p>
         </div>
         
-        <!-- SECCIÓN DE ESTADÍSTICAS -->
         <div class="section">
             <h2 class="section-title"><i class="fas fa-chart-pie"></i> Resumen del Inventario</h2>
-            <div class="placeholder">
-                <i class="fas fa-chart-line" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
-                <p>Gráficos y estadísticas se mostrarán aquí</p>
-            </div>
+            <div class="placeholder">Gráficos y estadísticas se mostrarán aquí</div>
         </div>
         
-        <!-- SECCIÓN DE FILTROS -->
         <div class="section">
             <h2 class="section-title"><i class="fas fa-filter"></i> Filtros de Búsqueda</h2>
-            <div class="placeholder">
-                <i class="fas fa-search" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
-                <p>Controles de filtrado y búsqueda</p>
-            </div>
+            <div class="placeholder">Controles de filtrado y búsqueda</div>
         </div>
         
-        <!-- TABLA DE INVENTARIO -->
         <div class="section">
             <h2 class="section-title"><i class="fas fa-list-alt"></i> Listado de Productos</h2>
-            <div class="placeholder">
-                <i class="fas fa-table" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
-                <p>Tabla de inventario se mostrará aquí</p>
-            </div>
+            <div class="placeholder">Tabla de inventario se mostrará aquí</div>
         </div>
     </div>
 </body>
