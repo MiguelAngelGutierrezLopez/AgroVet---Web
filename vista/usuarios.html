@@ -70,6 +70,7 @@
         .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--gris-medio); }
         .filter-container { display: flex; gap: 10px; flex-wrap: wrap; }
         .filter-select { padding: 12px 15px; border: 2px solid var(--gris-claro); border-radius: 8px; background: white; font-size: 14px; min-width: 180px; }
+        .export-buttons { display: flex; gap: 10px; margin-left: auto; }
 
         .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
         .btn-primary { background: linear-gradient(135deg, var(--teal) 0%, #1a7572 100%); color: white; }
@@ -77,9 +78,9 @@
         .btn-danger { background: var(--error); color: white; }
         .btn-info { background: var(--info); color: white; }
         .btn-warning { background: var(--advertencia); color: white; }
-        .btn-sm { padding: 8px 16px; font-size: 12px; }
         .btn-success { background: var(--exito); color: white; }
-
+        .btn-sm { padding: 8px 16px; font-size: 12px; }
+        
         .table-container { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto; display: none; }
         .table-container.active { display: block; }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
@@ -169,11 +170,29 @@
         .tab-historial-btn { padding: 12px 24px; background: none; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--gris-medio); display: flex; align-items: center; gap: 8px; }
         .tab-historial-btn.active { background: var(--teal); color: white; }
 
+        .reporte-container { background: white; border-radius: 12px; padding: 25px; margin-top: 20px; display: none; }
+        .reporte-container.active { display: block; }
+        .reporte-periodo { display: flex; gap: 15px; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap; }
+        .reporte-periodo .form-group { margin-bottom: 0; }
+        .reporte-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .reporte-stat-card { background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .reporte-stat-value { font-size: 24px; font-weight: bold; color: var(--teal); }
+        .reporte-stat-label { font-size: 12px; color: var(--gris-medio); margin-top: 5px; }
+
         @media (max-width: 768px) {
             .top-header { flex-direction: column; gap: 20px; text-align: center; }
             .controls-container { flex-direction: column; align-items: stretch; }
             .search-container { min-width: 100%; }
             .form-row { grid-template-columns: 1fr; }
+            .export-buttons { margin-left: 0; justify-content: center; }
+        }
+        
+        @media print {
+            .sidebar, .controls-container, .tabs-container, .export-buttons, .btn, .pagination, .modal, .reporte-periodo .btn { display: none !important; }
+            .main-content { margin: 0 !important; padding: 0 !important; }
+            .table-container { box-shadow: none !important; }
+            body { background: white; }
+            .reporte-container { display: block !important; }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -238,23 +257,41 @@
         <div class="controls-container" id="clientesControls">
             <div class="search-container"><i class="fas fa-search search-icon"></i><input type="text" class="search-input" placeholder="Buscar clientes por nombre, cédula o teléfono..." id="searchClientes"></div>
             <div class="filter-container"><select class="filter-select" id="filterEstadoCliente"><option value="">Todos los estados</option><option value="activo">Activos</option><option value="moroso">Morosos</option></select><select class="filter-select" id="filterDeudaCliente"><option value="">Toda la deuda</option><option value="sin">Sin deuda</option><option value="pequena">Deuda pequeña</option><option value="grande">Deuda grande</option></select><select class="filter-select" id="filterOrdenCliente"><option value="normal">Orden normal</option><option value="nombre_asc">A - Z</option><option value="nombre_desc">Z - A</option></select></div>
+            <div class="export-buttons"><button class="btn btn-success" id="exportClientesCSV"><i class="fas fa-file-csv"></i> CSV</button><button class="btn btn-info" id="exportClientesJSON"><i class="fas fa-file-code"></i> JSON</button><button class="btn btn-secondary" id="printClientes"><i class="fas fa-print"></i> Imprimir</button></div>
             <button class="btn btn-primary" id="btnNuevoCliente"><i class="fas fa-user-plus"></i> Nuevo Cliente</button>
         </div>
         
         <div class="controls-container" id="proveedoresControls" style="display: none;">
             <div class="search-container"><i class="fas fa-search search-icon"></i><input type="text" class="search-input" placeholder="Buscar proveedores por nombre, empresa o teléfono..." id="searchProveedores"></div>
             <div class="filter-container"><select class="filter-select" id="filterTipoProveedor"><option value="">Todos los proveedores</option><option value="activo">Activos</option><option value="inactivo">Inactivos</option></select><select class="filter-select" id="filterOrdenProveedor"><option value="fecha_desc">Más recientes primero</option><option value="nombre_asc">Nombre A-Z</option></select></div>
+            <div class="export-buttons"><button class="btn btn-success" id="exportProveedoresCSV"><i class="fas fa-file-csv"></i> CSV</button><button class="btn btn-info" id="exportProveedoresJSON"><i class="fas fa-file-code"></i> JSON</button><button class="btn btn-secondary" id="printProveedores"><i class="fas fa-print"></i> Imprimir</button></div>
             <button class="btn btn-warning" id="btnNuevoProveedor"><i class="fas fa-truck-loading"></i> Nuevo Proveedor</button>
         </div>
         
         <div class="table-container active" id="tablaClientes">
-            <table class="clientes-table"><thead><tr><th>Cédula</th><th>Nombre</th><th>Contacto</th><th>Estado</th><th>Deuda</th><th>Acciones</th></tr></thead><tbody id="clientesBody"></tbody>}</table>
+            <table class="clientes-table"><thead><tr><th>Cédula</th><th>Nombre</th><th>Contacto</th><th>Estado</th><th>Deuda</th><th>Acciones</th></tr></thead><tbody id="clientesBody"></tbody>}这些
             <div class="pagination" id="paginationClientes"></div>
         </div>
         
         <div class="table-container" id="tablaProveedores">
-            <table class="proveedores-table"><thead><tr><th>Teléfono</th><th>Empresa</th><th>Proveedor</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="proveedoresBody"></tbody>}</table>
+            <table class="proveedores-table"><thead><tr><th>Teléfono</th><th>Empresa</th><th>Proveedor</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="proveedoresBody"></tbody>}这些
             <div class="pagination" id="paginationProveedores"></div>
+        </div>
+        
+        <div class="reporte-container" id="reporteContainer">
+            <h2 style="color: var(--teal); margin-bottom: 20px;"><i class="fas fa-chart-line"></i> Reportes Financieros</h2>
+            <div class="reporte-periodo">
+                <div class="form-group"><label class="form-label">Fecha Inicio</label><input type="date" class="form-control" id="reporteFechaInicio"></div>
+                <div class="form-group"><label class="form-label">Fecha Fin</label><input type="date" class="form-control" id="reporteFechaFin"></div>
+                <button class="btn btn-primary" id="btnGenerarReporte"><i class="fas fa-sync-alt"></i> Generar Reporte</button>
+                <button class="btn btn-success" id="exportReporteCSV"><i class="fas fa-file-csv"></i> Exportar CSV</button>
+                <button class="btn btn-secondary" id="printReporte"><i class="fas fa-print"></i> Imprimir</button>
+            </div>
+            <div class="reporte-stats" id="reporteStats" style="margin-bottom: 20px;"></div>
+            <div class="table-container" style="margin-top: 20px; padding: 0;">
+                <h3 style="margin-bottom: 15px;">Ventas del período</h3>
+                <table style="width: 100%;"><thead><tr><th>Fecha</th><th>Cliente</th><th>Total</th><th>Anticipo</th><th>Saldo</th></tr></thead><tbody id="reporteVentasBody"></tbody>}这些
+            </div>
         </div>
     </div>
 
@@ -342,6 +379,7 @@
         let creditoActualAbono = null;
         let elementoHistorial = null;
         let timeoutBusqueda = null;
+        let reportesActivo = false;
 
         const MOCK_CLIENTES = [
             { cedula: '123456789', nombre: 'Juan Pérez', telefono: '3001234567', correo: 'juan@email.com', direccion: 'Calle 1', deuda_total: 0, fecha_creacion: new Date().toISOString(), ventas: [], creditos: [] },
@@ -472,7 +510,7 @@
 
         function renderProveedores(proveedores) {
             const tbody = document.getElementById('proveedoresBody');
-            if (!proveedores.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px"><i class="fas fa-truck" style="font-size:48px;color:var(--gris-medio);margin-bottom:15px;display:block"></i><h3>No se encontraron proveedores</h3></tr>'; return; }
+            if (!proveedores.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px"><i class="fas fa-truck" style="font-size:48px;color:var(--gris-medio);margin-bottom:15px;display:block"></i><h3>No se encontraron proveedores</h3></table>'; return; }
             tbody.innerHTML = proveedores.map(p => `
                 <tr>
                     <td>${p.telefono}</td>
@@ -499,6 +537,7 @@
         function changePageProveedores(page) { if (page >= 1 && page <= totalPagesProveedores) { currentPageProveedores = page; aplicarFiltrosYOrdenProveedores(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
 
         function cambiarTab(tab) {
+            reportesActivo = false;
             tabActual = tab;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
@@ -506,8 +545,11 @@
             document.getElementById('proveedoresControls').style.display = tab === 'proveedores' ? 'flex' : 'none';
             document.getElementById('tablaClientes').classList.toggle('active', tab === 'clientes');
             document.getElementById('tablaProveedores').classList.toggle('active', tab === 'proveedores');
+            document.getElementById('reporteContainer').classList.remove('active');
+            document.getElementById('reporteContainer').style.display = 'none';
+            document.querySelector('.tabs-container').style.display = 'block';
             if (tab === 'clientes') aplicarFiltrosYOrdenClientes();
-            else aplicarFiltrosYOrdenProveedores();
+            else if (tab === 'proveedores') aplicarFiltrosYOrdenProveedores();
         }
 
         function abrirModalNuevoCliente() { clienteEditando = null; document.getElementById('modalClienteTitulo').innerText = 'Nuevo Cliente'; limpiarFormCliente(); document.getElementById('modalCliente').style.display = 'flex'; }
@@ -675,9 +717,151 @@
         }
 
         function confirmarEliminar(tipo, id, nombre) { elementoAEliminar = id; tipoElementoAEliminar = tipo; document.getElementById('confirmTitulo').innerText = `Eliminar ${tipo === 'cliente' ? 'Cliente' : 'Proveedor'}`; document.getElementById('confirmMensaje').innerHTML = `¿Eliminar <strong>${nombre}</strong>?`; document.getElementById('modalConfirm').style.display = 'flex'; }
-        function eliminarElemento() { if (tipoElementoAEliminar === 'cliente') { let clientes = JSON.parse(localStorage.getItem('clientes')); clientes = clientes.filter(c => c.cedula !== elementoAEliminar); localStorage.setItem('clientes', JSON.stringify(clientes)); cargarTodosClientes(); } else if (tipoElementoAEliminar === 'proveedor') { let proveedores = JSON.parse(localStorage.getItem('proveedores')); proveedores = proveedores.filter(p => p.telefono !== elementoAEliminar); localStorage.setItem('proveedores', JSON.stringify(proveedores)); cargarTodosProveedores(); } document.getElementById('modalConfirm').style.display = 'none'; elementoAEliminar = null; tipoElementoAEliminar = null; }
+        
+        function eliminarElemento() { 
+            if (tipoElementoAEliminar === 'cliente') { 
+                let clientes = JSON.parse(localStorage.getItem('clientes')); 
+                clientes = clientes.filter(c => c.cedula !== elementoAEliminar); 
+                localStorage.setItem('clientes', JSON.stringify(clientes)); 
+                cargarTodosClientes(); 
+            } else if (tipoElementoAEliminar === 'proveedor') { 
+                let proveedores = JSON.parse(localStorage.getItem('proveedores')); 
+                proveedores = proveedores.filter(p => p.telefono !== elementoAEliminar); 
+                localStorage.setItem('proveedores', JSON.stringify(proveedores)); 
+                cargarTodosProveedores(); 
+            } 
+            document.getElementById('modalConfirm').style.display = 'none'; 
+            elementoAEliminar = null; 
+            tipoElementoAEliminar = null; 
+        }
 
         function updateStats() { document.getElementById('totalClientes').innerText = todosClientes.length; document.getElementById('totalProveedores').innerText = todosProveedores.length; }
+
+        // Funciones de exportación
+        function exportToCSV(data, filename, columns) {
+            let csvContent = columns.join(',') + '\n';
+            data.forEach(row => {
+                const values = columns.map(col => {
+                    let value = row[col] !== undefined ? row[col] : '';
+                    if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) value = `"${value.replace(/"/g, '""')}"`;
+                    return value;
+                });
+                csvContent += values.join(',') + '\n';
+            });
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.setAttribute('download', `${filename}_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            alert(`Exportación completada: ${filename}`);
+        }
+
+        function exportToJSON(data, filename) {
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.setAttribute('download', `${filename}_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            alert(`Exportación completada: ${filename}`);
+        }
+
+        function exportarClientesCSV() { const { filtrados } = obtenerClientesFiltrados(); exportToCSV(filtrados, 'clientes', ['cedula', 'nombre', 'telefono', 'correo', 'deuda_total']); }
+        function exportarClientesJSON() { const { filtrados } = obtenerClientesFiltrados(); exportToJSON(filtrados, 'clientes'); }
+        function exportarProveedoresCSV() { const { filtrados } = obtenerProveedoresFiltrados(); exportToCSV(filtrados, 'proveedores', ['telefono', 'nombre_empresa', 'nombre_proveedor', 'correo', 'estado', 'producto']); }
+        function exportarProveedoresJSON() { const { filtrados } = obtenerProveedoresFiltrados(); exportToJSON(filtrados, 'proveedores'); }
+        
+        function imprimirTabla(tablaId, titulo) {
+            const tabla = document.getElementById(tablaId);
+            const clonTabla = tabla.cloneNode(true);
+            const ventanaImpresion = window.open('', '_blank');
+            const estilos = document.querySelector('style').innerHTML;
+            ventanaImpresion.document.write(`<!DOCTYPE html><html><head><title>${titulo}</title><style>${estilos} body { margin: 20px; } .sidebar, .controls-container, .tabs-container, .export-buttons, .btn, .pagination { display: none; }</style></head><body><h1>${titulo}</h1><div>${clonTabla.outerHTML}</div></body></html>`);
+            ventanaImpresion.document.close();
+            ventanaImpresion.print();
+            ventanaImpresion.close();
+        }
+
+        // Funciones de reportes
+        function mostrarReportes() {
+            reportesActivo = true;
+            document.getElementById('tablaClientes').classList.remove('active');
+            document.getElementById('tablaProveedores').classList.remove('active');
+            document.getElementById('reporteContainer').style.display = 'block';
+            document.getElementById('reporteContainer').classList.add('active');
+            document.getElementById('clientesControls').style.display = 'none';
+            document.getElementById('proveedoresControls').style.display = 'none';
+            document.querySelector('.tabs-container').style.display = 'none';
+            const hoy = new Date();
+            const mesPasado = new Date();
+            mesPasado.setMonth(mesPasado.getMonth() - 1);
+            document.getElementById('reporteFechaInicio').value = mesPasado.toISOString().split('T')[0];
+            document.getElementById('reporteFechaFin').value = hoy.toISOString().split('T')[0];
+            generarReporte();
+        }
+
+        function generarReporte() {
+            const fechaInicio = document.getElementById('reporteFechaInicio').value;
+            const fechaFin = document.getElementById('reporteFechaFin').value;
+            if (!fechaInicio || !fechaFin) { alert('Seleccione un rango de fechas'); return; }
+            const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+            let todasVentas = [];
+            clientes.forEach(cliente => {
+                if (cliente.ventas) {
+                    cliente.ventas.forEach(venta => {
+                        if (venta.fecha_dia >= fechaInicio && venta.fecha_dia <= fechaFin) {
+                            todasVentas.push({ fecha: venta.fecha_dia, cliente: cliente.nombre, total: venta.total, anticipo: venta.anticipo || 0, saldo: (venta.total - (venta.anticipo || 0)) });
+                        }
+                    });
+                }
+            });
+            todasVentas.sort((a, b) => a.fecha.localeCompare(b.fecha));
+            const totalVentas = todasVentas.length;
+            const montoTotal = todasVentas.reduce((sum, v) => sum + v.total, 0);
+            const totalAnticipos = todasVentas.reduce((sum, v) => sum + v.anticipo, 0);
+            const saldoTotal = todasVentas.reduce((sum, v) => sum + v.saldo, 0);
+            document.getElementById('reporteStats').innerHTML = `<div class="reporte-stat-card"><div class="reporte-stat-value">${totalVentas}</div><div class="reporte-stat-label">Total Ventas</div></div><div class="reporte-stat-card"><div class="reporte-stat-value">${formatCurrency(montoTotal)}</div><div class="reporte-stat-label">Monto Total</div></div><div class="reporte-stat-card"><div class="reporte-stat-value">${formatCurrency(totalAnticipos)}</div><div class="reporte-stat-label">Anticipos</div></div><div class="reporte-stat-card"><div class="reporte-stat-value">${formatCurrency(saldoTotal)}</div><div class="reporte-stat-label">Saldo Pendiente</div></div>`;
+            const tbody = document.getElementById('reporteVentasBody');
+            if (!todasVentas.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px">No hay ventas en este período</td></tr>'; return; }
+            tbody.innerHTML = todasVentas.map(v => `<tr><td>${formatDate(v.fecha)}</td><td><strong>${v.cliente}</strong></td><td>${formatCurrency(v.total)}</td><td>${formatCurrency(v.anticipo)}</td><td class="${v.saldo > 0 ? 'deuda-grande' : 'deuda-cero'}">${formatCurrency(v.saldo)}</td></tr>`).join('');
+        }
+
+        function exportarReporteCSV() {
+            const fechaInicio = document.getElementById('reporteFechaInicio').value;
+            const fechaFin = document.getElementById('reporteFechaFin').value;
+            const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+            let todasVentas = [];
+            clientes.forEach(cliente => {
+                if (cliente.ventas) {
+                    cliente.ventas.forEach(venta => {
+                        if (venta.fecha_dia >= fechaInicio && venta.fecha_dia <= fechaFin) {
+                            todasVentas.push({ fecha: venta.fecha_dia, cliente: cliente.nombre, total: venta.total, anticipo: venta.anticipo || 0, saldo: (venta.total - (venta.anticipo || 0)) });
+                        }
+                    });
+                }
+            });
+            exportToCSV(todasVentas, `reporte_ventas_${fechaInicio}_a_${fechaFin}`, ['fecha', 'cliente', 'total', 'anticipo', 'saldo']);
+        }
+
+        function imprimirReporte() {
+            const fechaInicio = document.getElementById('reporteFechaInicio').value;
+            const fechaFin = document.getElementById('reporteFechaFin').value;
+            const contenido = document.getElementById('reporteContainer').cloneNode(true);
+            const ventanaImpresion = window.open('', '_blank');
+            const estilos = document.querySelector('style').innerHTML;
+            ventanaImpresion.document.write(`<!DOCTYPE html><html><head><title>Reporte de Ventas ${fechaInicio} al ${fechaFin}</title><style>${estilos} body { margin: 20px; } .reporte-periodo .btn, .export-buttons, .btn-print { display: none; }</style></head><body>${contenido.outerHTML}</body></html>`);
+            ventanaImpresion.document.close();
+            ventanaImpresion.print();
+            ventanaImpresion.close();
+        }
 
         function toggleSidebar() {
             const sb = document.getElementById('sidebar'), mc = document.getElementById('mainContent'), tb = document.getElementById('toggleSidebar'), tbc = document.getElementById('toggleSidebarCollapsed');
@@ -718,6 +902,18 @@
                 document.getElementById('ventasClienteTab').style.display = tab === 'ventas' ? 'block' : 'none';
                 document.getElementById('creditosClienteTab').style.display = tab === 'creditos' ? 'block' : 'none';
             }));
+            
+            // Eventos de exportación
+            document.getElementById('exportClientesCSV')?.addEventListener('click', exportarClientesCSV);
+            document.getElementById('exportClientesJSON')?.addEventListener('click', exportarClientesJSON);
+            document.getElementById('printClientes')?.addEventListener('click', () => imprimirTabla('tablaClientes', 'Lista de Clientes'));
+            document.getElementById('exportProveedoresCSV')?.addEventListener('click', exportarProveedoresCSV);
+            document.getElementById('exportProveedoresJSON')?.addEventListener('click', exportarProveedoresJSON);
+            document.getElementById('printProveedores')?.addEventListener('click', () => imprimirTabla('tablaProveedores', 'Lista de Proveedores'));
+            document.getElementById('navReportes')?.addEventListener('click', (e) => { e.preventDefault(); mostrarReportes(); });
+            document.getElementById('btnGenerarReporte')?.addEventListener('click', generarReporte);
+            document.getElementById('exportReporteCSV')?.addEventListener('click', exportarReporteCSV);
+            document.getElementById('printReporte')?.addEventListener('click', imprimirReporte);
         }
 
         initLocalStorage();
