@@ -66,10 +66,12 @@
         .periodo-buttons { display: flex; gap: 10px; }
         .periodo-btn { padding: 10px 20px; border: 2px solid var(--gris-claro); background: white; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
         .periodo-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
+        .date-range { display: flex; align-items: center; gap: 10px; background: var(--blanco-hueso); padding: 10px 15px; border-radius: 8px; border: 2px solid var(--gris-claro); }
+        .date-input { padding: 8px 12px; border: 1px solid var(--gris-claro); border-radius: 6px; font-size: 14px; }
         
         .resumen-financiero { background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .dashboard-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin-bottom: 30px; }
-        .dashboard-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-top: 4px solid; transition: transform 0.2s; }
+        .dashboard-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-top: 4px solid; transition: transform 0.2s; cursor: pointer; }
         .dashboard-card:hover { transform: translateY(-3px); }
         .card-lg { grid-column: span 2; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -78,19 +80,71 @@
         .card-detail { font-size: 14px; color: var(--gris-medio); margin-top: 10px; }
         .card-ingresos { border-color: var(--exito); }
         .card-egresos { border-color: var(--error); }
+        .card-contado { border-color: var(--mostaza); }
+        .card-anticipos { border-color: var(--info); }
+        .card-abonos { border-color: var(--turquesa); }
+        .card-banco { border-color: var(--banco); }
         .card-total { border-color: var(--total-caja); border-width: 5px; background: linear-gradient(135deg, #f8f5ff 0%, #f0ebff 100%); }
         .card-icon { width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; }
         .icon-ingresos { background: var(--exito); }
         .icon-egresos { background: var(--error); }
+        .icon-contado { background: var(--mostaza); }
+        .icon-anticipos { background: var(--info); }
+        .icon-abonos { background: var(--turquesa); }
+        .icon-banco { background: var(--banco); }
         .icon-total { background: var(--total-caja); width: 60px; height: 60px; font-size: 28px; }
         .card-value.ingresos { color: var(--exito); }
         .card-value.egresos { color: var(--error); }
+        .card-value.contado { color: var(--mostaza); }
+        .card-value.anticipos { color: var(--info); }
+        .card-value.abonos { color: var(--turquesa); }
+        .card-value.banco { color: var(--banco); }
         .card-value.total { color: var(--total-caja); font-size: 36px; }
         
         .formula-card { background: linear-gradient(135deg, #f0f7ff 0%, #e6f0ff 100%); border-left: 4px solid var(--info); padding: 20px; margin-top: 20px; border-radius: 8px; }
         .formula-title { font-size: 14px; color: var(--info); font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
         .formula-text { font-size: 13px; color: var(--gris-oscuro); line-height: 1.5; }
         .formula-highlight { background: var(--total-caja); color: white; padding: 2px 8px; border-radius: 4px; font-weight: 600; margin: 0 3px; }
+        
+        .tablas-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 25px; margin-bottom: 25px; }
+        .tabla-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .tabla-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .tabla-title { font-size: 18px; color: var(--teal); display: flex; align-items: center; gap: 10px; }
+        .reporte-table { width: 100%; border-collapse: collapse; }
+        .reporte-table th { background: var(--gris-claro); padding: 16px 12px; text-align: left; font-weight: 600; font-size: 14px; border-bottom: 2px solid; }
+        .ingresos-table th { border-color: var(--exito); }
+        .egresos-table th { border-color: var(--error); }
+        .reporte-table td { padding: 16px 12px; border-bottom: 1px solid var(--gris-claro); vertical-align: middle; }
+        .reporte-table tr:hover { background: var(--blanco-hueso); }
+        .monto-cell { font-weight: 600; text-align: right; }
+        .monto-ingreso { color: var(--exito); }
+        .monto-egreso { color: var(--error); }
+        .fecha-cell { font-size: 13px; color: var(--gris-medio); }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+        .badge-venta { background: rgba(39, 174, 96, 0.1); color: var(--exito); }
+        .badge-servicio { background: rgba(52, 152, 219, 0.1); color: var(--info); }
+        .badge-insumo { background: rgba(192, 138, 103, 0.1); color: var(--terracota); }
+        .badge-salario { background: rgba(231, 76, 60, 0.1); color: var(--error); }
+        .badge-alquiler { background: rgba(155, 89, 182, 0.1); color: #9b59b6; }
+        .badge-auxiliar { background: rgba(31, 138, 134, 0.1); color: var(--teal); }
+        .badge-proveedor { background: rgba(217, 201, 53, 0.1); color: var(--mostaza); }
+        .badge-otros { background: rgba(149, 165, 166, 0.1); color: var(--gris-medio); }
+        
+        .table-empty { text-align: center; padding: 40px; color: var(--gris-medio); }
+        .table-empty i { font-size: 48px; margin-bottom: 15px; opacity: 0.5; display: block; }
+        
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--gris-claro); }
+        .page-btn { width: 36px; height: 36px; border-radius: 8px; border: 2px solid var(--gris-claro); background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .page-btn:hover { border-color: var(--teal); color: var(--teal); }
+        .page-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
+        .page-btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+        
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-sm { padding: 6px 12px !important; font-size: 12px !important; }
+        .btn-secondary { background: var(--gris-claro); color: var(--gris-oscuro); }
+        .btn-danger { background: var(--error); color: white; }
+        .btn-primary { background: var(--teal); color: white; }
+        .btn-success { background: var(--exito); color: white; }
         
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); display: flex; justify-content: center; align-items: center; z-index: 9999; display: none; }
         .spinner { width: 50px; height: 50px; border: 5px solid var(--gris-claro); border-top: 5px solid var(--teal); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -99,10 +153,12 @@
         .notification { position: fixed; top: 20px; right: 20px; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 9999; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease; }
         .notification-success { background: var(--exito); color: white; }
         .notification-error { background: var(--error); color: white; }
+        .notification-warning { background: var(--advertencia); color: white; }
+        .notification-info { background: var(--info); color: white; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         
         @media (max-width: 1200px) { .dashboard-container { grid-template-columns: repeat(2, 1fr); } .card-lg { grid-column: span 2; } }
-        @media (max-width: 768px) { .top-header { flex-direction: column; gap: 20px; text-align: center; } .periodo-buttons { flex-wrap: wrap; justify-content: center; } .dashboard-container { grid-template-columns: 1fr; } .card-lg { grid-column: span 1; } }
+        @media (max-width: 768px) { .top-header { flex-direction: column; gap: 20px; text-align: center; } .periodo-buttons { flex-wrap: wrap; justify-content: center; } .dashboard-container { grid-template-columns: 1fr; } .card-lg { grid-column: span 1; } .tablas-container { grid-template-columns: 1fr; } .date-range { flex-direction: column; } }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -163,6 +219,12 @@
                         <button class="periodo-btn" data-periodo="anio">Este Año</button>
                         <button class="periodo-btn" data-periodo="personalizado">Personalizado</button>
                     </div>
+                    <div class="date-range" id="dateRange" style="display: none;">
+                        <input type="date" class="date-input" id="fechaInicio" value="">
+                        <span>hasta</span>
+                        <input type="date" class="date-input" id="fechaFin" value="">
+                        <button class="btn btn-primary" id="aplicarFechas"><i class="fas fa-check"></i> Aplicar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -192,6 +254,42 @@
                     <div class="card-detail" id="resumenEgresosSub">0 transacciones</div>
                 </div>
                 
+                <div class="dashboard-card card-contado">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-cash-register"></i> Ventas de Contado</div>
+                        <div class="card-icon icon-contado"><i class="fas fa-cash-register"></i></div>
+                    </div>
+                    <div class="card-value contado" id="ventasContadoTotal">$0</div>
+                    <div class="card-detail" id="infoContado">0 ventas</div>
+                </div>
+                
+                <div class="dashboard-card card-anticipos">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-hand-holding-usd"></i> Anticipos de Crédito</div>
+                        <div class="card-icon icon-anticipos"><i class="fas fa-handshake"></i></div>
+                    </div>
+                    <div class="card-value anticipos" id="totalAnticipos">$0</div>
+                    <div class="card-detail" id="infoAnticipos">0 anticipos</div>
+                </div>
+                
+                <div class="dashboard-card card-abonos" id="cardAbonos">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-money-check-alt"></i> Abonos a Créditos</div>
+                        <div class="card-icon icon-abonos"><i class="fas fa-credit-card"></i></div>
+                    </div>
+                    <div class="card-value abonos" id="totalAbonos">$0</div>
+                    <div class="card-detail" id="infoAbonos">0 abonos</div>
+                </div>
+                
+                <div class="dashboard-card card-banco" id="cardBanco">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-university"></i> Dinero en Banco</div>
+                        <div class="card-icon icon-banco"><i class="fas fa-building-columns"></i></div>
+                    </div>
+                    <div class="card-value banco" id="totalBanco">$0</div>
+                    <div class="card-detail" id="infoBanco">0 transacciones bancarias</div>
+                </div>
+                
                 <div class="dashboard-card card-lg card-total">
                     <div class="card-header">
                         <div class="card-title"><i class="fas fa-calculator"></i> TOTAL CAJA</div>
@@ -213,27 +311,273 @@
                 </div>
             </div>
         </div>
+        
+        <div class="tablas-container">
+            <div class="tabla-card">
+                <div class="tabla-header">
+                    <h3 class="tabla-title"><i class="fas fa-arrow-down" style="color: var(--exito);"></i> Ingresos Manuales Registrados</h3>
+                    <span class="balance-subtitle" id="contadorIngresos">0 registros</span>
+                </div>
+                <table class="reporte-table ingresos-table" id="tablaIngresos">
+                    <thead><tr><th width="20%">Fecha</th><th width="35%">Descripción</th><th width="15%">Categoría</th><th width="15%">Monto</th><th width="15%">Acciones</th></tr></thead>
+                    <tbody id="tbodyIngresos"><tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay ingresos manuales</h3><p>Registra un nuevo ingreso usando el botón "Nuevo Ingreso"</p></td></tr></tbody>
+                </table>
+                <div class="pagination" id="paginationIngresos"></div>
+            </div>
+            
+            <div class="tabla-card">
+                <div class="tabla-header">
+                    <h3 class="tabla-title"><i class="fas fa-arrow-up" style="color: var(--error);"></i> Egresos Manuales Registrados</h3>
+                    <span class="balance-subtitle" id="contadorEgresos">0 registros</span>
+                </div>
+                <table class="reporte-table egresos-table" id="tablaEgresos">
+                    <thead><tr><th width="20%">Fecha</th><th width="35%">Descripción</th><th width="15%">Categoría</th><th width="15%">Monto</th><th width="15%">Acciones</th></tr></thead>
+                    <tbody id="tbodyEgresos"><tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay egresos manuales</h3><p>Registra un nuevo egreso usando el botón "Nuevo Egreso"</p></td></tr></tbody>
+                </table>
+                <div class="pagination" id="paginationEgresos"></div>
+            </div>
+        </div>
     </div>
 
     <script>
+        let currentPageIngresos = 1;
+        let currentPageEgresos = 1;
+        const itemsPerPage = 10;
         let periodoActual = "hoy";
         let sidebarCollapsed = false;
+        let movimientosData = [];
+        
+        const MOCK_MOVIMIENTOS = [
+            { id: 1, tipo: 'ingreso', monto: 150000, categoria: 'venta', razon: 'Venta de productos agrícolas', fecha: new Date().toISOString().slice(0, 19).replace('T', ' ') },
+            { id: 2, tipo: 'ingreso', monto: 75000, categoria: 'servicio', razon: 'Consulta veterinaria', fecha: new Date(Date.now() - 86400000).toISOString().slice(0, 19).replace('T', ' ') },
+            { id: 3, tipo: 'egreso', monto: 50000, categoria: 'insumo', razon: 'Compra de fertilizantes', fecha: new Date(Date.now() - 172800000).toISOString().slice(0, 19).replace('T', ' ') },
+            { id: 4, tipo: 'egreso', monto: 120000, categoria: 'salario', razon: 'Pago de salario empleado', fecha: new Date(Date.now() - 259200000).toISOString().slice(0, 19).replace('T', ' ') }
+        ];
+        
+        function initLocalStorage() {
+            if (!localStorage.getItem('movimientos')) {
+                localStorage.setItem('movimientos', JSON.stringify(MOCK_MOVIMIENTOS));
+            }
+            cargarMovimientos();
+        }
+        
+        function cargarMovimientos() {
+            movimientosData = JSON.parse(localStorage.getItem('movimientos')) || [];
+        }
+        
+        function guardarMovimientos() {
+            localStorage.setItem('movimientos', JSON.stringify(movimientosData));
+        }
         
         function formatCurrency(valor) {
             if (typeof valor !== 'number') valor = parseFloat(valor) || 0;
             return `$${valor.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         }
         
+        function formatDateTime(fechaStr) {
+            if (!fechaStr) return '';
+            try {
+                const [fechaPart, horaPart] = fechaStr.split(' ');
+                const [anio, mes, dia] = fechaPart.split('-');
+                const [horas, minutos] = horaPart.split(':');
+                const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+                return `${dia} de ${meses[parseInt(mes)-1]} de ${anio}, ${horas}:${minutos}`;
+            } catch (e) {
+                return fechaStr;
+            }
+        }
+        
+        function getCategoriaNombre(categoria) {
+            switch(categoria) {
+                case 'venta': return 'Venta';
+                case 'servicio': return 'Servicio';
+                case 'insumo': return 'Insumo';
+                case 'salario': return 'Salario';
+                case 'alquiler': return 'Alquiler';
+                case 'auxiliar': return 'Auxiliar';
+                case 'proveedor': return 'Proveedor';
+                default: return 'Otros';
+            }
+        }
+        
+        function getBadgeClass(categoria) {
+            switch(categoria) {
+                case 'venta': return 'badge-venta';
+                case 'servicio': return 'badge-servicio';
+                case 'insumo': return 'badge-insumo';
+                case 'salario': return 'badge-salario';
+                case 'alquiler': return 'badge-alquiler';
+                case 'auxiliar': return 'badge-auxiliar';
+                case 'proveedor': return 'badge-proveedor';
+                default: return 'badge-otros';
+            }
+        }
+        
         function showNotification(msg, type) {
             const n = document.createElement('div');
             n.className = `notification notification-${type}`;
-            n.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>${msg}`;
+            n.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>${msg}`;
             document.body.appendChild(n);
             setTimeout(() => n.remove(), 3000);
         }
         
         function showLoading(mostrar) {
             document.getElementById('loadingOverlay').style.display = mostrar ? 'flex' : 'none';
+        }
+        
+        function obtenerFechasPeriodo(periodo) {
+            const hoy = new Date();
+            let fechaInicio, fechaFin;
+            if (periodo === 'hoy') {
+                fechaInicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), 0, 0, 0);
+                fechaFin = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), 23, 59, 59);
+            } else if (periodo === 'semana') {
+                let diaSemana = hoy.getDay();
+                let diff = diaSemana === 0 ? -6 : 1 - diaSemana;
+                let lunes = new Date(hoy);
+                lunes.setDate(hoy.getDate() + diff);
+                fechaInicio = new Date(lunes.getFullYear(), lunes.getMonth(), lunes.getDate(), 0, 0, 0);
+                fechaFin = new Date(lunes.getFullYear(), lunes.getMonth(), lunes.getDate() + 6, 23, 59, 59);
+            } else if (periodo === 'mes') {
+                fechaInicio = new Date(hoy.getFullYear(), hoy.getMonth(), 1, 0, 0, 0);
+                fechaFin = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0, 23, 59, 59);
+            } else {
+                fechaInicio = new Date(2020, 0, 1);
+                fechaFin = new Date(2030, 11, 31);
+            }
+            return { fechaInicio: fechaInicio.toISOString().split('T')[0], fechaFin: fechaFin.toISOString().split('T')[0] };
+        }
+        
+        function actualizarDashboardUI() {
+            const ingresos = movimientosData.filter(m => m.tipo === 'ingreso');
+            const egresos = movimientosData.filter(m => m.tipo === 'egreso');
+            const totalIngresos = ingresos.reduce((sum, m) => sum + m.monto, 0);
+            const totalEgresos = egresos.reduce((sum, m) => sum + m.monto, 0);
+            document.getElementById('totalIngresos').textContent = formatCurrency(totalIngresos);
+            document.getElementById('totalEgresos').textContent = formatCurrency(totalEgresos);
+            document.getElementById('resumenIngresos').textContent = formatCurrency(totalIngresos);
+            document.getElementById('resumenEgresos').textContent = formatCurrency(totalEgresos);
+            document.getElementById('resumenIngresosSub').textContent = `${ingresos.length} transacciones`;
+            document.getElementById('resumenEgresosSub').textContent = `${egresos.length} transacciones`;
+            document.getElementById('contadorIngresos').textContent = `${ingresos.length} registros`;
+            document.getElementById('contadorEgresos').textContent = `${egresos.length} registros`;
+            document.getElementById('totalCajaDashboard').textContent = formatCurrency(totalIngresos - totalEgresos);
+            document.getElementById('totalCajaHeader').textContent = formatCurrency(totalIngresos - totalEgresos);
+        }
+        
+        function renderTablaIngresos(ingresos) {
+            const tbody = document.getElementById('tbodyIngresos');
+            if (!ingresos || ingresos.length === 0) {
+                tbody.innerHTML = `<td><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay ingresos</h3></td></tr>`;
+                return;
+            }
+            tbody.innerHTML = '';
+            for (const item of ingresos) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="fecha-cell">${formatDateTime(item.fecha)}</td>
+                    <td class="razon-cell" title="${item.razon}">${item.razon}</td>
+                    <td><span class="badge ${getBadgeClass(item.categoria)}">${getCategoriaNombre(item.categoria)}</span></td>
+                    <td class="monto-cell monto-ingreso">${formatCurrency(item.monto)}</td>
+                    <td><button class="btn btn-secondary btn-sm" onclick="editarMovimiento(${item.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarMovimiento(${item.id})"><i class="fas fa-trash"></i></button></td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+        
+        function renderTablaEgresos(egresos) {
+            const tbody = document.getElementById('tbodyEgresos');
+            if (!egresos || egresos.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay egresos</h3></td></td>`;
+                return;
+            }
+            tbody.innerHTML = '';
+            for (const item of egresos) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="fecha-cell">${formatDateTime(item.fecha)}</td>
+                    <td class="razon-cell" title="${item.razon}">${item.razon}</td>
+                    <td><span class="badge ${getBadgeClass(item.categoria)}">${getCategoriaNombre(item.categoria)}</span></td>
+                    <td class="monto-cell monto-egreso">${formatCurrency(item.monto)}</td>
+                    <td><button class="btn btn-secondary btn-sm" onclick="editarMovimiento(${item.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarMovimiento(${item.id})"><i class="fas fa-trash"></i></button></td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+        
+        function renderPaginationIngresos(total) {
+            const pagination = document.getElementById('paginationIngresos');
+            const totalPages = Math.ceil(total / itemsPerPage);
+            if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+            let html = `<div class="page-btn ${currentPageIngresos <= 1 ? 'disabled' : ''}" onclick="cambiarPaginaIngresos(${currentPageIngresos - 1})"><i class="fas fa-chevron-left"></i></div>`;
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPageIngresos - 1 && i <= currentPageIngresos + 1)) {
+                    html += `<div class="page-btn ${i === currentPageIngresos ? 'active' : ''}" onclick="cambiarPaginaIngresos(${i})">${i}</div>`;
+                } else if (i === currentPageIngresos - 2 || i === currentPageIngresos + 2) {
+                    html += `<div class="page-btn" style="cursor:default">...</div>`;
+                }
+            }
+            html += `<div class="page-btn ${currentPageIngresos >= totalPages ? 'disabled' : ''}" onclick="cambiarPaginaIngresos(${currentPageIngresos + 1})"><i class="fas fa-chevron-right"></i></div>`;
+            pagination.innerHTML = html;
+        }
+        
+        function renderPaginationEgresos(total) {
+            const pagination = document.getElementById('paginationEgresos');
+            const totalPages = Math.ceil(total / itemsPerPage);
+            if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+            let html = `<div class="page-btn ${currentPageEgresos <= 1 ? 'disabled' : ''}" onclick="cambiarPaginaEgresos(${currentPageEgresos - 1})"><i class="fas fa-chevron-left"></i></div>`;
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPageEgresos - 1 && i <= currentPageEgresos + 1)) {
+                    html += `<div class="page-btn ${i === currentPageEgresos ? 'active' : ''}" onclick="cambiarPaginaEgresos(${i})">${i}</div>`;
+                } else if (i === currentPageEgresos - 2 || i === currentPageEgresos + 2) {
+                    html += `<div class="page-btn" style="cursor:default">...</div>`;
+                }
+            }
+            html += `<div class="page-btn ${currentPageEgresos >= totalPages ? 'disabled' : ''}" onclick="cambiarPaginaEgresos(${currentPageEgresos + 1})"><i class="fas fa-chevron-right"></i></div>`;
+            pagination.innerHTML = html;
+        }
+        
+        function cambiarPaginaIngresos(pagina) {
+            if (pagina < 1) return;
+            currentPageIngresos = pagina;
+            actualizarDatos();
+        }
+        
+        function cambiarPaginaEgresos(pagina) {
+            if (pagina < 1) return;
+            currentPageEgresos = pagina;
+            actualizarDatos();
+        }
+        
+        function actualizarDatos() {
+            const ingresos = movimientosData.filter(m => m.tipo === 'ingreso');
+            const egresos = movimientosData.filter(m => m.tipo === 'egreso');
+            const startIngresos = (currentPageIngresos - 1) * itemsPerPage;
+            const endIngresos = startIngresos + itemsPerPage;
+            const startEgresos = (currentPageEgresos - 1) * itemsPerPage;
+            const endEgresos = startEgresos + itemsPerPage;
+            renderTablaIngresos(ingresos.slice(startIngresos, endIngresos));
+            renderTablaEgresos(egresos.slice(startEgresos, endEgresos));
+            renderPaginationIngresos(ingresos.length);
+            renderPaginationEgresos(egresos.length);
+            actualizarDashboardUI();
+        }
+        
+        function eliminarMovimiento(id) {
+            if (!confirm('¿Está seguro de eliminar este movimiento?')) return;
+            const index = movimientosData.findIndex(m => m.id === id);
+            if (index !== -1) {
+                movimientosData.splice(index, 1);
+                guardarMovimientos();
+                actualizarDatos();
+                showNotification('Movimiento eliminado correctamente', 'success');
+            }
+        }
+        
+        function editarMovimiento(id) {
+            showNotification('Función de edición disponible en próximo sprint', 'info');
         }
         
         function getPeriodoNombre(periodo) {
@@ -279,6 +623,7 @@
         }
         
         document.addEventListener('DOMContentLoaded', function() {
+            initLocalStorage();
             cargarEstadoSidebar();
             document.getElementById('toggleSidebar').addEventListener('click', toggleSidebar);
             document.getElementById('toggleSidebarCollapsed').addEventListener('click', toggleSidebar);
@@ -290,10 +635,26 @@
                     this.classList.add('active');
                     periodoActual = this.dataset.periodo;
                     document.getElementById('periodoActual').textContent = `(${getPeriodoNombre(periodoActual)})`;
+                    const dateRange = document.getElementById('dateRange');
+                    if (periodoActual === 'personalizado') {
+                        dateRange.style.display = 'flex';
+                        const hoy = new Date();
+                        document.getElementById('fechaInicio').value = hoy.toISOString().split('T')[0];
+                        document.getElementById('fechaFin').value = hoy.toISOString().split('T')[0];
+                    } else {
+                        dateRange.style.display = 'none';
+                    }
                     showNotification(`Período cambiado a ${getPeriodoNombre(periodoActual)}`, 'success');
                 });
             });
+            
+            actualizarDatos();
         });
+        
+        window.editarMovimiento = editarMovimiento;
+        window.eliminarMovimiento = eliminarMovimiento;
+        window.cambiarPaginaIngresos = cambiarPaginaIngresos;
+        window.cambiarPaginaEgresos = cambiarPaginaEgresos;
     </script>
 </body>
 </html>
