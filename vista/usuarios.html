@@ -15,6 +15,9 @@
             --gris-oscuro: #2c3e50;
             --gris-medio: #7f8c8d;
             --gris-claro: #ecf0f1;
+            --exito: #27ae60;
+            --error: #e74c3c;
+            --info: #3498db;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
@@ -32,12 +35,29 @@
         .nav-item:hover { background: rgba(255,255,255,0.15); }
         .nav-item.active { background: rgba(255,255,255,0.2); border-left: 3px solid var(--mostaza); }
 
-        /* Estilos para tablas */
         .table-container { background: white; border-radius: 12px; padding: 25px; margin-top: 20px; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
         th { background: var(--gris-claro); padding: 16px 12px; text-align: left; font-weight: 600; }
         td { padding: 20px 12px; border-bottom: 1px solid var(--gris-claro); }
         tr:hover { background: rgba(63, 166, 160, 0.05); }
+
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { padding: 12px 24px; background: var(--gris-claro); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .tab-btn.active { background: var(--teal); color: white; }
+
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-primary { background: var(--teal); color: white; }
+        .btn-danger { background: var(--error); color: white; }
+        .btn-secondary { background: var(--gris-claro); color: var(--gris-oscuro); }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-content { background: white; border-radius: 12px; width: 90%; max-width: 500px; padding: 25px; }
+        .modal-header { margin-bottom: 20px; }
+        .modal-body { margin-bottom: 20px; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .form-group { margin-bottom: 15px; }
+        .form-control { width: 100%; padding: 10px; border: 2px solid var(--gris-claro); border-radius: 8px; }
+        .form-control:focus { outline: none; border-color: var(--teal); }
     </style>
 </head>
 <body>
@@ -49,8 +69,9 @@
         </nav>
     </div>
     <div class="main-content">
-        <header class="top-header">
+        <header>
             <h1>Gestión de Clientes y Proveedores</h1>
+            <button class="btn btn-primary" id="btnNuevoCliente" style="margin-top: 15px;">+ Nuevo Cliente</button>
         </header>
         
         <div class="tabs">
@@ -70,11 +91,65 @@
                 <thead><tr><th>Teléfono</th><th>Empresa</th><th>Proveedor</th><th>Estado</th><th>Acciones</th></tr></thead>
                 <tbody id="proveedoresBody"></tbody>
             </table>
+            <button class="btn btn-primary" id="btnNuevoProveedor" style="margin-top: 15px;">+ Nuevo Proveedor</button>
+        </div>
+    </div>
+
+    <!-- Modal Cliente -->
+    <div class="modal" id="modalCliente">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="modalClienteTitulo">Nuevo Cliente</h2></div>
+            <div class="modal-body">
+                <form id="formCliente">
+                    <input type="hidden" id="clienteCedulaOriginal">
+                    <div class="form-group"><label>Cédula *</label><input type="text" class="form-control" id="clienteCedula" required></div>
+                    <div class="form-group"><label>Nombre *</label><input type="text" class="form-control" id="clienteNombre" required></div>
+                    <div class="form-group"><label>Teléfono</label><input type="text" class="form-control" id="clienteTelefono"></div>
+                    <div class="form-group"><label>Correo</label><input type="email" class="form-control" id="clienteCorreo"></div>
+                    <div class="form-group"><label>Dirección</label><textarea class="form-control" id="clienteDireccion" rows="2"></textarea></div>
+                </form>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="btnCancelarCliente">Cancelar</button>
+                <button class="btn btn-primary" id="btnGuardarCliente">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Proveedor -->
+    <div class="modal" id="modalProveedor">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="modalProveedorTitulo">Nuevo Proveedor</h2></div>
+            <div class="modal-body">
+                <form id="formProveedor">
+                    <input type="hidden" id="proveedorTelefonoOriginal">
+                    <div class="form-group"><label>Teléfono *</label><input type="text" class="form-control" id="proveedorTelefono" required></div>
+                    <div class="form-group"><label>Empresa *</label><input type="text" class="form-control" id="proveedorEmpresa" required></div>
+                    <div class="form-group"><label>Nombre Proveedor *</label><input type="text" class="form-control" id="proveedorNombre" required></div>
+                    <div class="form-group"><label>Correo</label><input type="email" class="form-control" id="proveedorCorreo"></div>
+                    <div class="form-group"><label>Estado</label><select class="form-control" id="proveedorEstado"><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select></div>
+                </form>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="btnCancelarProveedor">Cancelar</button>
+                <button class="btn btn-primary" id="btnGuardarProveedor">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmación -->
+    <div class="modal" id="modalConfirm">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="confirmTitulo">Confirmar</h2></div>
+            <div class="modal-body"><p id="confirmMensaje">¿Estás seguro?</p></div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="confirmCancelar">Cancelar</button>
+                <button class="btn btn-danger" id="confirmAceptar">Eliminar</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Mock de datos iniciales
         const MOCK_CLIENTES = [
             { cedula: '123456789', nombre: 'Juan Pérez', telefono: '3001234567', correo: 'juan@email.com', direccion: 'Calle 1', deuda_total: 0, fecha_creacion: new Date().toISOString() },
             { cedula: '987654321', nombre: 'María Gómez', telefono: '3007654321', correo: 'maria@email.com', direccion: 'Carrera 2', deuda_total: 150000, fecha_creacion: new Date().toISOString() }
@@ -85,124 +160,204 @@
         ];
 
         let tabActual = 'clientes';
+        let elementoAEliminar = null;
+        let tipoElementoAEliminar = null;
+        let esEdicionCliente = false;
+        let esEdicionProveedor = false;
 
-        // Inicializar localStorage
-        if (!localStorage.getItem('clientes')) {
-            localStorage.setItem('clientes', JSON.stringify(MOCK_CLIENTES));
-        }
-        if (!localStorage.getItem('proveedores')) {
-            localStorage.setItem('proveedores', JSON.stringify(MOCK_PROVEEDORES));
-        }
+        if (!localStorage.getItem('clientes')) localStorage.setItem('clientes', JSON.stringify(MOCK_CLIENTES));
+        if (!localStorage.getItem('proveedores')) localStorage.setItem('proveedores', JSON.stringify(MOCK_PROVEEDORES));
 
-        function formatCurrency(v) {
-            if (!v && v !== 0) return '$ 0';
-            const n = parseFloat(v);
-            return isNaN(n) ? '$ 0' : `$ ${n.toLocaleString('es-CO')}`;
-        }
+        function formatCurrency(v) { return !v && v !== 0 ? '$ 0' : `$ ${parseFloat(v).toLocaleString('es-CO')}`; }
 
         function renderClientes() {
             const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
             const tbody = document.getElementById('clientesBody');
-            if (!clientes.length) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No hay clientes</td></tr>';
-                return;
-            }
-            tbody.innerHTML = clientes.map(c => `
-                <tr>
-                    <td><strong>${c.cedula}</strong></td>
-                    <td><strong>${c.nombre}</strong><br><small>${c.direccion || ''}</small></td>
-                    <td>${c.telefono ? `<i class="fas fa-phone"></i> ${c.telefono}<br>` : ''}${c.correo ? `<i class="fas fa-envelope"></i> ${c.correo}` : ''}</td>
-                    <td class="${c.deuda_total > 0 ? 'deuda-grande' : 'deuda-cero'}">${formatCurrency(c.deuda_total)}</td>
-                    <td>
-                        <button onclick="editarCliente('${c.cedula}')">Editar</button>
-                        <button onclick="eliminarCliente('${c.cedula}')">Eliminar</button>
-                    </td>
-                </tr>
-            `).join('');
+            if (!clientes.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No hay clientes</td></tr>'; return; }
+            tbody.innerHTML = clientes.map(c => `<tr><td><strong>${c.cedula}</strong></td><td><strong>${c.nombre}</strong><br><small>${c.direccion || ''}</small></td><td>${c.telefono ? `📞 ${c.telefono}<br>` : ''}${c.correo ? `✉️ ${c.correo}` : ''}</td><td>${formatCurrency(c.deuda_total)}</td><td><button class="btn" style="background:var(--info);color:white" onclick="abrirModalEditarCliente('${c.cedula}')">✏️</button> <button class="btn" style="background:var(--error);color:white" onclick="confirmarEliminar('cliente','${c.cedula}','${c.nombre}')">🗑️</button></td></tr>`).join('');
         }
 
         function renderProveedores() {
             const proveedores = JSON.parse(localStorage.getItem('proveedores')) || [];
             const tbody = document.getElementById('proveedoresBody');
-            if (!proveedores.length) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No hay proveedores</td></tr>';
-                return;
-            }
-            tbody.innerHTML = proveedores.map(p => `
-                <tr>
-                    <td><strong>${p.telefono}</strong></td>
-                    <td>${p.nombre_empresa}</td>
-                    <td>${p.nombre_proveedor}</td>
-                    <td><span class="status-${p.estado}">${p.estado === 'activo' ? 'Activo' : 'Inactivo'}</span></td>
-                    <td>
-                        <button onclick="editarProveedor('${p.telefono}')">Editar</button>
-                        <button onclick="eliminarProveedor('${p.telefono}')">Eliminar</button>
-                    </td>
-                </tr>
-            `).join('');
+            if (!proveedores.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No hay proveedores</td></tr>'; return; }
+            tbody.innerHTML = proveedores.map(p => `<tr><td><strong>${p.telefono}</strong></td><td>${p.nombre_empresa}</td><td>${p.nombre_proveedor}</td><td><span style="background:${p.estado==='activo'?'rgba(39,174,96,0.1)':'rgba(231,76,60,0.1)'};color:${p.estado==='activo'?'var(--exito)':'var(--error)'};padding:4px 12px;border-radius:20px">${p.estado==='activo'?'Activo':'Inactivo'}</span></td><td><button class="btn" style="background:var(--info);color:white" onclick="abrirModalEditarProveedor('${p.telefono}')">✏️</button> <button class="btn" style="background:var(--error);color:white" onclick="confirmarEliminar('proveedor','${p.telefono}','${p.nombre_empresa}')">🗑️</button></td></tr>`).join('');
         }
 
         function cambiarTab(tab) {
             tabActual = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             const tablaClientes = document.getElementById('tablaClientes');
             const tablaProveedores = document.getElementById('tablaProveedores');
-            const btns = document.querySelectorAll('.tab-btn');
-            
-            btns.forEach(btn => btn.classList.remove('active'));
             if (tab === 'clientes') {
                 tablaClientes.style.display = 'block';
                 tablaProveedores.style.display = 'none';
-                btns[0].classList.add('active');
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
                 renderClientes();
             } else {
                 tablaClientes.style.display = 'none';
                 tablaProveedores.style.display = 'block';
-                btns[1].classList.add('active');
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
                 renderProveedores();
             }
         }
 
-        function editarCliente(cedula) {
+        function abrirModalNuevoCliente() {
+            esEdicionCliente = false;
+            document.getElementById('modalClienteTitulo').textContent = 'Nuevo Cliente';
+            document.getElementById('clienteCedulaOriginal').value = '';
+            document.getElementById('clienteCedula').value = '';
+            document.getElementById('clienteNombre').value = '';
+            document.getElementById('clienteTelefono').value = '';
+            document.getElementById('clienteCorreo').value = '';
+            document.getElementById('clienteDireccion').value = '';
+            document.getElementById('modalCliente').style.display = 'flex';
+        }
+
+        function abrirModalEditarCliente(cedula) {
+            esEdicionCliente = true;
             const clientes = JSON.parse(localStorage.getItem('clientes'));
             const cliente = clientes.find(c => c.cedula === cedula);
-            const nuevoNombre = prompt('Nuevo nombre:', cliente.nombre);
-            if (nuevoNombre) {
-                cliente.nombre = nuevoNombre;
-                localStorage.setItem('clientes', JSON.stringify(clientes));
-                renderClientes();
-            }
+            document.getElementById('modalClienteTitulo').textContent = 'Editar Cliente';
+            document.getElementById('clienteCedulaOriginal').value = cedula;
+            document.getElementById('clienteCedula').value = cliente.cedula;
+            document.getElementById('clienteNombre').value = cliente.nombre;
+            document.getElementById('clienteTelefono').value = cliente.telefono || '';
+            document.getElementById('clienteCorreo').value = cliente.correo || '';
+            document.getElementById('clienteDireccion').value = cliente.direccion || '';
+            document.getElementById('modalCliente').style.display = 'flex';
         }
 
-        function eliminarCliente(cedula) {
-            if (confirm('¿Eliminar cliente?')) {
-                let clientes = JSON.parse(localStorage.getItem('clientes'));
-                clientes = clientes.filter(c => c.cedula !== cedula);
-                localStorage.setItem('clientes', JSON.stringify(clientes));
-                renderClientes();
+        function guardarCliente() {
+            const cedula = document.getElementById('clienteCedula').value.trim();
+            const nombre = document.getElementById('clienteNombre').value.trim();
+            if (!cedula || !nombre) { alert('Cédula y nombre son requeridos'); return; }
+            const clientes = JSON.parse(localStorage.getItem('clientes'));
+            const cedulaOriginal = document.getElementById('clienteCedulaOriginal').value;
+            
+            if (!esEdicionCliente && clientes.find(c => c.cedula === cedula)) {
+                alert('Ya existe un cliente con esa cédula');
+                return;
             }
+            
+            const nuevoCliente = {
+                cedula, nombre,
+                telefono: document.getElementById('clienteTelefono').value,
+                correo: document.getElementById('clienteCorreo').value,
+                direccion: document.getElementById('clienteDireccion').value,
+                deuda_total: 0,
+                fecha_creacion: new Date().toISOString()
+            };
+            
+            if (esEdicionCliente) {
+                const index = clientes.findIndex(c => c.cedula === cedulaOriginal);
+                if (index !== -1) {
+                    nuevoCliente.deuda_total = clientes[index].deuda_total || 0;
+                    clientes[index] = nuevoCliente;
+                }
+            } else {
+                clientes.push(nuevoCliente);
+            }
+            
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            document.getElementById('modalCliente').style.display = 'none';
+            renderClientes();
         }
 
-        function editarProveedor(telefono) {
+        function abrirModalNuevoProveedor() {
+            esEdicionProveedor = false;
+            document.getElementById('modalProveedorTitulo').textContent = 'Nuevo Proveedor';
+            document.getElementById('proveedorTelefonoOriginal').value = '';
+            document.getElementById('proveedorTelefono').value = '';
+            document.getElementById('proveedorEmpresa').value = '';
+            document.getElementById('proveedorNombre').value = '';
+            document.getElementById('proveedorCorreo').value = '';
+            document.getElementById('proveedorEstado').value = 'activo';
+            document.getElementById('modalProveedor').style.display = 'flex';
+        }
+
+        function abrirModalEditarProveedor(telefono) {
+            esEdicionProveedor = true;
             const proveedores = JSON.parse(localStorage.getItem('proveedores'));
             const proveedor = proveedores.find(p => p.telefono === telefono);
-            const nuevoNombre = prompt('Nuevo nombre del proveedor:', proveedor.nombre_proveedor);
-            if (nuevoNombre) {
-                proveedor.nombre_proveedor = nuevoNombre;
-                localStorage.setItem('proveedores', JSON.stringify(proveedores));
-                renderProveedores();
-            }
+            document.getElementById('modalProveedorTitulo').textContent = 'Editar Proveedor';
+            document.getElementById('proveedorTelefonoOriginal').value = telefono;
+            document.getElementById('proveedorTelefono').value = proveedor.telefono;
+            document.getElementById('proveedorEmpresa').value = proveedor.nombre_empresa;
+            document.getElementById('proveedorNombre').value = proveedor.nombre_proveedor;
+            document.getElementById('proveedorCorreo').value = proveedor.correo || '';
+            document.getElementById('proveedorEstado').value = proveedor.estado;
+            document.getElementById('modalProveedor').style.display = 'flex';
         }
 
-        function eliminarProveedor(telefono) {
-            if (confirm('¿Eliminar proveedor?')) {
+        function guardarProveedor() {
+            const telefono = document.getElementById('proveedorTelefono').value.trim();
+            const empresa = document.getElementById('proveedorEmpresa').value.trim();
+            const nombre = document.getElementById('proveedorNombre').value.trim();
+            if (!telefono || !empresa || !nombre) { alert('Teléfono, empresa y nombre son requeridos'); return; }
+            const proveedores = JSON.parse(localStorage.getItem('proveedores'));
+            const telefonoOriginal = document.getElementById('proveedorTelefonoOriginal').value;
+            
+            if (!esEdicionProveedor && proveedores.find(p => p.telefono === telefono)) {
+                alert('Ya existe un proveedor con ese teléfono');
+                return;
+            }
+            
+            const nuevoProveedor = {
+                telefono, nombre_empresa: empresa, nombre_proveedor: nombre,
+                correo: document.getElementById('proveedorCorreo').value,
+                estado: document.getElementById('proveedorEstado').value,
+                producto: '',
+                fecha_creacion: new Date().toISOString()
+            };
+            
+            if (esEdicionProveedor) {
+                const index = proveedores.findIndex(p => p.telefono === telefonoOriginal);
+                if (index !== -1) proveedores[index] = nuevoProveedor;
+            } else {
+                proveedores.push(nuevoProveedor);
+            }
+            
+            localStorage.setItem('proveedores', JSON.stringify(proveedores));
+            document.getElementById('modalProveedor').style.display = 'none';
+            renderProveedores();
+        }
+
+        function confirmarEliminar(tipo, id, nombre) {
+            elementoAEliminar = id;
+            tipoElementoAEliminar = tipo;
+            document.getElementById('confirmTitulo').textContent = `Eliminar ${tipo === 'cliente' ? 'Cliente' : 'Proveedor'}`;
+            document.getElementById('confirmMensaje').innerHTML = `¿Eliminar <strong>${nombre}</strong>?<br><small style="color:var(--error)">Esta acción no se puede deshacer</small>`;
+            document.getElementById('modalConfirm').style.display = 'flex';
+        }
+
+        function eliminarElemento() {
+            if (tipoElementoAEliminar === 'cliente') {
+                let clientes = JSON.parse(localStorage.getItem('clientes'));
+                clientes = clientes.filter(c => c.cedula !== elementoAEliminar);
+                localStorage.setItem('clientes', JSON.stringify(clientes));
+                renderClientes();
+            } else if (tipoElementoAEliminar === 'proveedor') {
                 let proveedores = JSON.parse(localStorage.getItem('proveedores'));
-                proveedores = proveedores.filter(p => p.telefono !== telefono);
+                proveedores = proveedores.filter(p => p.telefono !== elementoAEliminar);
                 localStorage.setItem('proveedores', JSON.stringify(proveedores));
                 renderProveedores();
             }
+            document.getElementById('modalConfirm').style.display = 'none';
+            elementoAEliminar = null;
+            tipoElementoAEliminar = null;
         }
 
-        // Render inicial
+        // Eventos
+        document.getElementById('btnNuevoCliente').addEventListener('click', abrirModalNuevoCliente);
+        document.getElementById('btnNuevoProveedor').addEventListener('click', abrirModalNuevoProveedor);
+        document.getElementById('btnGuardarCliente').addEventListener('click', guardarCliente);
+        document.getElementById('btnCancelarCliente').addEventListener('click', () => document.getElementById('modalCliente').style.display = 'none');
+        document.getElementById('btnGuardarProveedor').addEventListener('click', guardarProveedor);
+        document.getElementById('btnCancelarProveedor').addEventListener('click', () => document.getElementById('modalProveedor').style.display = 'none');
+        document.getElementById('confirmCancelar').addEventListener('click', () => document.getElementById('modalConfirm').style.display = 'none');
+        document.getElementById('confirmAceptar').addEventListener('click', eliminarElemento);
+
         renderClientes();
     </script>
 </body>
