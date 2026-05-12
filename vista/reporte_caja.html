@@ -62,11 +62,12 @@
         .periodo-container { background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .periodo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
         .periodo-title { font-size: 20px; color: var(--teal); display: flex; align-items: center; gap: 10px; }
-        .periodo-actions { display: flex; gap: 15px; align-items: center; }
-        .periodo-buttons { display: flex; gap: 10px; }
-        .periodo-btn { padding: 10px 20px; border: 2px solid var(--gris-claro); background: white; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .periodo-actions { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        .periodo-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+        .periodo-btn { padding: 10px 20px; border: 2px solid var(--gris-claro); background: white; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .periodo-btn:hover { border-color: var(--teal); color: var(--teal); }
         .periodo-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
-        .date-range { display: flex; align-items: center; gap: 10px; background: var(--blanco-hueso); padding: 10px 15px; border-radius: 8px; border: 2px solid var(--gris-claro); }
+        .date-range { display: flex; align-items: center; gap: 10px; background: var(--blanco-hueso); padding: 10px 15px; border-radius: 8px; border: 2px solid var(--gris-claro); flex-wrap: wrap; }
         .date-input { padding: 8px 12px; border: 1px solid var(--gris-claro); border-radius: 6px; font-size: 14px; }
         
         .resumen-financiero { background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
@@ -112,14 +113,15 @@
         .diagnostico-error { border-left-color: var(--error); }
         .diagnostico-warning { border-left-color: var(--advertencia); }
         
-        .btn-export { background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-export { background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s; }
+        .btn-export:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(76,175,80,0.3); }
+        
+        .export-container { text-align: right; margin-bottom: 25px; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; justify-content: flex-end; gap: 15px; flex-wrap: wrap; }
         
         .charts-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 25px; margin-bottom: 25px; }
         .chart-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .chart-title { font-size: 18px; color: var(--teal); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         .chart-container { position: relative; height: 300px; width: 100%; }
-        
-        .export-container { text-align: right; margin-bottom: 25px; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; justify-content: flex-end; gap: 15px; flex-wrap: wrap; }
         
         .form-container { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 25px; }
         .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
@@ -160,7 +162,7 @@
         .table-empty i { font-size: 48px; margin-bottom: 15px; opacity: 0.5; display: block; }
         
         .pagination { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--gris-claro); }
-        .page-btn { width: 36px; height: 36px; border-radius: 8px; border: 2px solid var(--gris-claro); background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .page-btn { width: 36px; height: 36px; border-radius: 8px; border: 2px solid var(--gris-claro); background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; }
         .page-btn:hover { border-color: var(--teal); color: var(--teal); }
         .page-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
         .page-btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
@@ -192,9 +194,13 @@
         .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s; }
         .btn-sm { padding: 6px 12px !important; font-size: 12px !important; }
         .btn-secondary { background: var(--gris-claro); color: var(--gris-oscuro); }
+        .btn-secondary:hover { background: var(--gris-medio); color: white; }
         .btn-danger { background: var(--error); color: white; }
+        .btn-danger:hover { background: #c0392b; }
         .btn-primary { background: var(--teal); color: white; }
+        .btn-primary:hover { background: #1a7572; }
         .btn-success { background: var(--exito); color: white; }
+        .btn-success:hover { background: #219653; }
         .btn-warning { background: var(--advertencia); color: white; }
         
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); display: flex; justify-content: center; align-items: center; z-index: 9999; display: none; }
@@ -211,7 +217,20 @@
         .btn-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s ease-in-out infinite; margin-right: 8px; }
         
         @media (max-width: 1200px) { .dashboard-container { grid-template-columns: repeat(2, 1fr); } .card-lg { grid-column: span 2; } }
-        @media (max-width: 768px) { .top-header { flex-direction: column; gap: 20px; text-align: center; } .periodo-buttons { flex-wrap: wrap; justify-content: center; } .dashboard-container { grid-template-columns: 1fr; } .card-lg { grid-column: span 1; } .tablas-container { grid-template-columns: 1fr; } .date-range { flex-direction: column; } .form-actions { flex-direction: column; } .btn { width: 100%; justify-content: center; } .charts-container { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { 
+            .top-header { flex-direction: column; gap: 20px; text-align: center; } 
+            .periodo-buttons { justify-content: center; } 
+            .dashboard-container { grid-template-columns: 1fr; } 
+            .card-lg { grid-column: span 1; } 
+            .tablas-container { grid-template-columns: 1fr; } 
+            .date-range { flex-direction: column; align-items: stretch; } 
+            .date-range span { text-align: center; }
+            .form-actions { flex-direction: column; } 
+            .btn { width: 100%; justify-content: center; } 
+            .charts-container { grid-template-columns: 1fr; }
+            .periodo-actions { flex-direction: column; align-items: stretch; }
+            .periodo-buttons { justify-content: center; }
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -511,19 +530,27 @@
         let isSubmitting = false;
         let chartFlujoCaja = null;
         let chartDistribucionEgresos = null;
+        let fechaInicioPersonalizada = null;
+        let fechaFinPersonalizada = null;
         
-        // Datos simulados
+        // Datos simulados - Versión mejorada con más datos de ejemplo
         const MOCK_MOVIMIENTOS = [
             { id: 1, tipo: 'ingreso', monto: 150000, categoria: 'venta', razon: 'Venta de productos agrícolas', fecha: new Date().toISOString().slice(0, 19).replace('T', ' ') },
             { id: 2, tipo: 'ingreso', monto: 75000, categoria: 'servicio', razon: 'Consulta veterinaria', fecha: new Date(Date.now() - 86400000).toISOString().slice(0, 19).replace('T', ' ') },
             { id: 3, tipo: 'egreso', monto: 50000, categoria: 'insumo', razon: 'Compra de fertilizantes', fecha: new Date(Date.now() - 172800000).toISOString().slice(0, 19).replace('T', ' ') },
             { id: 4, tipo: 'egreso', monto: 120000, categoria: 'salario', razon: 'Pago de salario empleado', fecha: new Date(Date.now() - 259200000).toISOString().slice(0, 19).replace('T', ' ') },
-            { id: 5, tipo: 'ingreso', monto: 200000, categoria: 'venta', razon: 'Venta de medicamentos', fecha: new Date(Date.now() - 345600000).toISOString().slice(0, 19).replace('T', ' ') }
+            { id: 5, tipo: 'ingreso', monto: 200000, categoria: 'venta', razon: 'Venta de medicamentos', fecha: new Date(Date.now() - 345600000).toISOString().slice(0, 19).replace('T', ' ') },
+            { id: 6, tipo: 'ingreso', monto: 95000, categoria: 'servicio', razon: 'Vacunación de ganado', fecha: new Date(Date.now() - 432000000).toISOString().slice(0, 19).replace('T', ' ') },
+            { id: 7, tipo: 'egreso', monto: 80000, categoria: 'insumo', razon: 'Compra de vitaminas', fecha: new Date(Date.now() - 518400000).toISOString().slice(0, 19).replace('T', ' ') },
+            { id: 8, tipo: 'ingreso', monto: 320000, categoria: 'venta', razon: 'Venta de equipos agrícolas', fecha: new Date(Date.now() - 604800000).toISOString().slice(0, 19).replace('T', ' ') },
+            { id: 9, tipo: 'egreso', monto: 45000, categoria: 'alquiler', razon: 'Pago de alquiler local', fecha: new Date(Date.now() - 691200000).toISOString().slice(0, 19).replace('T', ' ') },
+            { id: 10, tipo: 'ingreso', monto: 180000, categoria: 'venta', razon: 'Venta de semillas', fecha: new Date(Date.now() - 777600000).toISOString().slice(0, 19).replace('T', ' ') }
         ];
         
         const MOCK_ABONOS = [
             { id: 1, credito_id: 101, cliente: { nombre: 'Juan Pérez', cedula: '123456789', telefono: '3001234567' }, monto_abono: 50000, fecha_abono: '2024-01-15', deuda_inicial: 200000, saldo_pendiente: 150000, productos: [{ nombre: 'Fertilizante', cantidad: 2, precio_unidad: 50000, precio_neto: 100000 }] },
-            { id: 2, credito_id: 102, cliente: { nombre: 'María Gómez', cedula: '987654321', telefono: '3007654321' }, monto_abono: 30000, fecha_abono: '2024-01-20', deuda_inicial: 100000, saldo_pendiente: 70000, productos: [{ nombre: 'Semillas', cantidad: 1, precio_unidad: 80000, precio_neto: 80000 }] }
+            { id: 2, credito_id: 102, cliente: { nombre: 'María Gómez', cedula: '987654321', telefono: '3007654321' }, monto_abono: 30000, fecha_abono: '2024-01-20', deuda_inicial: 100000, saldo_pendiente: 70000, productos: [{ nombre: 'Semillas', cantidad: 1, precio_unidad: 80000, precio_neto: 80000 }] },
+            { id: 3, credito_id: 103, cliente: { nombre: 'Luis Mendoza', cedula: '555444333', telefono: '3112223334' }, monto_abono: 75000, fecha_abono: '2024-01-25', deuda_inicial: 300000, saldo_pendiente: 225000, productos: [{ nombre: 'Insecticida', cantidad: 5, precio_unidad: 15000, precio_neto: 75000 }] }
         ];
         
         const MOCK_DINERO_BANCO = {
@@ -532,7 +559,9 @@
             ventas_mixtas: { total: 450000, cantidad_ventas: 3 },
             transacciones_recientes: [
                 { cliente: 'Carlos Ruiz', fecha: '2024-01-25', numero_venta: 'V-001', monto: 150000 },
-                { cliente: 'Ana Torres', fecha: '2024-01-24', numero_venta: 'V-002', monto: 200000 }
+                { cliente: 'Ana Torres', fecha: '2024-01-24', numero_venta: 'V-002', monto: 200000 },
+                { cliente: 'Luis Mendoza', fecha: '2024-01-23', numero_venta: 'V-003', monto: 95000 },
+                { cliente: 'Sofía Ramírez', fecha: '2024-01-22', numero_venta: 'V-004', monto: 180000 }
             ]
         };
         
@@ -549,14 +578,181 @@
             cargarMovimientos();
         }
         
+        function inicializarDatosEjemplo() {
+            if (!confirm('¿Está seguro de inicializar los datos de ejemplo? Esto agregará datos de prueba al sistema y conservará sus movimientos actuales.')) return;
+            showLoading(true);
+            try {
+                const movimientosExistentes = JSON.parse(localStorage.getItem('movimientos')) || [];
+                const nuevosMovimientos = MOCK_MOVIMIENTOS.filter(m => !movimientosExistentes.some(em => em.id === m.id));
+                if (nuevosMovimientos.length > 0) {
+                    movimientosExistentes.push(...nuevosMovimientos);
+                    localStorage.setItem('movimientos', JSON.stringify(movimientosExistentes));
+                }
+                if (!localStorage.getItem('abonos')) {
+                    localStorage.setItem('abonos', JSON.stringify(MOCK_ABONOS));
+                }
+                if (!localStorage.getItem('dinero_banco')) {
+                    localStorage.setItem('dinero_banco', JSON.stringify(MOCK_DINERO_BANCO));
+                }
+                cargarMovimientos();
+                aplicarFiltroPorFecha();
+                showNotification(`Se agregaron ${nuevosMovimientos.length} movimientos de ejemplo`, 'success');
+                const btnInicializar = document.getElementById('btnInicializarDatos');
+                if (btnInicializar) btnInicializar.style.display = 'none';
+            } catch (error) {
+                showNotification('Error al inicializar datos', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
         function cargarMovimientos() {
             movimientosData = JSON.parse(localStorage.getItem('movimientos')) || [];
-            actualizarDashboardUI();
-            actualizarGraficos();
+            aplicarFiltroPorFecha();
         }
         
         function guardarMovimientos() {
             localStorage.setItem('movimientos', JSON.stringify(movimientosData));
+        }
+        
+        function obtenerFechasPeriodo() {
+            const hoy = new Date();
+            let inicio, fin;
+            
+            if (periodoActual === 'hoy') {
+                inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), 0, 0, 0);
+                fin = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), 23, 59, 59);
+            } else if (periodoActual === 'semana') {
+                const diaSemana = hoy.getDay();
+                const diff = diaSemana === 0 ? -6 : 1 - diaSemana;
+                const lunes = new Date(hoy);
+                lunes.setDate(hoy.getDate() + diff);
+                inicio = new Date(lunes.getFullYear(), lunes.getMonth(), lunes.getDate(), 0, 0, 0);
+                fin = new Date(lunes.getFullYear(), lunes.getMonth(), lunes.getDate() + 6, 23, 59, 59);
+            } else if (periodoActual === 'mes') {
+                inicio = new Date(hoy.getFullYear(), hoy.getMonth(), 1, 0, 0, 0);
+                fin = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0, 23, 59, 59);
+            } else if (periodoActual === 'anio') {
+                inicio = new Date(hoy.getFullYear(), 0, 1, 0, 0, 0);
+                fin = new Date(hoy.getFullYear(), 11, 31, 23, 59, 59);
+            } else {
+                if (fechaInicioPersonalizada && fechaFinPersonalizada) {
+                    inicio = new Date(fechaInicioPersonalizada);
+                    fin = new Date(fechaFinPersonalizada);
+                    fin.setHours(23, 59, 59);
+                } else {
+                    inicio = new Date(2020, 0, 1);
+                    fin = new Date(2030, 11, 31);
+                }
+            }
+            
+            return {
+                inicio: inicio.toISOString().split('T')[0],
+                fin: fin.toISOString().split('T')[0],
+                inicioDate: inicio,
+                finDate: fin
+            };
+        }
+        
+        function filtrarMovimientosPorFecha(movimientos) {
+            const { inicio, fin } = obtenerFechasPeriodo();
+            return movimientos.filter(m => {
+                const fechaMov = m.fecha.split(' ')[0];
+                return fechaMov >= inicio && fechaMov <= fin;
+            });
+        }
+        
+        function aplicarFiltroPorFecha() {
+            const movimientosFiltrados = filtrarMovimientosPorFecha(movimientosData);
+            actualizarDashboardUI(movimientosFiltrados);
+            actualizarGraficos(movimientosFiltrados);
+            actualizarTablas(movimientosFiltrados);
+        }
+        
+        function actualizarDashboardUI(movimientos) {
+            const ingresos = movimientos.filter(m => m.tipo === 'ingreso');
+            const egresos = movimientos.filter(m => m.tipo === 'egreso');
+            const totalIngresos = ingresos.reduce((sum, m) => sum + m.monto, 0);
+            const totalEgresos = egresos.reduce((sum, m) => sum + m.monto, 0);
+            document.getElementById('totalIngresos').textContent = formatCurrency(totalIngresos);
+            document.getElementById('totalEgresos').textContent = formatCurrency(totalEgresos);
+            document.getElementById('resumenIngresos').textContent = formatCurrency(totalIngresos);
+            document.getElementById('resumenEgresos').textContent = formatCurrency(totalEgresos);
+            document.getElementById('resumenIngresosSub').textContent = `${ingresos.length} transacciones`;
+            document.getElementById('resumenEgresosSub').textContent = `${egresos.length} transacciones`;
+            document.getElementById('contadorIngresos').textContent = `${ingresos.length} registros`;
+            document.getElementById('contadorEgresos').textContent = `${egresos.length} registros`;
+            document.getElementById('totalCajaDashboard').textContent = formatCurrency(totalIngresos - totalEgresos);
+            document.getElementById('totalCajaHeader').textContent = formatCurrency(totalIngresos - totalEgresos);
+            
+            const abonos = JSON.parse(localStorage.getItem('abonos')) || [];
+            const dinero = JSON.parse(localStorage.getItem('dinero_banco')) || {};
+            document.getElementById('ventasContadoTotal').textContent = formatCurrency(1250000);
+            document.getElementById('totalAnticipos').textContent = formatCurrency(350000);
+            document.getElementById('totalAbonos').textContent = formatCurrency(abonos.reduce((sum, a) => sum + a.monto_abono, 0));
+            document.getElementById('totalBanco').textContent = formatCurrency(dinero.total_general || 0);
+            document.getElementById('infoContado').textContent = '12 ventas';
+            document.getElementById('infoAnticipos').textContent = '5 anticipos';
+            document.getElementById('infoAbonos').textContent = `${abonos.length} abonos`;
+            document.getElementById('infoBanco').textContent = `${dinero.transacciones_recientes?.length || 0} transacciones bancarias`;
+        }
+        
+        function actualizarGraficos(movimientos) {
+            const ingresos = movimientos.filter(m => m.tipo === 'ingreso');
+            const egresos = movimientos.filter(m => m.tipo === 'egreso');
+            
+            const fechasMap = new Map();
+            ingresos.forEach(i => { const fecha = i.fecha.split(' ')[0]; fechasMap.set(fecha, { ingresos: (fechasMap.get(fecha)?.ingresos || 0) + i.monto, egresos: fechasMap.get(fecha)?.egresos || 0 }); });
+            egresos.forEach(e => { const fecha = e.fecha.split(' ')[0]; fechasMap.set(fecha, { ingresos: fechasMap.get(fecha)?.ingresos || 0, egresos: (fechasMap.get(fecha)?.egresos || 0) + e.monto }); });
+            
+            const fechasOrdenadas = Array.from(fechasMap.keys()).sort();
+            const ingresosData = fechasOrdenadas.map(f => fechasMap.get(f).ingresos);
+            const egresosData = fechasOrdenadas.map(f => fechasMap.get(f).egresos);
+            
+            if (chartFlujoCaja) chartFlujoCaja.destroy();
+            const ctx1 = document.getElementById('chartFlujoCaja');
+            if (ctx1 && fechasOrdenadas.length > 0) {
+                chartFlujoCaja = new Chart(ctx1, {
+                    type: 'line',
+                    data: { labels: fechasOrdenadas, datasets: [
+                        { label: 'Ingresos', data: ingresosData, borderColor: '#27ae60', backgroundColor: 'rgba(39,174,96,0.1)', fill: true, tension: 0.1 },
+                        { label: 'Egresos', data: egresosData, borderColor: '#e74c3c', backgroundColor: 'rgba(231,76,60,0.1)', fill: true, tension: 0.1 }
+                    ] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${formatCurrency(ctx.raw)}` } } }, scales: { y: { ticks: { callback: (v) => formatCurrency(v) } } } }
+                });
+            } else if (ctx1) {
+                chartFlujoCaja = new Chart(ctx1, { type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true } });
+            }
+            
+            const egresosPorCategoria = {};
+            egresos.forEach(e => { egresosPorCategoria[e.categoria] = (egresosPorCategoria[e.categoria] || 0) + e.monto; });
+            const categorias = Object.keys(egresosPorCategoria);
+            const montos = Object.values(egresosPorCategoria);
+            
+            if (chartDistribucionEgresos) chartDistribucionEgresos.destroy();
+            const ctx2 = document.getElementById('chartDistribucionEgresos');
+            if (ctx2 && categorias.length > 0) {
+                chartDistribucionEgresos = new Chart(ctx2, {
+                    type: 'pie',
+                    data: { labels: categorias.map(c => getCategoriaNombre(c)), datasets: [{ data: montos, backgroundColor: ['#e74c3c', '#3498db', '#c08a67', '#9b59b6', '#f1c40f', '#95a5a6', '#e67e22', '#1abc9c'] }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${formatCurrency(ctx.raw)}` } } } }
+                });
+            } else if (ctx2) {
+                chartDistribucionEgresos = new Chart(ctx2, { type: 'pie', data: { labels: [], datasets: [] }, options: { responsive: true } });
+            }
+        }
+        
+        function actualizarTablas(movimientos) {
+            const ingresos = movimientos.filter(m => m.tipo === 'ingreso');
+            const egresos = movimientos.filter(m => m.tipo === 'egreso');
+            const startIngresos = (currentPageIngresos - 1) * itemsPerPage;
+            const endIngresos = startIngresos + itemsPerPage;
+            const startEgresos = (currentPageEgresos - 1) * itemsPerPage;
+            const endEgresos = startEgresos + itemsPerPage;
+            renderTablaIngresos(ingresos.slice(startIngresos, endIngresos));
+            renderTablaEgresos(egresos.slice(startEgresos, endEgresos));
+            renderPaginationIngresos(ingresos.length);
+            renderPaginationEgresos(egresos.length);
         }
         
         function formatCurrency(valor) {
@@ -599,78 +795,10 @@
             document.getElementById('loadingOverlay').style.display = mostrar ? 'flex' : 'none';
         }
         
-        function actualizarDashboardUI() {
-            const ingresos = movimientosData.filter(m => m.tipo === 'ingreso');
-            const egresos = movimientosData.filter(m => m.tipo === 'egreso');
-            const totalIngresos = ingresos.reduce((sum, m) => sum + m.monto, 0);
-            const totalEgresos = egresos.reduce((sum, m) => sum + m.monto, 0);
-            document.getElementById('totalIngresos').textContent = formatCurrency(totalIngresos);
-            document.getElementById('totalEgresos').textContent = formatCurrency(totalEgresos);
-            document.getElementById('resumenIngresos').textContent = formatCurrency(totalIngresos);
-            document.getElementById('resumenEgresos').textContent = formatCurrency(totalEgresos);
-            document.getElementById('resumenIngresosSub').textContent = `${ingresos.length} transacciones`;
-            document.getElementById('resumenEgresosSub').textContent = `${egresos.length} transacciones`;
-            document.getElementById('contadorIngresos').textContent = `${ingresos.length} registros`;
-            document.getElementById('contadorEgresos').textContent = `${egresos.length} registros`;
-            document.getElementById('totalCajaDashboard').textContent = formatCurrency(totalIngresos - totalEgresos);
-            document.getElementById('totalCajaHeader').textContent = formatCurrency(totalIngresos - totalEgresos);
-            
-            // Actualizar tarjetas adicionales con datos simulados
-            document.getElementById('ventasContadoTotal').textContent = formatCurrency(1250000);
-            document.getElementById('totalAnticipos').textContent = formatCurrency(350000);
-            document.getElementById('totalAbonos').textContent = formatCurrency(80000);
-            document.getElementById('totalBanco').textContent = formatCurrency(1250000);
-            document.getElementById('infoContado').textContent = '12 ventas';
-            document.getElementById('infoAnticipos').textContent = '5 anticipos';
-            document.getElementById('infoAbonos').textContent = '2 abonos';
-            document.getElementById('infoBanco').textContent = '8 transacciones bancarias';
-        }
-        
-        function actualizarGraficos() {
-            const ingresos = movimientosData.filter(m => m.tipo === 'ingreso');
-            const egresos = movimientosData.filter(m => m.tipo === 'egreso');
-            
-            const fechasMap = new Map();
-            ingresos.forEach(i => { const fecha = i.fecha.split(' ')[0]; fechasMap.set(fecha, { ingresos: (fechasMap.get(fecha)?.ingresos || 0) + i.monto, egresos: fechasMap.get(fecha)?.egresos || 0 }); });
-            egresos.forEach(e => { const fecha = e.fecha.split(' ')[0]; fechasMap.set(fecha, { ingresos: fechasMap.get(fecha)?.ingresos || 0, egresos: (fechasMap.get(fecha)?.egresos || 0) + e.monto }); });
-            
-            const fechasOrdenadas = Array.from(fechasMap.keys()).sort();
-            const ingresosData = fechasOrdenadas.map(f => fechasMap.get(f).ingresos);
-            const egresosData = fechasOrdenadas.map(f => fechasMap.get(f).egresos);
-            
-            if (chartFlujoCaja) chartFlujoCaja.destroy();
-            const ctx1 = document.getElementById('chartFlujoCaja');
-            if (ctx1 && fechasOrdenadas.length > 0) {
-                chartFlujoCaja = new Chart(ctx1, {
-                    type: 'line',
-                    data: { labels: fechasOrdenadas, datasets: [
-                        { label: 'Ingresos', data: ingresosData, borderColor: '#27ae60', backgroundColor: 'rgba(39,174,96,0.1)', fill: true, tension: 0.1 },
-                        { label: 'Egresos', data: egresosData, borderColor: '#e74c3c', backgroundColor: 'rgba(231,76,60,0.1)', fill: true, tension: 0.1 }
-                    ] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${formatCurrency(ctx.raw)}` } } }, scales: { y: { ticks: { callback: (v) => formatCurrency(v) } } } }
-                });
-            }
-            
-            const egresosPorCategoria = {};
-            egresos.forEach(e => { egresosPorCategoria[e.categoria] = (egresosPorCategoria[e.categoria] || 0) + e.monto; });
-            const categorias = Object.keys(egresosPorCategoria);
-            const montos = Object.values(egresosPorCategoria);
-            
-            if (chartDistribucionEgresos) chartDistribucionEgresos.destroy();
-            const ctx2 = document.getElementById('chartDistribucionEgresos');
-            if (ctx2 && categorias.length > 0) {
-                chartDistribucionEgresos = new Chart(ctx2, {
-                    type: 'pie',
-                    data: { labels: categorias.map(c => getCategoriaNombre(c)), datasets: [{ data: montos, backgroundColor: ['#e74c3c', '#3498db', '#c08a67', '#9b59b6', '#f1c40f', '#95a5a6', '#e67e22', '#1abc9c'] }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${formatCurrency(ctx.raw)}` } } } }
-                });
-            }
-        }
-        
         function renderTablaIngresos(ingresos) {
             const tbody = document.getElementById('tbodyIngresos');
             if (!ingresos || ingresos.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay ingresos</h3></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay ingresos en este período</h3>纽约</tr>`;
                 return;
             }
             tbody.innerHTML = '';
@@ -691,7 +819,7 @@
         function renderTablaEgresos(egresos) {
             const tbody = document.getElementById('tbodyEgresos');
             if (!egresos || egresos.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay egresos</h3></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay egresos en este período</h3></td></tr>`;
                 return;
             }
             tbody.innerHTML = '';
@@ -744,28 +872,15 @@
         function cambiarPaginaIngresos(pagina) {
             if (pagina < 1) return;
             currentPageIngresos = pagina;
-            actualizarDatos();
+            const movimientosFiltrados = filtrarMovimientosPorFecha(movimientosData);
+            actualizarTablas(movimientosFiltrados);
         }
         
         function cambiarPaginaEgresos(pagina) {
             if (pagina < 1) return;
             currentPageEgresos = pagina;
-            actualizarDatos();
-        }
-        
-        function actualizarDatos() {
-            const ingresos = movimientosData.filter(m => m.tipo === 'ingreso');
-            const egresos = movimientosData.filter(m => m.tipo === 'egreso');
-            const startIngresos = (currentPageIngresos - 1) * itemsPerPage;
-            const endIngresos = startIngresos + itemsPerPage;
-            const startEgresos = (currentPageEgresos - 1) * itemsPerPage;
-            const endEgresos = startEgresos + itemsPerPage;
-            renderTablaIngresos(ingresos.slice(startIngresos, endIngresos));
-            renderTablaEgresos(egresos.slice(startEgresos, endEgresos));
-            renderPaginationIngresos(ingresos.length);
-            renderPaginationEgresos(egresos.length);
-            actualizarDashboardUI();
-            actualizarGraficos();
+            const movimientosFiltrados = filtrarMovimientosPorFecha(movimientosData);
+            actualizarTablas(movimientosFiltrados);
         }
         
         function setSubmittingState(submitting) {
@@ -839,7 +954,7 @@
             }
             document.getElementById('formMovimiento').style.display = 'none';
             movimientoEditandoId = null;
-            actualizarDatos();
+            aplicarFiltroPorFecha();
             setSubmittingState(false);
         }
         
@@ -849,7 +964,7 @@
             if (index !== -1) {
                 movimientosData.splice(index, 1);
                 guardarMovimientos();
-                actualizarDatos();
+                aplicarFiltroPorFecha();
                 showNotification('Movimiento eliminado correctamente', 'success');
             }
         }
@@ -857,13 +972,16 @@
         function exportarAExcel() {
             showLoading(true);
             try {
-                const datosExcel = [];
-                datosExcel.push(['REPORTE DE CAJA', `Período: ${getPeriodoNombre(periodoActual)}`, `Fecha: ${new Date().toLocaleDateString()}`], []);
-                datosExcel.push(['RESUMEN FINANCIERO'], ['Concepto', 'Cantidad', 'Monto']);
-                const ingresos = movimientosData.filter(m => m.tipo === 'ingreso');
-                const egresos = movimientosData.filter(m => m.tipo === 'egreso');
+                const movimientosFiltrados = filtrarMovimientosPorFecha(movimientosData);
+                const ingresos = movimientosFiltrados.filter(m => m.tipo === 'ingreso');
+                const egresos = movimientosFiltrados.filter(m => m.tipo === 'egreso');
                 const totalIngresos = ingresos.reduce((sum, m) => sum + m.monto, 0);
                 const totalEgresos = egresos.reduce((sum, m) => sum + m.monto, 0);
+                const { inicio, fin } = obtenerFechasPeriodo();
+                
+                const datosExcel = [];
+                datosExcel.push(['REPORTE DE CAJA', `Período: ${getPeriodoNombre(periodoActual)}`, `Rango: ${inicio} al ${fin}`, `Fecha: ${new Date().toLocaleDateString()}`], []);
+                datosExcel.push(['RESUMEN FINANCIERO'], ['Concepto', 'Cantidad', 'Monto']);
                 datosExcel.push(['Ingresos Manuales', ingresos.length, formatCurrency(totalIngresos)]);
                 datosExcel.push(['Egresos Manuales', egresos.length, formatCurrency(totalEgresos)]);
                 datosExcel.push(['TOTAL CAJA', '', formatCurrency(totalIngresos - totalEgresos)]);
@@ -888,21 +1006,37 @@
         }
         
         function ejecutarDiagnostico() {
-            const ingresos = movimientosData.filter(m => m.tipo === 'ingreso');
-            const egresos = movimientosData.filter(m => m.tipo === 'egreso');
+            const movimientosFiltrados = filtrarMovimientosPorFecha(movimientosData);
+            const ingresos = movimientosFiltrados.filter(m => m.tipo === 'ingreso');
+            const egresos = movimientosFiltrados.filter(m => m.tipo === 'egreso');
             const totalIngresos = ingresos.reduce((sum, m) => sum + m.monto, 0);
             const totalEgresos = egresos.reduce((sum, m) => sum + m.monto, 0);
+            const { inicio, fin } = obtenerFechasPeriodo();
+            const abonos = JSON.parse(localStorage.getItem('abonos')) || [];
+            const dinero = JSON.parse(localStorage.getItem('dinero_banco')) || {};
+            
+            const tieneDatos = movimientosData.length > 0 || abonos.length > 0;
+            const estadoGeneral = tieneDatos ? 'ok' : 'warning';
+            const estadoGeneralTexto = tieneDatos ? 'Sistema con datos' : 'Sistema sin datos (inicialice con ejemplos)';
+            
             const resultados = document.getElementById('diagnosticoResultados');
             const panel = document.getElementById('diagnosticoPanel');
             panel.style.display = 'block';
             resultados.innerHTML = `
-                <div class="diagnostico-item diagnostico-ok"><strong>Movimientos:</strong> OK<br><small>Total ingresos: ${ingresos.length} (${formatCurrency(totalIngresos)})</small></div>
-                <div class="diagnostico-item diagnostico-ok"><strong>Egresos:</strong> OK<br><small>Total egresos: ${egresos.length} (${formatCurrency(totalEgresos)})</small></div>
-                <div class="diagnostico-item diagnostico-ok"><strong>Balance:</strong> OK<br><small>${formatCurrency(totalIngresos - totalEgresos)} en caja</small></div>
-                <div class="diagnostico-item diagnostico-ok"><strong>Almacenamiento:</strong> OK<br><small>Datos guardados en localStorage</small></div>
+                <div class="diagnostico-item diagnostico-ok"><strong>📅 Período:</strong> ${getPeriodoNombre(periodoActual)} (${inicio} al ${fin})</div>
+                <div class="diagnostico-item diagnostico-ok"><strong>💰 Ingresos:</strong> ${ingresos.length} movimientos - ${formatCurrency(totalIngresos)}</div>
+                <div class="diagnostico-item diagnostico-ok"><strong>💸 Egresos:</strong> ${egresos.length} movimientos - ${formatCurrency(totalEgresos)}</div>
+                <div class="diagnostico-item diagnostico-ok"><strong>⚖️ Balance:</strong> ${formatCurrency(totalIngresos - totalEgresos)} en caja</div>
+                <div class="diagnostico-item diagnostico-ok"><strong>📦 Abonos:</strong> ${abonos.length} registros - Total: ${formatCurrency(abonos.reduce((sum, a) => sum + a.monto_abono, 0))}</div>
+                <div class="diagnostico-item diagnostico-ok"><strong>🏦 Banco:</strong> Total: ${formatCurrency(dinero.total_general || 0)} - ${dinero.transacciones_recientes?.length || 0} transacciones</div>
+                <div class="diagnostico-item diagnostico-${estadoGeneral}"><strong>💾 Estado general:</strong> ${estadoGeneralTexto}</div>
             `;
             const btnInicializar = document.getElementById('btnInicializarDatos');
-            if (movimientosData.length === 0) btnInicializar.style.display = 'inline-flex';
+            if (movimientosData.length === 0 && abonos.length === 0) {
+                btnInicializar.style.display = 'inline-flex';
+            } else {
+                btnInicializar.style.display = 'none';
+            }
             showNotification('Diagnóstico completado', 'success');
         }
         
@@ -936,11 +1070,11 @@
                     for (const p of abono.productos) {
                         html += `<tr><td>${p.nombre}</td><td>${p.cantidad}</td><td>${formatCurrency(p.precio_unidad)}</td><td>${formatCurrency(p.precio_neto)}</td></tr>`;
                     }
-                    html += `</tbody></table></div></div>`;
+                    html += `</tbody>}</table></div></div>`;
                 }
                 body.innerHTML = html;
             } else {
-                body.innerHTML = `<div class="empty-state-modal"><i class="fas fa-coins"></i><h3>No hay abonos registrados</h3></div>`;
+                body.innerHTML = `<div class="empty-state-modal"><i class="fas fa-coins"></i><h3>No hay abonos registrados</h3><button class="btn btn-primary" onclick="inicializarDatosEjemplo()" style="margin-top: 15px;"><i class="fas fa-database"></i> Inicializar datos de ejemplo</button></div>`;
             }
         }
         
@@ -973,7 +1107,8 @@
                 case 'semana': return 'Esta Semana';
                 case 'mes': return 'Este Mes';
                 case 'anio': return 'Este Año';
-                default: return 'Período Personalizado';
+                case 'personalizado': return 'Personalizado';
+                default: return 'Período';
             }
         }
         
@@ -1009,6 +1144,21 @@
             }
         }
         
+        function aplicarFechasPersonalizadas() {
+            fechaInicioPersonalizada = document.getElementById('fechaInicio').value;
+            fechaFinPersonalizada = document.getElementById('fechaFin').value;
+            if (fechaInicioPersonalizada && fechaFinPersonalizada) {
+                if (fechaInicioPersonalizada > fechaFinPersonalizada) {
+                    showNotification('La fecha de inicio no puede ser mayor a la fecha fin', 'error');
+                    return;
+                }
+                aplicarFiltroPorFecha();
+                showNotification(`Filtrado por fechas: ${fechaInicioPersonalizada} al ${fechaFinPersonalizada}`, 'success');
+            } else {
+                showNotification('Seleccione ambas fechas', 'warning');
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             initLocalStorage();
             cargarEstadoSidebar();
@@ -1025,8 +1175,10 @@
             document.getElementById('movimientoForm').addEventListener('submit', (e) => { e.preventDefault(); procesarMovimiento(); });
             document.getElementById('btnExportarExcel').addEventListener('click', exportarAExcel);
             document.getElementById('btnDiagnostico').addEventListener('click', ejecutarDiagnostico);
+            document.getElementById('btnInicializarDatos').addEventListener('click', inicializarDatosEjemplo);
             document.getElementById('cardAbonos').addEventListener('click', mostrarDetalleAbonos);
             document.getElementById('cardBanco').addEventListener('click', mostrarDetalleBanco);
+            document.getElementById('aplicarFechas').addEventListener('click', aplicarFechasPersonalizadas);
             
             document.querySelectorAll('.periodo-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -1040,14 +1192,19 @@
                         const hoy = new Date();
                         document.getElementById('fechaInicio').value = hoy.toISOString().split('T')[0];
                         document.getElementById('fechaFin').value = hoy.toISOString().split('T')[0];
+                        fechaInicioPersonalizada = null;
+                        fechaFinPersonalizada = null;
                     } else {
                         dateRange.style.display = 'none';
+                        fechaInicioPersonalizada = null;
+                        fechaFinPersonalizada = null;
+                        aplicarFiltroPorFecha();
                     }
                     showNotification(`Período cambiado a ${getPeriodoNombre(periodoActual)}`, 'success');
                 });
             });
             
-            actualizarDatos();
+            aplicarFiltroPorFecha();
         });
         
         window.editarMovimiento = editarMovimiento;
@@ -1056,6 +1213,7 @@
         window.cambiarPaginaEgresos = cambiarPaginaEgresos;
         window.cerrarModalAbonos = cerrarModalAbonos;
         window.cerrarModalBanco = cerrarModalBanco;
+        window.inicializarDatosEjemplo = inicializarDatosEjemplo;
     </script>
 </body>
 </html>
