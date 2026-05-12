@@ -26,7 +26,16 @@
         body { background-color: var(--blanco-hueso); display: flex; min-height: 100vh; }
         
         .sidebar { width: 250px; background: var(--teal); color: white; position: fixed; height: 100vh; transition: 0.3s; z-index: 1000; }
+        .sidebar.collapsed { width: 0; transform: translateX(-100%); opacity: 0; pointer-events: none; }
         .main-content { flex: 1; margin-left: 250px; padding: 30px; transition: margin-left 0.3s; }
+        .main-content.expanded { margin-left: 0; width: 100%; }
+        
+        .toggle-sidebar-btn { position: absolute; top: 50%; right: -15px; background: var(--mostaza); color: var(--gris-oscuro); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 1001; }
+        .toggle-sidebar-btn:hover { background: var(--terracota); color: white; }
+        .toggle-sidebar-btn.collapsed { right: -40px; background: var(--teal); color: white; transform: rotate(180deg); }
+        .toggle-sidebar-collapsed { position: fixed; top: 20px; left: 20px; width: 40px; height: 40px; background: var(--teal); color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; cursor: pointer; border: none; box-shadow: 0 3px 10px rgba(0,0,0,0.2); z-index: 999; }
+        .toggle-sidebar-collapsed.show { display: flex; }
+        .toggle-sidebar-collapsed:hover { background: var(--mostaza); color: var(--gris-oscuro); }
         
         .logo-container { text-align: center; padding: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); }
         .logo { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 22px; font-weight: 700; }
@@ -69,6 +78,7 @@
         .btn-info { background: var(--info); color: white; }
         .btn-warning { background: var(--advertencia); color: white; }
         .btn-sm { padding: 8px 16px; font-size: 12px; }
+        .btn-success { background: var(--exito); color: white; }
 
         .table-container { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto; display: none; }
         .table-container.active { display: block; }
@@ -100,17 +110,79 @@
         .form-label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--gris-oscuro); }
         .form-control { width: 100%; padding: 12px; border: 2px solid var(--gris-claro); border-radius: 8px; font-size: 14px; }
         .form-control:focus { outline: none; border-color: var(--teal); }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .close-modal { background: rgba(255,255,255,0.2); border: none; color: white; font-size: 20px; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .close-modal:hover { background: rgba(255,255,255,0.3); }
+        
+        .productos-textarea { width: 100%; padding: 12px; border: 2px solid var(--gris-claro); border-radius: 8px; font-size: 14px; resize: vertical; min-height: 100px; }
+        .contador-caracteres { text-align: right; font-size: 12px; color: var(--gris-medio); margin-top: 5px; }
+        
+        .historial-btn { background: rgba(52, 152, 219, 0.1); color: var(--info); border: 2px solid var(--info); padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+        .historial-btn:hover { background: var(--info); color: white; }
+        
+        .btn-icon-small { width: 32px; height: 32px; border-radius: 6px; border: none; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; color: white; }
+        .btn-factura { background: var(--teal); }
+        .btn-abono { background: var(--terracota); }
+        
+        .ventas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; margin-top: 20px; }
+        .venta-card { background: white; border: 1px solid var(--gris-claro); border-radius: 12px; overflow: hidden; }
+        .venta-header { background: linear-gradient(135deg, var(--teal) 0%, #1a7572 100%); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .venta-body { padding: 20px; }
+        .venta-detalle-row { display: flex; margin: 8px 0; font-size: 13px; border-bottom: 1px dashed var(--gris-claro); padding-bottom: 8px; }
+        .venta-detalle-label { width: 40%; color: var(--gris-medio); font-weight: 500; }
+        .venta-detalle-value { width: 60%; font-weight: 600; color: var(--gris-oscuro); }
+        .venta-productos { margin-top: 12px; padding: 12px; background: var(--blanco-hueso); border-radius: 8px; font-size: 12px; }
+        .venta-acciones { display: flex; gap: 8px; padding: 15px 20px; background: var(--gris-claro); justify-content: flex-end; }
+        
+        .creditos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 20px; margin-top: 20px; }
+        .credito-card { background: white; border: 1px solid var(--gris-claro); border-radius: 12px; overflow: hidden; }
+        .credito-header { background: linear-gradient(135deg, var(--terracota) 0%, #b07a57 100%); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .credito-body { padding: 20px; }
+        .credito-detalle-row { display: flex; margin: 8px 0; font-size: 13px; border-bottom: 1px dashed var(--gris-claro); padding-bottom: 8px; }
+        .credito-detalle-label { width: 45%; color: var(--gris-medio); font-weight: 500; }
+        .credito-detalle-value { width: 55%; font-weight: 600; color: var(--gris-oscuro); }
+        .credito-saldo { font-size: 18px; font-weight: bold; color: var(--error); margin-top: 15px; padding-top: 15px; border-top: 2px solid var(--gris-claro); text-align: right; }
+        .credito-acciones { display: flex; gap: 8px; padding: 15px 20px; background: var(--gris-claro); justify-content: flex-end; }
+        
+        .abono-info { background: var(--blanco-hueso); border-radius: 8px; padding: 15px; margin: 15px 0; border-left: 4px solid var(--terracota); }
+        .abono-info-row { display: flex; justify-content: space-between; margin: 8px 0; }
+        .abono-label { font-weight: 600; color: var(--gris-oscuro); }
+        .abono-value { color: var(--teal); font-weight: 500; }
+        
+        .producto-input-container { position: relative; flex: 2; }
+        .producto-input { width: 100%; padding: 10px; border: 2px solid var(--gris-claro); border-radius: 6px; font-size: 13px; }
+        .cantidad-input { width: 100px; padding: 10px; border: 2px solid var(--gris-claro); border-radius: 6px; font-size: 13px; }
+        .btn-eliminar-producto { width: 36px; height: 36px; border-radius: 6px; border: none; background: var(--error); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .sugerencias-productos { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid var(--teal); border-radius: 6px; max-height: 200px; overflow-y: auto; z-index: 100; display: none; }
+        .producto-sugerencia { padding: 10px; cursor: pointer; border-bottom: 1px solid var(--gris-claro); font-size: 13px; }
+        .producto-sugerencia:hover { background: var(--celeste-fondo); }
+        .producto-item { margin-bottom: 10px; }
+        
+        .resumen-historico { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; padding: 25px; margin-bottom: 30px; border-left: 5px solid var(--teal); }
+        .resumen-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+        .resumen-item { background: white; border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .resumen-valor { font-size: 28px; font-weight: bold; color: var(--teal); margin: 10px 0; }
+        .resumen-label { font-size: 13px; color: var(--gris-medio); text-transform: uppercase; }
+        
+        .modal-content.small { max-width: 600px; height: auto; }
+        .historial-tabs { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid var(--gris-claro); padding-bottom: 10px; }
+        .tab-historial-btn { padding: 12px 24px; background: none; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--gris-medio); display: flex; align-items: center; gap: 8px; }
+        .tab-historial-btn.active { background: var(--teal); color: white; }
 
         @media (max-width: 768px) {
             .top-header { flex-direction: column; gap: 20px; text-align: center; }
             .controls-container { flex-direction: column; align-items: stretch; }
             .search-container { min-width: 100%; }
+            .form-row { grid-template-columns: 1fr; }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="sidebar">
+    <button class="toggle-sidebar-collapsed" id="toggleSidebarCollapsed"><i class="fas fa-bars"></i></button>
+    
+    <div class="sidebar" id="sidebar">
+        <button class="toggle-sidebar-btn" id="toggleSidebar"><i class="fas fa-chevron-left"></i></button>
         <div class="logo-container"><div class="logo"><span class="logo-agro">AGRO</span><span class="logo-vet">VET</span></div><div class="slogan">Yacuanquer - Sistema POS</div></div>
         <nav class="nav-menu">
             <a href="/" class="nav-item"><i class="nav-icon fas fa-home"></i><span class="nav-text">Inicio</span></a>
@@ -118,7 +190,7 @@
         </nav>
     </div>
     
-    <div class="main-content">
+    <div class="main-content" id="mainContent">
         <header class="top-header">
             <div class="header-left"><h1>Gestión de Clientes y Proveedores</h1><p>Administra la información de tus clientes y proveedores</p></div>
             <div class="header-stats"><div class="stat-badge"><div class="stat-value" id="totalClientes">0</div><div class="stat-label">Total Clientes</div></div><div class="stat-badge"><div class="stat-value" id="totalProveedores">0</div><div class="stat-label">Proveedores</div></div></div>
@@ -139,60 +211,135 @@
         </div>
         
         <div class="table-container active" id="tablaClientes">
-            <table class="clientes-table"><thead><tr><th>Cédula</th><th>Nombre</th><th>Contacto</th><th>Estado</th><th>Deuda</th><th>Acciones</th></tr></thead><tbody id="clientesBody"></tbody></table>
+            <table class="clientes-table"><thead><tr><th>Cédula</th><th>Nombre</th><th>Contacto</th><th>Estado</th><th>Deuda</th><th>Acciones</th></tr></thead><tbody id="clientesBody"></tbody>}</table>
             <div class="pagination" id="paginationClientes"></div>
         </div>
         
         <div class="table-container" id="tablaProveedores">
-            <table class="proveedores-table"><thead><tr><th>Teléfono</th><th>Empresa</th><th>Proveedor</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="proveedoresBody"></tbody></table>
+            <table class="proveedores-table"><thead><tr><th>Teléfono</th><th>Empresa</th><th>Proveedor</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="proveedoresBody"></tbody>}</table>
             <div class="pagination" id="paginationProveedores"></div>
         </div>
     </div>
 
-    <!-- Modales -->
+    <!-- Modal Cliente -->
     <div class="modal" id="modalCliente"><div class="modal-content"><div class="modal-header"><h2 id="modalClienteTitulo">Nuevo Cliente</h2></div><form id="formCliente"><input type="hidden" id="clienteCedulaOriginal"><div class="form-group"><label class="form-label">Cédula *</label><input type="text" class="form-control" id="clienteCedula" required></div><div class="form-group"><label class="form-label">Nombre *</label><input type="text" class="form-control" id="clienteNombre" required></div><div class="form-group"><label class="form-label">Teléfono</label><input type="text" class="form-control" id="clienteTelefono"></div><div class="form-group"><label class="form-label">Correo</label><input type="email" class="form-control" id="clienteCorreo"></div><div class="form-group"><label class="form-label">Dirección</label><textarea class="form-control" id="clienteDireccion" rows="2"></textarea></div><div class="modal-actions"><button type="button" class="btn" id="btnCancelarCliente">Cancelar</button><button type="button" class="btn btn-primary" id="btnGuardarCliente">Guardar</button></div></form></div></div>
 
-    <div class="modal" id="modalProveedor"><div class="modal-content"><div class="modal-header"><h2 id="modalProveedorTitulo">Nuevo Proveedor</h2></div><form id="formProveedor"><input type="hidden" id="proveedorTelefonoOriginal"><div class="form-group"><label class="form-label">Teléfono *</label><input type="text" class="form-control" id="proveedorTelefono" required></div><div class="form-group"><label class="form-label">Empresa *</label><input type="text" class="form-control" id="proveedorEmpresa" required></div><div class="form-group"><label class="form-label">Nombre Proveedor *</label><input type="text" class="form-control" id="proveedorNombre" required></div><div class="form-group"><label class="form-label">Correo</label><input type="email" class="form-control" id="proveedorCorreo"></div><div class="form-group"><label class="form-label">Estado</label><select class="form-control" id="proveedorEstado"><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select></div><div class="modal-actions"><button type="button" class="btn" id="btnCancelarProveedor">Cancelar</button><button type="button" class="btn btn-primary" id="btnGuardarProveedor">Guardar</button></div></form></div></div>
+    <!-- Modal Proveedor Completo -->
+    <div class="modal" id="modalProveedorCompleto">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="modalProveedorTitulo">Nuevo Proveedor</h2><button class="close-modal" onclick="cerrarModalProveedorCompleto()"><i class="fas fa-times"></i></button></div>
+            <div class="modal-body">
+                <form id="formProveedorCompleto">
+                    <input type="hidden" id="proveedorTelefonoOriginal">
+                    <div class="form-row"><div class="form-group"><label class="form-label">Teléfono *</label><input type="text" class="form-control" id="proveedorTelefono" required></div><div class="form-group"><label class="form-label">Nombre Empresa *</label><input type="text" class="form-control" id="proveedorEmpresa" required></div></div>
+                    <div class="form-row"><div class="form-group"><label class="form-label">Nombre Proveedor *</label><input type="text" class="form-control" id="proveedorNombre" required></div><div class="form-group"><label class="form-label">Correo Electrónico</label><input type="email" class="form-control" id="proveedorCorreo"></div></div>
+                    <div class="form-row"><div class="form-group"><label class="form-label">Estado</label><select class="form-control" id="proveedorEstado"><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select></div></div>
+                    <div style="margin:20px 0;padding:15px;background:var(--blanco-hueso);border-radius:8px"><h3 style="color:var(--terracota);margin-bottom:15px"><i class="fas fa-boxes"></i> Productos que Suministra</h3><textarea class="productos-textarea" id="proveedorProductos" rows="4" placeholder="Ingrese los productos que suministra este proveedor, separados por comas..." maxlength="500" oninput="actualizarContadorProductos()"></textarea><div class="contador-caracteres"><span id="contadorNumero">0</span>/500 caracteres</div></div>
+                    <div style="display:flex;gap:15px;justify-content:flex-end"><button type="button" class="btn btn-secondary" onclick="cerrarModalProveedorCompleto()">Cancelar</button><button type="submit" class="btn btn-warning"><i class="fas fa-save"></i> Guardar Proveedor</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
 
+    <!-- Modal Venta Manual -->
+    <div class="modal" id="modalVentaManual">
+        <div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title"><i class="fas fa-cash-register"></i><span id="modalVentaManualTitulo">Nueva Venta Manual</span></h2><button class="close-modal" onclick="cerrarModalVentaManual()"><i class="fas fa-times"></i></button></div>
+            <div class="modal-body">
+                <form id="formVentaManual">
+                    <input type="hidden" id="ventaManualClienteCedula">
+                    <input type="hidden" id="ventaManualClienteNombre">
+                    <div class="form-row"><div class="form-group"><label class="form-label">Fecha de Venta *</label><input type="date" class="form-control" id="ventaManualFecha" required></div><div class="form-group"><label class="form-label">Total ($) *</label><input type="number" class="form-control" id="ventaManualTotal" step="0.01" min="0" required></div></div>
+                    <div class="form-row"><div class="form-group"><label class="form-label">Anticipo ($)</label><input type="number" class="form-control" id="ventaManualAnticipo" step="0.01" min="0" value="0"></div><div class="form-group"><label class="form-label">Días de Crédito</label><input type="number" class="form-control" id="ventaManualDiasCredito" min="1" value="30"></div></div>
+                    <div style="margin:20px 0;padding:15px;background:var(--blanco-hueso);border-radius:8px"><h3 style="color:var(--terracota);margin-bottom:15px"><i class="fas fa-boxes"></i> Productos Vendidos</h3><div id="productosVentaManualContainer"><div class="producto-item"><div style="display:flex;gap:10px;align-items:center"><div class="producto-input-container"><input type="text" class="producto-input" placeholder="Nombre del producto" oninput="buscarProductosSugeridos(this)"><div class="sugerencias-productos"></div></div><input type="number" class="cantidad-input" placeholder="Cantidad" min="1" value="1"><button type="button" class="btn-eliminar-producto" onclick="eliminarProductoVentaManual(this)"><i class="fas fa-times"></i></button></div></div></div><button type="button" class="btn btn-secondary btn-sm" onclick="agregarProductoVentaManual()"><i class="fas fa-plus"></i> Agregar Producto</button></div>
+                    <div class="form-group"><label class="form-label">Observaciones</label><textarea class="form-control" id="ventaManualObservaciones" rows="3"></textarea></div>
+                    <div style="display:flex;gap:15px;justify-content:flex-end"><button type="button" class="btn btn-secondary" onclick="cerrarModalVentaManual()">Cancelar</button><button type="submit" class="btn btn-warning"><i class="fas fa-save"></i> Registrar Venta</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Historial Cliente -->
+    <div class="modal" id="historialClienteModal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title"><i class="fas fa-history"></i><span id="historialClienteNombre">Historial de Ventas</span></h2><button class="close-modal" id="closeHistorialCliente"><i class="fas fa-times"></i></button></div>
+            <div class="modal-body">
+                <div class="resumen-historico"><h3 style="color:var(--teal);margin-bottom:15px"><i class="fas fa-chart-line"></i> Resumen General</h3><div class="resumen-grid" id="resumenClienteGrid"></div></div>
+                <div class="historial-tabs"><button class="tab-historial-btn active" data-historial-tab="ventas"><i class="fas fa-shopping-cart"></i> Ventas</button><button class="tab-historial-btn" data-historial-tab="creditos"><i class="fas fa-file-invoice-dollar"></i> Créditos</button></div>
+                <div class="historial-tab-content active" id="ventasClienteTab"><div id="ventasClienteList" class="ventas-grid"></div></div>
+                <div class="historial-tab-content" id="creditosClienteTab" style="display:none"><div id="creditosClienteList" class="creditos-grid"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Abono -->
+    <div class="modal" id="abonoModal">
+        <div class="modal-content small">
+            <div class="modal-header"><h2 class="modal-title"><i class="fas fa-money-bill-wave"></i><span>Registrar Abono</span></h2><button class="close-modal" id="closeAbonoModal"><i class="fas fa-times"></i></button></div>
+            <div class="modal-body">
+                <form id="formAbono">
+                    <input type="hidden" id="abonoCreditoId">
+                    <div class="abono-info"><div class="abono-info-row"><span class="abono-label">Cliente:</span><span class="abono-value" id="abonoClienteDisplay"></span></div><div class="abono-info-row"><span class="abono-label">Saldo actual:</span><span class="abono-value" id="saldoActual">$0.00</span></div></div>
+                    <div class="form-group"><label class="form-label">Monto del Abono ($)</label><input type="number" class="form-control" id="abonoMonto" step="0.01" min="0.01" required><small>Máximo: <span id="saldoMaximo">$0.00</span></small></div>
+                    <div class="form-row"><div class="form-group"><label class="form-label">Fecha del Abono *</label><input type="date" class="form-control" id="abonoFecha" required></div><div class="form-group"><label class="form-label">Hora</label><input type="time" class="form-control" id="abonoHora" step="1"></div></div>
+                    <div class="form-group"><label class="form-label">Observaciones</label><textarea class="form-control" id="abonoObservaciones" rows="3"></textarea></div>
+                    <div style="display:flex;gap:15px;justify-content:flex-end"><button type="button" class="btn btn-secondary" id="btnCancelarAbono">Cancelar</button><button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Registrar Abono</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmación -->
     <div class="modal" id="modalConfirm"><div class="modal-content"><div class="modal-header"><h2 id="confirmTitulo">Confirmar</h2></div><div class="modal-body"><p id="confirmMensaje">¿Estás seguro?</p></div><div class="modal-actions"><button class="btn" id="confirmCancelar">Cancelar</button><button class="btn btn-danger" id="confirmAceptar">Eliminar</button></div></div></div>
 
     <script>
         const ITEMS_PER_PAGE = 5;
-        let todosClientes = [], todosProveedores = [];
+        let todosClientes = [], todosProveedores = [], todosProductos = [];
         let currentPageClientes = 1, currentPageProveedores = 1;
         let totalPagesClientes = 1, totalPagesProveedores = 1;
         let clienteEditando = null, proveedorEditando = null;
         let elementoAEliminar = null, tipoElementoAEliminar = null;
         let tabActual = 'clientes';
+        let sidebarCollapsed = false;
+        let esEdicionProveedor = false;
+        let creditoActualAbono = null;
+        let elementoHistorial = null;
+        let timeoutBusqueda = null;
 
         const MOCK_CLIENTES = [
-            { cedula: '123456789', nombre: 'Juan Pérez', telefono: '3001234567', correo: 'juan@email.com', direccion: 'Calle 1', deuda_total: 0, fecha_creacion: new Date().toISOString() },
-            { cedula: '987654321', nombre: 'María Gómez', telefono: '3007654321', correo: 'maria@email.com', direccion: 'Carrera 2', deuda_total: 150000, fecha_creacion: new Date().toISOString() },
-            { cedula: '555666777', nombre: 'Pedro Ramírez', telefono: '3109998888', correo: 'pedro@email.com', direccion: 'Avenida 3', deuda_total: 25000, fecha_creacion: new Date().toISOString() },
-            { cedula: '111222333', nombre: 'Luisa Fernández', telefono: '3154445555', correo: 'luisa@email.com', direccion: 'Calle 5', deuda_total: 0, fecha_creacion: new Date().toISOString() },
-            { cedula: '444555666', nombre: 'Carlos Méndez', telefono: '3176667777', correo: 'carlos@email.com', direccion: 'Carrera 8', deuda_total: 200000, fecha_creacion: new Date().toISOString() },
-            { cedula: '777888999', nombre: 'Ana Torres', telefono: '3118889999', correo: 'ana@email.com', direccion: 'Avenida 10', deuda_total: 0, fecha_creacion: new Date().toISOString() }
+            { cedula: '123456789', nombre: 'Juan Pérez', telefono: '3001234567', correo: 'juan@email.com', direccion: 'Calle 1', deuda_total: 0, fecha_creacion: new Date().toISOString(), ventas: [], creditos: [] },
+            { cedula: '987654321', nombre: 'María Gómez', telefono: '3007654321', correo: 'maria@email.com', direccion: 'Carrera 2', deuda_total: 150000, fecha_creacion: new Date().toISOString(), ventas: [], creditos: [] },
+            { cedula: '555666777', nombre: 'Pedro Ramírez', telefono: '3109998888', correo: 'pedro@email.com', direccion: 'Avenida 3', deuda_total: 25000, fecha_creacion: new Date().toISOString(), ventas: [], creditos: [] }
         ];
+        
         const MOCK_PROVEEDORES = [
-            { telefono: '3101112223', nombre_empresa: 'Agroinsumos SA', nombre_proveedor: 'Carlos López', correo: 'carlos@agroinsumos.com', estado: 'activo', producto: 'Fertilizantes', fecha_creacion: new Date().toISOString() },
-            { telefono: '3203334445', nombre_empresa: 'Veterinaria Central', nombre_proveedor: 'Ana Martínez', correo: 'ana@vetcentral.com', estado: 'activo', producto: 'Medicamentos', fecha_creacion: new Date().toISOString() },
-            { telefono: '3115556667', nombre_empresa: 'Semillas del Campo', nombre_proveedor: 'Roberto Jiménez', correo: 'roberto@semillas.com', estado: 'activo', producto: 'Semillas', fecha_creacion: new Date().toISOString() },
-            { telefono: '3127778889', nombre_empresa: 'Equipos Agro', nombre_proveedor: 'Laura Vargas', correo: 'laura@equiposagro.com', estado: 'inactivo', producto: 'Maquinaria', fecha_creacion: new Date().toISOString() }
+            { telefono: '3101112223', nombre_empresa: 'Agroinsumos SA', nombre_proveedor: 'Carlos López', correo: 'carlos@agroinsumos.com', estado: 'activo', producto: 'Fertilizantes, Semillas', fecha_creacion: new Date().toISOString() },
+            { telefono: '3203334445', nombre_empresa: 'Veterinaria Central', nombre_proveedor: 'Ana Martínez', correo: 'ana@vetcentral.com', estado: 'activo', producto: 'Medicamentos', fecha_creacion: new Date().toISOString() }
+        ];
+        
+        const MOCK_PRODUCTOS = [
+            { id: 1, nombre: 'Fertilizante Urea', precio_costo: 45000, stock: 100 },
+            { id: 2, nombre: 'Semillas de Maíz', precio_costo: 80000, stock: 50 },
+            { id: 3, nombre: 'Insecticida', precio_costo: 35000, stock: 75 }
         ];
 
         function initLocalStorage() {
             if (!localStorage.getItem('clientes')) localStorage.setItem('clientes', JSON.stringify(MOCK_CLIENTES));
             if (!localStorage.getItem('proveedores')) localStorage.setItem('proveedores', JSON.stringify(MOCK_PROVEEDORES));
+            if (!localStorage.getItem('productos')) localStorage.setItem('productos', JSON.stringify(MOCK_PRODUCTOS));
             cargarTodosClientes();
             cargarTodosProveedores();
+            cargarTodosProductos();
         }
 
         function formatCurrency(v) { return (!v && v !== 0) ? '$ 0' : `$ ${parseFloat(v).toLocaleString('es-CO')}`; }
+        function formatDate(f) { if (!f) return 'Nunca'; try { return new Date(f).toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'}); } catch(e) { return f; } }
         function getDeudaClass(d) { d = parseFloat(d) || 0; if (d === 0) return 'deuda-cero'; if (d < 50000) return 'deuda-pequena'; return 'deuda-grande'; }
-        function getEstadoClass(e, deuda) { if (deuda > 0) return 'status-moroso'; return e === 'activo' ? 'status-activo' : 'status-inactivo'; }
+        function getEstadoClass(e, deuda) { if (deuda > 0) return 'status-moroso'; return 'status-activo'; }
 
         function cargarTodosClientes() { todosClientes = JSON.parse(localStorage.getItem('clientes')) || []; updateStats(); aplicarFiltrosYOrdenClientes(); }
         function cargarTodosProveedores() { todosProveedores = JSON.parse(localStorage.getItem('proveedores')) || []; updateStats(); aplicarFiltrosYOrdenProveedores(); }
+        function cargarTodosProductos() { todosProductos = JSON.parse(localStorage.getItem('productos')) || []; }
 
         function ordenarClientes(c, orden) {
             const copy = [...c];
@@ -259,7 +406,7 @@
 
         function renderClientes(clientes) {
             const tbody = document.getElementById('clientesBody');
-            if (!clientes.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px"><i class="fas fa-users" style="font-size:48px;color:var(--gris-medio);margin-bottom:15px;display:block"></i><h3>No se encontraron clientes</h3></td></tr>'; return; }
+            if (!clientes.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px"><i class="fas fa-users" style="font-size:48px;color:var(--gris-medio);margin-bottom:15px;display:block"></i><h3>No se encontraron clientes</h3></tr>'; return; }
             tbody.innerHTML = clientes.map(c => `
                 <tr>
                     <td>${c.cedula}</td>
@@ -267,7 +414,7 @@
                     <td>${c.telefono ? `<i class="fas fa-phone"></i> ${c.telefono}<br>` : ''}${c.correo ? `<i class="fas fa-envelope"></i> ${c.correo}` : ''}</td>
                     <td><span class="status-badge ${getEstadoClass(c.estado_actual, c.deuda_total)}">${c.deuda_total > 0 ? 'Moroso' : 'Activo'}</span></td>
                     <td class="${getDeudaClass(c.deuda_total)}"><strong>${formatCurrency(c.deuda_total)}</strong></td>
-                    <td><button class="btn btn-info btn-sm" onclick="abrirModalEditarCliente('${c.cedula}')"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" onclick="confirmarEliminar('cliente','${c.cedula}','${c.nombre}')"><i class="fas fa-trash"></i></button></td>
+                    <td><button class="btn btn-info btn-sm" onclick="abrirModalEditarCliente('${c.cedula}')"><i class="fas fa-edit"></i></button> <button class="btn btn-warning btn-sm" onclick="abrirModalVentaManual('${c.cedula}','${c.nombre}')"><i class="fas fa-cash-register"></i></button> <button class="historial-btn btn-sm" onclick="verHistorialCliente('${c.cedula}')"><i class="fas fa-chart-bar"></i> Historial</button> <button class="btn btn-danger btn-sm" onclick="confirmarEliminar('cliente','${c.cedula}','${c.nombre}')"><i class="fas fa-trash"></i></button></td>
                 </tr>
             `).join('');
         }
@@ -288,14 +435,14 @@
 
         function renderProveedores(proveedores) {
             const tbody = document.getElementById('proveedoresBody');
-            if (!proveedores.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px"><i class="fas fa-truck" style="font-size:48px;color:var(--gris-medio);margin-bottom:15px;display:block"></i><h3>No se encontraron proveedores</h3></td></tr>'; return; }
+            if (!proveedores.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px"><i class="fas fa-truck" style="font-size:48px;color:var(--gris-medio);margin-bottom:15px;display:block"></i><h3>No se encontraron proveedores</h3></tr>'; return; }
             tbody.innerHTML = proveedores.map(p => `
                 <tr>
                     <td>${p.telefono}</td>
                     <td><strong>${p.nombre_empresa}</strong></td>
                     <td>${p.nombre_proveedor}</td>
                     <td><span class="status-badge ${p.estado === 'activo' ? 'status-activo' : 'status-inactivo'}">${p.estado === 'activo' ? 'Activo' : 'Inactivo'}</span></td>
-                    <td><button class="btn btn-info btn-sm" onclick="abrirModalEditarProveedor('${p.telefono}')"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" onclick="confirmarEliminar('proveedor','${p.telefono}','${p.nombre_empresa}')"><i class="fas fa-trash"></i></button></td>
+                    <td><button class="btn btn-info btn-sm" onclick="editarProveedorCompleto('${p.telefono}')"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" onclick="confirmarEliminar('proveedor','${p.telefono}','${p.nombre_empresa}')"><i class="fas fa-trash"></i></button></td>
                 </tr>
             `).join('');
         }
@@ -329,25 +476,186 @@
         function abrirModalNuevoCliente() { clienteEditando = null; document.getElementById('modalClienteTitulo').innerText = 'Nuevo Cliente'; limpiarFormCliente(); document.getElementById('modalCliente').style.display = 'flex'; }
         function abrirModalEditarCliente(cedula) { clienteEditando = cedula; const c = todosClientes.find(c => c.cedula === cedula); document.getElementById('modalClienteTitulo').innerText = 'Editar Cliente'; document.getElementById('clienteCedulaOriginal').value = cedula; document.getElementById('clienteCedula').value = c.cedula; document.getElementById('clienteNombre').value = c.nombre; document.getElementById('clienteTelefono').value = c.telefono || ''; document.getElementById('clienteCorreo').value = c.correo || ''; document.getElementById('clienteDireccion').value = c.direccion || ''; document.getElementById('modalCliente').style.display = 'flex'; }
         function limpiarFormCliente() { document.getElementById('clienteCedulaOriginal').value = ''; document.getElementById('clienteCedula').value = ''; document.getElementById('clienteNombre').value = ''; document.getElementById('clienteTelefono').value = ''; document.getElementById('clienteCorreo').value = ''; document.getElementById('clienteDireccion').value = ''; }
-        function guardarCliente() { const cedula = document.getElementById('clienteCedula').value.trim(); const nombre = document.getElementById('clienteNombre').value.trim(); if (!cedula || !nombre) { alert('Cédula y nombre son requeridos'); return; } let clientes = JSON.parse(localStorage.getItem('clientes')); if (!clienteEditando && clientes.find(c => c.cedula === cedula)) { alert('Ya existe un cliente con esa cédula'); return; } const nuevo = { cedula, nombre, telefono: document.getElementById('clienteTelefono').value, correo: document.getElementById('clienteCorreo').value, direccion: document.getElementById('clienteDireccion').value, deuda_total: 0, fecha_creacion: new Date().toISOString() }; if (clienteEditando) { const idx = clientes.findIndex(c => c.cedula === clienteEditando); if (idx !== -1) { nuevo.deuda_total = clientes[idx].deuda_total || 0; clientes[idx] = nuevo; } } else { clientes.push(nuevo); } localStorage.setItem('clientes', JSON.stringify(clientes)); document.getElementById('modalCliente').style.display = 'none'; cargarTodosClientes(); }
+        function guardarCliente() { const cedula = document.getElementById('clienteCedula').value.trim(); const nombre = document.getElementById('clienteNombre').value.trim(); if (!cedula || !nombre) { alert('Cédula y nombre son requeridos'); return; } let clientes = JSON.parse(localStorage.getItem('clientes')); if (!clienteEditando && clientes.find(c => c.cedula === cedula)) { alert('Ya existe un cliente con esa cédula'); return; } const nuevo = { cedula, nombre, telefono: document.getElementById('clienteTelefono').value, correo: document.getElementById('clienteCorreo').value, direccion: document.getElementById('clienteDireccion').value, deuda_total: 0, fecha_creacion: new Date().toISOString(), ventas: [], creditos: [] }; if (clienteEditando) { const idx = clientes.findIndex(c => c.cedula === clienteEditando); if (idx !== -1) { nuevo.deuda_total = clientes[idx].deuda_total || 0; nuevo.ventas = clientes[idx].ventas || []; nuevo.creditos = clientes[idx].creditos || []; clientes[idx] = nuevo; } } else { clientes.push(nuevo); } localStorage.setItem('clientes', JSON.stringify(clientes)); document.getElementById('modalCliente').style.display = 'none'; cargarTodosClientes(); }
 
-        function abrirModalNuevoProveedor() { proveedorEditando = null; limpiarFormProveedor(); document.getElementById('modalProveedorTitulo').innerText = 'Nuevo Proveedor'; document.getElementById('modalProveedor').style.display = 'flex'; }
-        function abrirModalEditarProveedor(telefono) { proveedorEditando = telefono; const p = todosProveedores.find(p => p.telefono === telefono); document.getElementById('proveedorTelefonoOriginal').value = telefono; document.getElementById('proveedorTelefono').value = p.telefono; document.getElementById('proveedorEmpresa').value = p.nombre_empresa; document.getElementById('proveedorNombre').value = p.nombre_proveedor; document.getElementById('proveedorCorreo').value = p.correo || ''; document.getElementById('proveedorEstado').value = p.estado; document.getElementById('modalProveedorTitulo').innerText = 'Editar Proveedor'; document.getElementById('modalProveedor').style.display = 'flex'; }
-        function limpiarFormProveedor() { document.getElementById('proveedorTelefonoOriginal').value = ''; document.getElementById('proveedorTelefono').value = ''; document.getElementById('proveedorEmpresa').value = ''; document.getElementById('proveedorNombre').value = ''; document.getElementById('proveedorCorreo').value = ''; document.getElementById('proveedorEstado').value = 'activo'; }
-        function guardarProveedor() { const telefono = document.getElementById('proveedorTelefono').value.trim(); const empresa = document.getElementById('proveedorEmpresa').value.trim(); const nombre = document.getElementById('proveedorNombre').value.trim(); if (!telefono || !empresa || !nombre) { alert('Teléfono, empresa y nombre son requeridos'); return; } let proveedores = JSON.parse(localStorage.getItem('proveedores')); if (!proveedorEditando && proveedores.find(p => p.telefono === telefono)) { alert('Ya existe un proveedor con ese teléfono'); return; } const nuevo = { telefono, nombre_empresa: empresa, nombre_proveedor: nombre, correo: document.getElementById('proveedorCorreo').value, estado: document.getElementById('proveedorEstado').value, producto: '', fecha_creacion: new Date().toISOString() }; if (proveedorEditando) { const idx = proveedores.findIndex(p => p.telefono === proveedorEditando); if (idx !== -1) proveedores[idx] = nuevo; } else { proveedores.push(nuevo); } localStorage.setItem('proveedores', JSON.stringify(proveedores)); document.getElementById('modalProveedor').style.display = 'none'; cargarTodosProveedores(); }
+        function mostrarModalProveedorCompleto(editar=false, data=null) {
+            esEdicionProveedor = editar;
+            document.getElementById('modalProveedorTitulo').textContent = editar ? 'Editar Proveedor' : 'Nuevo Proveedor';
+            document.querySelector('#formProveedorCompleto button[type="submit"]').innerHTML = editar ? '<i class="fas fa-save"></i> Guardar Cambios' : '<i class="fas fa-save"></i> Crear Proveedor';
+            document.getElementById('proveedorTelefonoOriginal').value = '';
+            document.getElementById('proveedorTelefono').value = '';
+            document.getElementById('proveedorEmpresa').value = '';
+            document.getElementById('proveedorNombre').value = '';
+            document.getElementById('proveedorCorreo').value = '';
+            document.getElementById('proveedorEstado').value = 'activo';
+            document.getElementById('proveedorProductos').value = '';
+            if (editar && data) {
+                document.getElementById('proveedorTelefonoOriginal').value = data.telefono;
+                document.getElementById('proveedorTelefono').value = data.telefono;
+                document.getElementById('proveedorEmpresa').value = data.nombre_empresa||'';
+                document.getElementById('proveedorNombre').value = data.nombre_proveedor||'';
+                document.getElementById('proveedorCorreo').value = data.correo||'';
+                document.getElementById('proveedorEstado').value = data.estado||'activo';
+                document.getElementById('proveedorProductos').value = data.producto||'';
+            }
+            document.getElementById('modalProveedorCompleto').style.display = 'flex';
+        }
 
-        function confirmarEliminar(tipo, id, nombre) { elementoAEliminar = id; tipoElementoAEliminar = tipo; document.getElementById('confirmTitulo').innerText = `Eliminar ${tipo === 'cliente' ? 'Cliente' : 'Proveedor'}`; document.getElementById('confirmMensaje').innerHTML = `¿Eliminar <strong>${nombre}</strong>?<br><small style="color:var(--error)">Esta acción no se puede deshacer</small>`; document.getElementById('modalConfirm').style.display = 'flex'; }
+        function cerrarModalProveedorCompleto() { document.getElementById('modalProveedorCompleto').style.display = 'none'; esEdicionProveedor = false; }
+        function actualizarContadorProductos() { const ta = document.getElementById('proveedorProductos'); const c = document.getElementById('contadorNumero'); if(ta && c) c.textContent = ta.value.length; }
+        
+        function guardarProveedorCompleto(e) {
+            e.preventDefault();
+            const telefono = document.getElementById('proveedorTelefono').value.trim();
+            const empresa = document.getElementById('proveedorEmpresa').value.trim();
+            const nombre = document.getElementById('proveedorNombre').value.trim();
+            if (!telefono || !empresa || !nombre) { alert('Teléfono, empresa y nombre son requeridos'); return; }
+            let proveedores = JSON.parse(localStorage.getItem('proveedores')) || [];
+            const telefonoOriginal = document.getElementById('proveedorTelefonoOriginal').value;
+            const data = { telefono, nombre_empresa: empresa, nombre_proveedor: nombre, correo: document.getElementById('proveedorCorreo').value, estado: document.getElementById('proveedorEstado').value, producto: document.getElementById('proveedorProductos').value, fecha_creacion: new Date().toISOString() };
+            if (esEdicionProveedor && telefonoOriginal) {
+                const idx = proveedores.findIndex(p => p.telefono === telefonoOriginal);
+                if (idx !== -1) proveedores[idx] = data;
+            } else {
+                if (proveedores.find(p => p.telefono === telefono)) { alert('Ya existe un proveedor con ese teléfono'); return; }
+                proveedores.push(data);
+            }
+            localStorage.setItem('proveedores', JSON.stringify(proveedores));
+            alert('Proveedor guardado correctamente');
+            cerrarModalProveedorCompleto();
+            cargarTodosProveedores();
+            if (tabActual !== 'proveedores') cambiarTab('proveedores');
+        }
+
+        function editarProveedorCompleto(telefono) { const p = todosProveedores.find(p => p.telefono === telefono); if (p) mostrarModalProveedorCompleto(true, p); }
+        function abrirModalNuevoProveedor() { mostrarModalProveedorCompleto(false); }
+
+        function buscarProductosSugeridos(input) {
+            const term = input.value.toLowerCase().trim();
+            const sugDiv = input.parentElement.querySelector('.sugerencias-productos');
+            if (timeoutBusqueda) clearTimeout(timeoutBusqueda);
+            timeoutBusqueda = setTimeout(() => {
+                if (term.length < 2) { sugDiv.style.display = 'none'; return; }
+                const sugs = todosProductos.filter(p => p.nombre.toLowerCase().includes(term)).slice(0,10);
+                if (!sugs.length) { sugDiv.innerHTML = '<div class="producto-sugerencia">No se encontraron productos</div>'; sugDiv.style.display = 'block'; return; }
+                sugDiv.innerHTML = sugs.map(p => `<div class="producto-sugerencia" data-nombre="${p.nombre}" onclick="seleccionarProductoSugerido(this, '${p.nombre.replace(/'/g, "\\'")}')">${p.nombre}</div>`).join('');
+                sugDiv.style.display = 'block';
+            }, 300);
+        }
+
+        function seleccionarProductoSugerido(el, nom) { const input = el.closest('.producto-input-container').querySelector('.producto-input'); input.value = nom; el.closest('.sugerencias-productos').style.display = 'none'; }
+        function agregarProductoVentaManual() { const container = document.getElementById('productosVentaManualContainer'); const nuevo = document.createElement('div'); nuevo.className = 'producto-item'; nuevo.innerHTML = `<div style="display:flex;gap:10px;align-items:center"><div class="producto-input-container"><input type="text" class="producto-input" placeholder="Nombre del producto" oninput="buscarProductosSugeridos(this)"><div class="sugerencias-productos"></div></div><input type="number" class="cantidad-input" placeholder="Cantidad" min="1" value="1"><button type="button" class="btn-eliminar-producto" onclick="eliminarProductoVentaManual(this)"><i class="fas fa-times"></i></button></div>`; container.appendChild(nuevo); }
+        function eliminarProductoVentaManual(btn) { const items = document.querySelectorAll('.producto-item'); if (items.length > 1) btn.closest('.producto-item').remove(); }
+        function abrirModalVentaManual(cedula, nombre) { document.getElementById('ventaManualClienteCedula').value = cedula; document.getElementById('ventaManualClienteNombre').value = nombre; document.getElementById('modalVentaManualTitulo').textContent = `Venta Manual - ${nombre}`; document.getElementById('ventaManualFecha').value = new Date().toISOString().split('T')[0]; document.getElementById('ventaManualTotal').value = ''; document.getElementById('ventaManualAnticipo').value = '0'; document.getElementById('ventaManualDiasCredito').value = '30'; document.getElementById('ventaManualObservaciones').value = ''; document.getElementById('productosVentaManualContainer').innerHTML = `<div class="producto-item"><div style="display:flex;gap:10px;align-items:center"><div class="producto-input-container"><input type="text" class="producto-input" placeholder="Nombre del producto" oninput="buscarProductosSugeridos(this)"><div class="sugerencias-productos"></div></div><input type="number" class="cantidad-input" placeholder="Cantidad" min="1" value="1"><button type="button" class="btn-eliminar-producto" onclick="eliminarProductoVentaManual(this)"><i class="fas fa-times"></i></button></div></div>`; cargarTodosProductos(); document.getElementById('modalVentaManual').style.display = 'flex'; }
+        function cerrarModalVentaManual() { document.getElementById('modalVentaManual').style.display = 'none'; }
+
+        function registrarVentaManual(e) {
+            e.preventDefault();
+            const cedula = document.getElementById('ventaManualClienteCedula').value;
+            const fecha = document.getElementById('ventaManualFecha').value;
+            const total = parseFloat(document.getElementById('ventaManualTotal').value);
+            const anticipo = parseFloat(document.getElementById('ventaManualAnticipo').value) || 0;
+            const diasCredito = parseInt(document.getElementById('ventaManualDiasCredito').value) || 30;
+            const observaciones = document.getElementById('ventaManualObservaciones').value;
+            if (!cedula || !fecha || !total || total <= 0) { alert('Fecha y total son requeridos'); return; }
+            if (anticipo > total) { alert('Anticipo no puede ser mayor al total'); return; }
+            const productos = []; document.querySelectorAll('.producto-item').forEach(item => { const nombre = item.querySelector('.producto-input').value.trim(); const cantidad = parseInt(item.querySelector('.cantidad-input').value) || 0; if (nombre && cantidad > 0) productos.push({ nombre, cantidad }); });
+            let clientes = JSON.parse(localStorage.getItem('clientes'));
+            const clienteIdx = clientes.findIndex(c => c.cedula === cedula);
+            if (clienteIdx === -1) { alert('Cliente no encontrado'); return; }
+            const venta = { id: Date.now(), numero_venta: Date.now(), fecha_dia: fecha, total: total, anticipo: anticipo, tipo_pago: anticipo === total ? 'Contado' : 'Crédito', productos: productos.map(p=>`${p.nombre} x${p.cantidad}`).join(', '), observaciones: observaciones };
+            clientes[clienteIdx].ventas = clientes[clienteIdx].ventas || [];
+            clientes[clienteIdx].ventas.push(venta);
+            if (anticipo < total) {
+                const credito = { id: Date.now(), venta_id: venta.id, numero_venta: venta.numero_venta, anticipo: anticipo, deuda_inicial: total - anticipo, saldo_pendiente: total - anticipo, abonos_realizados: 0, fecha_inicio: fecha, fecha_vencimiento: new Date(Date.now() + diasCredito * 86400000).toISOString().split('T')[0], estado: 'pendiente', cliente_nombre: clientes[clienteIdx].nombre };
+                clientes[clienteIdx].creditos = clientes[clienteIdx].creditos || [];
+                clientes[clienteIdx].creditos.push(credito);
+                clientes[clienteIdx].deuda_total = (clientes[clienteIdx].deuda_total || 0) + (total - anticipo);
+                alert('Venta registrada con crédito');
+            } else { alert('Venta registrada correctamente'); }
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            cerrarModalVentaManual();
+            cargarTodosClientes();
+            if (elementoHistorial?.cliente?.cedula === cedula) verHistorialCliente(cedula);
+        }
+
+        function verHistorialCliente(cedula) {
+            const clientes = JSON.parse(localStorage.getItem('clientes'));
+            const cliente = clientes.find(c => c.cedula === cedula);
+            if (!cliente) return;
+            elementoHistorial = { tipo: 'cliente', cliente: cliente };
+            const ventas = cliente.ventas || [];
+            const creditos = cliente.creditos || [];
+            const totalVentas = ventas.length;
+            const montoTotal = ventas.reduce((sum, v) => sum + v.total, 0);
+            const deudaTotal = parseFloat(cliente.deuda_total || 0);
+            document.getElementById('historialClienteNombre').textContent = `Historial - ${cliente.nombre}`;
+            document.getElementById('resumenClienteGrid').innerHTML = `<div class="resumen-item"><div class="resumen-valor">${totalVentas}</div><div class="resumen-label">Total Ventas</div></div><div class="resumen-item"><div class="resumen-valor">${formatCurrency(montoTotal)}</div><div class="resumen-label">Monto Total</div></div><div class="resumen-item"><div class="resumen-valor">${creditos.length}</div><div class="resumen-label">Créditos</div></div><div class="resumen-item"><div class="resumen-valor" style="color:${deudaTotal>0?'var(--error)':'var(--exito)'}">${formatCurrency(deudaTotal)}</div><div class="resumen-label">Deuda Total</div></div>`;
+            document.getElementById('ventasClienteList').innerHTML = (!ventas.length) ? '<div style="text-align:center;padding:40px"><i class="fas fa-shopping-cart" style="font-size:48px"></i><p>No hay ventas</p></div>' : ventas.map(v => `<div class="venta-card"><div class="venta-header"><span>Venta #${v.numero_venta}</span><span>${formatDate(v.fecha_dia)}</span></div><div class="venta-body"><div class="venta-detalle-row"><span class="venta-detalle-label">Total:</span><span class="venta-detalle-value">${formatCurrency(v.total)}</span></div><div class="venta-detalle-row"><span class="venta-detalle-label">Anticipo:</span><span class="venta-detalle-value">${formatCurrency(v.anticipo)}</span></div><div class="venta-productos"><strong>Productos:</strong> ${v.productos || 'Sin productos'}</div></div></div>`).join('');
+            document.getElementById('creditosClienteList').innerHTML = (!creditos.length) ? '<div style="text-align:center;padding:40px"><i class="fas fa-file-invoice-dollar" style="font-size:48px"></i><p>No hay créditos</p></div>' : creditos.map(c => `<div class="credito-card"><div class="credito-header"><span>Crédito #${c.id}</span><span class="credito-estado-badge">${c.estado}</span></div><div class="credito-body"><div class="credito-detalle-row"><span class="credito-detalle-label">Vence:</span><span class="credito-detalle-value">${c.fecha_vencimiento}</span></div><div class="credito-detalle-row"><span class="credito-detalle-label">Anticipo:</span><span class="credito-detalle-value">${formatCurrency(c.anticipo)}</span></div><div class="credito-saldo">Saldo: ${formatCurrency(c.saldo_pendiente)}</div></div><div class="credito-acciones"><button class="btn-icon-small btn-abono" onclick="registrarAbonoCredito(${c.id}, '${cedula}')"><i class="fas fa-money-bill-wave"></i></button></div></div>`).join('');
+            document.getElementById('historialClienteModal').style.display = 'flex';
+        }
+
+        function registrarAbonoCredito(creditoId, cedula) {
+            const clientes = JSON.parse(localStorage.getItem('clientes'));
+            const cliente = clientes.find(c => c.cedula === cedula);
+            const credito = cliente?.creditos?.find(c => c.id === creditoId);
+            if (!credito) return;
+            creditoActualAbono = { credito, cliente, cedula };
+            document.getElementById('abonoCreditoId').value = creditoId;
+            document.getElementById('abonoClienteDisplay').textContent = cliente.nombre;
+            document.getElementById('saldoActual').textContent = formatCurrency(credito.saldo_pendiente);
+            document.getElementById('saldoMaximo').textContent = formatCurrency(credito.saldo_pendiente);
+            document.getElementById('abonoMonto').value = '';
+            document.getElementById('abonoMonto').max = credito.saldo_pendiente;
+            document.getElementById('abonoFecha').value = new Date().toISOString().split('T')[0];
+            document.getElementById('abonoHora').value = new Date().toTimeString().split(' ')[0].substring(0,5);
+            document.getElementById('abonoObservaciones').value = '';
+            document.getElementById('abonoModal').style.display = 'flex';
+        }
+
+        function procesarAbono(e) {
+            e.preventDefault();
+            const id = parseInt(document.getElementById('abonoCreditoId').value);
+            const monto = parseFloat(document.getElementById('abonoMonto').value);
+            const fecha = document.getElementById('abonoFecha').value;
+            const obs = document.getElementById('abonoObservaciones').value;
+            if (!monto || monto <= 0) { alert('Ingrese un monto válido'); return; }
+            if (monto > creditoActualAbono.credito.saldo_pendiente) { alert('El abono no puede ser mayor al saldo pendiente'); return; }
+            const clientes = JSON.parse(localStorage.getItem('clientes'));
+            const clienteIdx = clientes.findIndex(c => c.cedula === creditoActualAbono.cedula);
+            const creditoIdx = clientes[clienteIdx].creditos.findIndex(c => c.id === id);
+            clientes[clienteIdx].creditos[creditoIdx].abonos_realizados += monto;
+            clientes[clienteIdx].creditos[creditoIdx].saldo_pendiente -= monto;
+            clientes[clienteIdx].creditos[creditoIdx].ultimo_pago = fecha;
+            if (clientes[clienteIdx].creditos[creditoIdx].saldo_pendiente <= 0) clientes[clienteIdx].creditos[creditoIdx].estado = 'pagado';
+            clientes[clienteIdx].deuda_total = clientes[clienteIdx].creditos.reduce((sum, c) => sum + c.saldo_pendiente, 0);
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            alert(`Abono de ${formatCurrency(monto)} registrado correctamente`);
+            document.getElementById('abonoModal').style.display = 'none';
+            cargarTodosClientes();
+            verHistorialCliente(creditoActualAbono.cedula);
+        }
+
+        function confirmarEliminar(tipo, id, nombre) { elementoAEliminar = id; tipoElementoAEliminar = tipo; document.getElementById('confirmTitulo').innerText = `Eliminar ${tipo === 'cliente' ? 'Cliente' : 'Proveedor'}`; document.getElementById('confirmMensaje').innerHTML = `¿Eliminar <strong>${nombre}</strong>?`; document.getElementById('modalConfirm').style.display = 'flex'; }
         function eliminarElemento() { if (tipoElementoAEliminar === 'cliente') { let clientes = JSON.parse(localStorage.getItem('clientes')); clientes = clientes.filter(c => c.cedula !== elementoAEliminar); localStorage.setItem('clientes', JSON.stringify(clientes)); cargarTodosClientes(); } else if (tipoElementoAEliminar === 'proveedor') { let proveedores = JSON.parse(localStorage.getItem('proveedores')); proveedores = proveedores.filter(p => p.telefono !== elementoAEliminar); localStorage.setItem('proveedores', JSON.stringify(proveedores)); cargarTodosProveedores(); } document.getElementById('modalConfirm').style.display = 'none'; elementoAEliminar = null; tipoElementoAEliminar = null; }
 
         function updateStats() { document.getElementById('totalClientes').innerText = todosClientes.length; document.getElementById('totalProveedores').innerText = todosProveedores.length; }
+
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar'), mc = document.getElementById('mainContent'), tb = document.getElementById('toggleSidebar'), tbc = document.getElementById('toggleSidebarCollapsed');
+            sidebarCollapsed = !sidebarCollapsed;
+            if (sidebarCollapsed) { sb.classList.add('collapsed'); mc.classList.add('expanded'); if(tb) { tb.innerHTML='<i class="fas fa-chevron-right"></i>'; tb.classList.add('collapsed'); } if(tbc) tbc.classList.add('show'); localStorage.setItem('sidebarCollapsed','true'); }
+            else { sb.classList.remove('collapsed'); mc.classList.remove('expanded'); if(tb) { tb.innerHTML='<i class="fas fa-chevron-left"></i>'; tb.classList.remove('collapsed'); } if(tbc) tbc.classList.remove('show'); localStorage.setItem('sidebarCollapsed','false'); }
+        }
+
+        function cargarEstadoSidebar() { if (localStorage.getItem('sidebarCollapsed') === 'true') { sidebarCollapsed = true; document.getElementById('sidebar')?.classList.add('collapsed'); document.getElementById('mainContent')?.classList.add('expanded'); const tb = document.getElementById('toggleSidebar'); if(tb) { tb.innerHTML='<i class="fas fa-chevron-right"></i>'; tb.classList.add('collapsed'); } document.getElementById('toggleSidebarCollapsed')?.classList.add('show'); } }
 
         function setupEventListeners() {
             document.getElementById('btnNuevoCliente')?.addEventListener('click', abrirModalNuevoCliente);
             document.getElementById('btnNuevoProveedor')?.addEventListener('click', abrirModalNuevoProveedor);
             document.getElementById('btnGuardarCliente')?.addEventListener('click', guardarCliente);
             document.getElementById('btnCancelarCliente')?.addEventListener('click', () => document.getElementById('modalCliente').style.display = 'none');
-            document.getElementById('btnGuardarProveedor')?.addEventListener('click', guardarProveedor);
-            document.getElementById('btnCancelarProveedor')?.addEventListener('click', () => document.getElementById('modalProveedor').style.display = 'none');
             document.getElementById('confirmCancelar')?.addEventListener('click', () => document.getElementById('modalConfirm').style.display = 'none');
             document.getElementById('confirmAceptar')?.addEventListener('click', eliminarElemento);
             document.getElementById('searchClientes')?.addEventListener('input', () => { currentPageClientes = 1; aplicarFiltrosYOrdenClientes(); });
@@ -358,13 +666,39 @@
             document.getElementById('filterTipoProveedor')?.addEventListener('change', () => { currentPageProveedores = 1; aplicarFiltrosYOrdenProveedores(); });
             document.getElementById('filterOrdenProveedor')?.addEventListener('change', () => { currentPageProveedores = 1; aplicarFiltrosYOrdenProveedores(); });
             document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => cambiarTab(btn.dataset.tab)));
+            document.getElementById('toggleSidebar')?.addEventListener('click', toggleSidebar);
+            document.getElementById('toggleSidebarCollapsed')?.addEventListener('click', toggleSidebar);
+            document.getElementById('formProveedorCompleto')?.addEventListener('submit', guardarProveedorCompleto);
+            document.getElementById('formVentaManual')?.addEventListener('submit', registrarVentaManual);
+            document.getElementById('formAbono')?.addEventListener('submit', procesarAbono);
+            document.getElementById('closeHistorialCliente')?.addEventListener('click', () => { document.getElementById('historialClienteModal').style.display = 'none'; elementoHistorial = null; });
+            document.getElementById('closeAbonoModal')?.addEventListener('click', () => { document.getElementById('abonoModal').style.display = 'none'; creditoActualAbono = null; });
+            document.getElementById('btnCancelarAbono')?.addEventListener('click', () => { document.getElementById('abonoModal').style.display = 'none'; creditoActualAbono = null; });
+            document.querySelectorAll('.tab-historial-btn').forEach(btn => btn.addEventListener('click', function() {
+                const tab = this.dataset.historialTab;
+                document.querySelectorAll('.tab-historial-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('ventasClienteTab').style.display = tab === 'ventas' ? 'block' : 'none';
+                document.getElementById('creditosClienteTab').style.display = tab === 'creditos' ? 'block' : 'none';
+            }));
         }
 
         initLocalStorage();
         setupEventListeners();
+        cargarEstadoSidebar();
 
         window.changePageClientes = changePageClientes;
         window.changePageProveedores = changePageProveedores;
+        window.editarProveedorCompleto = editarProveedorCompleto;
+        window.cerrarModalProveedorCompleto = cerrarModalProveedorCompleto;
+        window.cerrarModalVentaManual = cerrarModalVentaManual;
+        window.agregarProductoVentaManual = agregarProductoVentaManual;
+        window.eliminarProductoVentaManual = eliminarProductoVentaManual;
+        window.buscarProductosSugeridos = buscarProductosSugeridos;
+        window.seleccionarProductoSugerido = seleccionarProductoSugerido;
+        window.verHistorialCliente = verHistorialCliente;
+        window.registrarAbonoCredito = registrarAbonoCredito;
+        window.actualizarContadorProductos = actualizarContadorProductos;
     </script>
 </body>
 </html>
