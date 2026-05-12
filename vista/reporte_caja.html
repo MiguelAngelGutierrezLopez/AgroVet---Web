@@ -46,6 +46,49 @@
         .toggle-sidebar-collapsed { position: fixed; top: 20px; left: 20px; width: 40px; height: 40px; background: var(--teal); color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; cursor: pointer; border: none; box-shadow: 0 3px 10px rgba(0,0,0,0.2); z-index: 999; }
         .toggle-sidebar-collapsed.show { display: flex; }
         
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--teal);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            font-size: 20px;
+        }
+        .scroll-top-btn.show { opacity: 1; visibility: visible; }
+        .scroll-top-btn:hover { background: var(--mostaza); transform: translateY(-3px); }
+        
+        [data-tooltip] { position: relative; cursor: help; }
+        [data-tooltip]:before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gris-oscuro);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            display: none;
+            z-index: 1000;
+            margin-bottom: 8px;
+        }
+        [data-tooltip]:hover:before { display: block; }
+        
         .main-content { flex: 1; margin-left: 250px; padding: 30px; min-height: 100vh; transition: margin-left 0.3s ease; }
         .main-content.expanded { margin-left: 0; width: 100%; }
         
@@ -231,6 +274,16 @@
             .periodo-actions { flex-direction: column; align-items: stretch; }
             .periodo-buttons { justify-content: center; }
         }
+        @media (max-width: 480px) {
+            .main-content { padding: 15px; }
+            .top-header { padding: 15px; }
+            .stat-badge { min-width: 100px; padding: 8px 12px; }
+            .stat-value { font-size: 14px; }
+            .card-value { font-size: 24px; }
+            .periodo-title { font-size: 16px; }
+            .btn-export, .btn { padding: 8px 16px; font-size: 12px; }
+            .periodo-btn { padding: 6px 12px; font-size: 12px; }
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -310,9 +363,9 @@
             </h2>
             
             <div class="export-container">
-                <button class="btn-export" id="btnExportarExcel"><i class="fas fa-file-excel"></i> Exportar a Excel</button>
-                <button class="btn btn-secondary" id="btnDiagnostico"><i class="fas fa-stethoscope"></i> Diagnóstico</button>
-                <button class="btn btn-danger" id="btnInicializarDatos" style="display: none;"><i class="fas fa-database"></i> Inicializar Datos</button>
+                <button class="btn-export" id="btnExportarExcel" data-tooltip="Exportar a Excel"><i class="fas fa-file-excel"></i> Exportar a Excel</button>
+                <button class="btn btn-secondary" id="btnDiagnostico" data-tooltip="Ejecutar diagnóstico"><i class="fas fa-stethoscope"></i> Diagnóstico</button>
+                <button class="btn btn-danger" id="btnInicializarDatos" style="display: none;" data-tooltip="Inicializar datos de ejemplo"><i class="fas fa-database"></i> Inicializar Datos</button>
             </div>
             
             <div class="diagnostico-panel" id="diagnosticoPanel">
@@ -321,7 +374,7 @@
             </div>
             
             <div class="dashboard-container">
-                <div class="dashboard-card card-ingresos">
+                <div class="dashboard-card card-ingresos" data-tooltip="Total de ingresos manuales registrados">
                     <div class="card-header">
                         <div class="card-title"><i class="fas fa-arrow-down"></i> Ingresos Manuales</div>
                         <div class="card-icon icon-ingresos"><i class="fas fa-hand-holding-usd"></i></div>
@@ -330,7 +383,7 @@
                     <div class="card-detail" id="resumenIngresosSub">0 transacciones</div>
                 </div>
                 
-                <div class="dashboard-card card-egresos">
+                <div class="dashboard-card card-egresos" data-tooltip="Total de egresos manuales registrados">
                     <div class="card-header">
                         <div class="card-title"><i class="fas fa-arrow-up"></i> Egresos Manuales</div>
                         <div class="card-icon icon-egresos"><i class="fas fa-money-bill-wave"></i></div>
@@ -339,7 +392,7 @@
                     <div class="card-detail" id="resumenEgresosSub">0 transacciones</div>
                 </div>
                 
-                <div class="dashboard-card card-contado">
+                <div class="dashboard-card card-contado" data-tooltip="Ventas al contado registradas">
                     <div class="card-header">
                         <div class="card-title"><i class="fas fa-cash-register"></i> Ventas de Contado</div>
                         <div class="card-icon icon-contado"><i class="fas fa-cash-register"></i></div>
@@ -348,7 +401,7 @@
                     <div class="card-detail" id="infoContado">0 ventas</div>
                 </div>
                 
-                <div class="dashboard-card card-anticipos">
+                <div class="dashboard-card card-anticipos" data-tooltip="Anticipos de ventas a crédito">
                     <div class="card-header">
                         <div class="card-title"><i class="fas fa-hand-holding-usd"></i> Anticipos de Crédito</div>
                         <div class="card-icon icon-anticipos"><i class="fas fa-handshake"></i></div>
@@ -357,7 +410,7 @@
                     <div class="card-detail" id="infoAnticipos">0 anticipos</div>
                 </div>
                 
-                <div class="dashboard-card card-abonos" id="cardAbonos">
+                <div class="dashboard-card card-abonos" id="cardAbonos" data-tooltip="Ver detalle de abonos a créditos">
                     <div class="card-header">
                         <div class="card-title"><i class="fas fa-money-check-alt"></i> Abonos a Créditos</div>
                         <div class="card-icon icon-abonos"><i class="fas fa-credit-card"></i></div>
@@ -366,7 +419,7 @@
                     <div class="card-detail" id="infoAbonos">0 abonos</div>
                 </div>
                 
-                <div class="dashboard-card card-banco" id="cardBanco">
+                <div class="dashboard-card card-banco" id="cardBanco" data-tooltip="Ver detalle de transacciones bancarias">
                     <div class="card-header">
                         <div class="card-title"><i class="fas fa-university"></i> Dinero en Banco</div>
                         <div class="card-icon icon-banco"><i class="fas fa-building-columns"></i></div>
@@ -375,7 +428,7 @@
                     <div class="card-detail" id="infoBanco">0 transacciones bancarias</div>
                 </div>
                 
-                <div class="dashboard-card card-lg card-total">
+                <div class="dashboard-card card-lg card-total" data-tooltip="Balance total de caja">
                     <div class="card-header">
                         <div class="card-title"><i class="fas fa-calculator"></i> TOTAL CAJA</div>
                         <div class="card-icon icon-total"><i class="fas fa-cash-register"></i></div>
@@ -412,8 +465,8 @@
             <div class="form-header">
                 <h2 class="form-title"><i class="fas fa-plus-circle"></i> Registrar Movimiento de Caja</h2>
                 <div class="btn-group">
-                    <button class="btn btn-success" id="btnNuevoIngreso"><i class="fas fa-plus"></i> Nuevo Ingreso</button>
-                    <button class="btn btn-danger" id="btnNuevoEgreso"><i class="fas fa-minus"></i> Nuevo Egreso</button>
+                    <button class="btn btn-success" id="btnNuevoIngreso" data-tooltip="Registrar nuevo ingreso"><i class="fas fa-plus"></i> Nuevo Ingreso</button>
+                    <button class="btn btn-danger" id="btnNuevoEgreso" data-tooltip="Registrar nuevo egreso"><i class="fas fa-minus"></i> Nuevo Egreso</button>
                 </div>
             </div>
             
@@ -475,7 +528,7 @@
                 </div>
                 <table class="reporte-table ingresos-table" id="tablaIngresos">
                     <thead><tr><th width="20%">Fecha</th><th width="35%">Descripción</th><th width="15%">Categoría</th><th width="15%">Monto</th><th width="15%">Acciones</th></tr></thead>
-                    <tbody id="tbodyIngresos"><tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay ingresos manuales</h3><p>Registra un nuevo ingreso usando el botón "Nuevo Ingreso"</p><tr></tr></tbody>
+                    <tbody id="tbodyIngresos"><tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay ingresos manuales</h3><p>Registra un nuevo ingreso usando el botón "Nuevo Ingreso"</p></td></tr></tbody>
                 </table>
                 <div class="pagination" id="paginationIngresos"></div>
             </div>
@@ -518,6 +571,10 @@
             </div>
         </div>
     </div>
+    
+    <button class="scroll-top-btn" id="scrollTopBtn" data-tooltip="Volver arriba">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <script>
         let currentPageIngresos = 1;
@@ -798,7 +855,7 @@
         function renderTablaIngresos(ingresos) {
             const tbody = document.getElementById('tbodyIngresos');
             if (!ingresos || ingresos.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay ingresos en este período</h3>纽约</tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay ingresos en este período</h3></td></tr>`;
                 return;
             }
             tbody.innerHTML = '';
@@ -809,8 +866,8 @@
                     <td class="razon-cell" title="${item.razon}">${item.razon}</td>
                     <td><span class="badge ${getBadgeClass(item.categoria)}">${getCategoriaNombre(item.categoria)}</span></td>
                     <td class="monto-cell monto-ingreso">${formatCurrency(item.monto)}</td>
-                    <td><button class="btn btn-secondary btn-sm" onclick="editarMovimiento(${item.id})"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger btn-sm" onclick="eliminarMovimiento(${item.id})"><i class="fas fa-trash"></i></button></td>
+                    <td><button class="btn btn-secondary btn-sm" onclick="editarMovimiento(${item.id})" data-tooltip="Editar movimiento"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarMovimiento(${item.id})" data-tooltip="Eliminar movimiento"><i class="fas fa-trash"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             }
@@ -830,8 +887,8 @@
                     <td class="razon-cell" title="${item.razon}">${item.razon}</td>
                     <td><span class="badge ${getBadgeClass(item.categoria)}">${getCategoriaNombre(item.categoria)}</span></td>
                     <td class="monto-cell monto-egreso">${formatCurrency(item.monto)}</td>
-                    <td><button class="btn btn-secondary btn-sm" onclick="editarMovimiento(${item.id})"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger btn-sm" onclick="eliminarMovimiento(${item.id})"><i class="fas fa-trash"></i></button></td>
+                    <td><button class="btn btn-secondary btn-sm" onclick="editarMovimiento(${item.id})" data-tooltip="Editar movimiento"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarMovimiento(${item.id})" data-tooltip="Eliminar movimiento"><i class="fas fa-trash"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             }
@@ -841,7 +898,7 @@
             const pagination = document.getElementById('paginationIngresos');
             const totalPages = Math.ceil(total / itemsPerPage);
             if (totalPages <= 1) { pagination.innerHTML = ''; return; }
-            let html = `<div class="page-btn ${currentPageIngresos <= 1 ? 'disabled' : ''}" onclick="cambiarPaginaIngresos(${currentPageIngresos - 1})"><i class="fas fa-chevron-left"></i></div>`;
+            let html = `<div class="page-btn ${currentPageIngresos <= 1 ? 'disabled' : ''}" onclick="cambiarPaginaIngresos(${currentPageIngresos - 1})" data-tooltip="Anterior"><i class="fas fa-chevron-left"></i></div>`;
             for (let i = 1; i <= totalPages; i++) {
                 if (i === 1 || i === totalPages || (i >= currentPageIngresos - 1 && i <= currentPageIngresos + 1)) {
                     html += `<div class="page-btn ${i === currentPageIngresos ? 'active' : ''}" onclick="cambiarPaginaIngresos(${i})">${i}</div>`;
@@ -849,7 +906,7 @@
                     html += `<div class="page-btn" style="cursor:default">...</div>`;
                 }
             }
-            html += `<div class="page-btn ${currentPageIngresos >= totalPages ? 'disabled' : ''}" onclick="cambiarPaginaIngresos(${currentPageIngresos + 1})"><i class="fas fa-chevron-right"></i></div>`;
+            html += `<div class="page-btn ${currentPageIngresos >= totalPages ? 'disabled' : ''}" onclick="cambiarPaginaIngresos(${currentPageIngresos + 1})" data-tooltip="Siguiente"><i class="fas fa-chevron-right"></i></div>`;
             pagination.innerHTML = html;
         }
         
@@ -857,7 +914,7 @@
             const pagination = document.getElementById('paginationEgresos');
             const totalPages = Math.ceil(total / itemsPerPage);
             if (totalPages <= 1) { pagination.innerHTML = ''; return; }
-            let html = `<div class="page-btn ${currentPageEgresos <= 1 ? 'disabled' : ''}" onclick="cambiarPaginaEgresos(${currentPageEgresos - 1})"><i class="fas fa-chevron-left"></i></div>`;
+            let html = `<div class="page-btn ${currentPageEgresos <= 1 ? 'disabled' : ''}" onclick="cambiarPaginaEgresos(${currentPageEgresos - 1})" data-tooltip="Anterior"><i class="fas fa-chevron-left"></i></div>`;
             for (let i = 1; i <= totalPages; i++) {
                 if (i === 1 || i === totalPages || (i >= currentPageEgresos - 1 && i <= currentPageEgresos + 1)) {
                     html += `<div class="page-btn ${i === currentPageEgresos ? 'active' : ''}" onclick="cambiarPaginaEgresos(${i})">${i}</div>`;
@@ -865,7 +922,7 @@
                     html += `<div class="page-btn" style="cursor:default">...</div>`;
                 }
             }
-            html += `<div class="page-btn ${currentPageEgresos >= totalPages ? 'disabled' : ''}" onclick="cambiarPaginaEgresos(${currentPageEgresos + 1})"><i class="fas fa-chevron-right"></i></div>`;
+            html += `<div class="page-btn ${currentPageEgresos >= totalPages ? 'disabled' : ''}" onclick="cambiarPaginaEgresos(${currentPageEgresos + 1})" data-tooltip="Siguiente"><i class="fas fa-chevron-right"></i></div>`;
             pagination.innerHTML = html;
         }
         
@@ -1070,7 +1127,7 @@
                     for (const p of abono.productos) {
                         html += `<tr><td>${p.nombre}</td><td>${p.cantidad}</td><td>${formatCurrency(p.precio_unidad)}</td><td>${formatCurrency(p.precio_neto)}</td></tr>`;
                     }
-                    html += `</tbody>}</table></div></div>`;
+                    html += `</tbody>}<tr></div></div>`;
                 }
                 body.innerHTML = html;
             } else {
@@ -1179,6 +1236,19 @@
             document.getElementById('cardAbonos').addEventListener('click', mostrarDetalleAbonos);
             document.getElementById('cardBanco').addEventListener('click', mostrarDetalleBanco);
             document.getElementById('aplicarFechas').addEventListener('click', aplicarFechasPersonalizadas);
+            
+            // Botón volver arriba
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    scrollTopBtn.classList.add('show');
+                } else {
+                    scrollTopBtn.classList.remove('show');
+                }
+            });
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
             
             document.querySelectorAll('.periodo-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
