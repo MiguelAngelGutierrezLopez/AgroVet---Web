@@ -123,6 +123,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
         
         .top-header h1 {
@@ -139,6 +141,7 @@
         .action-buttons {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
         
         /* ===== SECCIONES ===== */
@@ -442,6 +445,55 @@
         .cantidad-entrada { color: var(--exito); }
         .cantidad-salida { color: var(--error); }
         
+        /* ===== TOP PRODUCTOS ===== */
+        .product-rank {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            border-bottom: 1px solid var(--gris-claro);
+        }
+        
+        .rank-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--teal);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .rank-1 { background: var(--mostaza); }
+        .rank-2 { background: var(--turquesa); }
+        .rank-3 { background: var(--terracota); }
+        
+        .rank-info { flex: 1; }
+        .rank-info h4 { font-size: 14px; margin-bottom: 5px; }
+        .rank-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--gris-medio);
+        }
+        .rank-progress {
+            margin-top: 8px;
+            height: 6px;
+            background: var(--gris-claro);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--teal);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+        
         /* ===== MODALES ===== */
         .modal {
             display: none;
@@ -541,6 +593,12 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+        
+        .placeholder {
+            text-align: center;
+            padding: 40px;
+            color: var(--gris-medio);
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -599,6 +657,9 @@
                 </button>
                 <button class="btn btn-warning" id="btnAjusteStock">
                     <i class="fas fa-adjust"></i> Ajustar Stock
+                </button>
+                <button class="btn btn-secondary" id="btnExportarInventario">
+                    <i class="fas fa-file-csv"></i> Exportar CSV
                 </button>
             </div>
         </div>
@@ -682,7 +743,7 @@
                         </tr>
                     </thead>
                     <tbody id="inventarioBody">
-                        <tr><td colspan="9" style="text-align: center;">Cargando productos...</td></tr>
+                        <tr><td colspan="9" style="text-align: center;">Cargando productos...</td</tr>
                     </tbody>
                 </table>
             </div>
@@ -693,7 +754,15 @@
         <div class="section">
             <h2 class="section-title"><i class="fas fa-exchange-alt"></i> Movimientos Recientes</h2>
             <div id="movimientosContainer">
-                <div class="placeholder" style="text-align: center; padding: 40px;">Cargando movimientos...</div>
+                <div class="placeholder">Cargando movimientos...</div>
+            </div>
+        </div>
+        
+        <!-- PRODUCTOS MÁS VENDIDOS -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-trophy"></i> Productos Más Vendidos</h2>
+            <div id="topProductosContainer">
+                <div class="placeholder">Calculando estadísticas...</div>
             </div>
         </div>
     </div>
@@ -820,10 +889,13 @@
         ];
         
         const movimientosMock = [
-            { id: 1, producto_id: 1, producto_nombre: "Vacuna Triple Felina", tipo: "salida", cantidad: 5, fecha: "2026-05-10", hora: "10:30", motivo: "venta", observaciones: "" },
+            { id: 1, producto_id: 1, producto_nombre: "Vacuna Triple Felina", tipo: "salida", cantidad: 8, fecha: "2026-05-10", hora: "10:30", motivo: "venta", observaciones: "" },
             { id: 2, producto_id: 2, producto_nombre: "Antiparasitario Interno", tipo: "entrada", cantidad: 20, fecha: "2026-05-09", hora: "14:15", motivo: "compra", observaciones: "" },
             { id: 3, producto_id: 3, producto_nombre: "Shampoo Antipulgas", tipo: "salida", cantidad: 3, fecha: "2026-05-08", hora: "09:45", motivo: "venta", observaciones: "" },
-            { id: 4, producto_id: 5, producto_nombre: "Jeringas 3ml", tipo: "entrada", cantidad: 50, fecha: "2026-05-07", hora: "11:20", motivo: "compra", observaciones: "" }
+            { id: 4, producto_id: 1, producto_nombre: "Vacuna Triple Felina", tipo: "salida", cantidad: 5, fecha: "2026-05-07", hora: "16:20", motivo: "venta", observaciones: "" },
+            { id: 5, producto_id: 5, producto_nombre: "Jeringas 3ml", tipo: "entrada", cantidad: 50, fecha: "2026-05-07", hora: "11:20", motivo: "compra", observaciones: "" },
+            { id: 6, producto_id: 2, producto_nombre: "Antiparasitario Interno", tipo: "salida", cantidad: 4, fecha: "2026-05-06", hora: "13:00", motivo: "venta", observaciones: "" },
+            { id: 7, producto_id: 7, producto_nombre: "Collar Antipulgas", tipo: "salida", cantidad: 2, fecha: "2026-05-05", hora: "10:15", motivo: "venta", observaciones: "" }
         ];
         
         let productoAEliminar = null;
@@ -915,28 +987,20 @@
             };
             movimientos.unshift(nuevoMovimiento);
             saveMovimientos(movimientos);
-            
-            if (movimientos.length > 100) {
-                saveMovimientos(movimientos.slice(0, 100));
-            }
+            if (movimientos.length > 100) saveMovimientos(movimientos.slice(0, 100));
         }
         
         function ajustarStock(productoId, tipo, cantidad, motivo, observaciones) {
             const productos = getProductos();
             const productoIndex = productos.findIndex(p => p.id === productoId);
-            
             if (productoIndex === -1) {
                 showNotification('Producto no encontrado', true);
                 return false;
             }
-            
             const producto = productos[productoIndex];
             let nuevaCantidad = producto.stock;
-            
             switch(tipo) {
-                case 'entrada':
-                    nuevaCantidad += cantidad;
-                    break;
+                case 'entrada': nuevaCantidad += cantidad; break;
                 case 'salida':
                     if (producto.stock < cantidad) {
                         showNotification(`Stock insuficiente. Solo hay ${producto.stock} unidades`, true);
@@ -944,16 +1008,11 @@
                     }
                     nuevaCantidad -= cantidad;
                     break;
-                case 'ajuste':
-                    nuevaCantidad = cantidad;
-                    break;
+                case 'ajuste': nuevaCantidad = cantidad; break;
             }
-            
             productos[productoIndex].stock = nuevaCantidad;
             saveProductos(productos);
-            
             registrarMovimiento(productoId, producto.nombre, tipo, cantidad, motivo, observaciones);
-            
             showNotification(`Stock de "${producto.nombre}" actualizado a ${nuevaCantidad} unidades`);
             return true;
         }
@@ -961,51 +1020,97 @@
         function renderizarMovimientos() {
             const movimientos = getMovimientos();
             const container = document.getElementById('movimientosContainer');
-            
             if (!movimientos.length) {
-                container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--gris-medio);">No hay movimientos registrados</div>';
+                container.innerHTML = '<div class="placeholder">No hay movimientos registrados</div>';
                 return;
             }
-            
             let html = '';
             movimientos.slice(0, 8).forEach(mov => {
                 const iconClass = mov.tipo === 'entrada' ? 'icon-entrada' : (mov.tipo === 'salida' ? 'icon-salida' : 'icon-ajuste');
                 const icono = mov.tipo === 'entrada' ? 'fa-arrow-down' : (mov.tipo === 'salida' ? 'fa-arrow-up' : 'fa-adjust');
                 const cantidadClass = mov.tipo === 'entrada' ? 'cantidad-entrada' : 'cantidad-salida';
                 const signo = mov.tipo === 'entrada' ? '+' : '-';
-                
                 const motivos = { compra: 'Compra', venta: 'Venta', devolucion: 'Devolución', perdida: 'Pérdida', conteo: 'Conteo' };
                 const motivoLabel = motivos[mov.motivo] || mov.motivo;
-                
-                html += `
-                    <div class="movimiento-item">
-                        <div class="movimiento-icon ${iconClass}">
-                            <i class="fas ${icono}"></i>
-                        </div>
-                        <div class="movimiento-info">
-                            <h4>${mov.producto_nombre}</h4>
-                            <div class="movimiento-details">${motivoLabel} • ${mov.observaciones || 'Sin observaciones'}</div>
-                        </div>
-                        <div class="movimiento-date">${mov.fecha}<br><small>${mov.hora || ''}</small></div>
-                        <div class="movimiento-cantidad ${cantidadClass}">${signo} ${mov.cantidad} und</div>
-                    </div>
-                `;
+                html += `<div class="movimiento-item">
+                            <div class="movimiento-icon ${iconClass}"><i class="fas ${icono}"></i></div>
+                            <div class="movimiento-info"><h4>${mov.producto_nombre}</h4><div class="movimiento-details">${motivoLabel} • ${mov.observaciones || 'Sin observaciones'}</div></div>
+                            <div class="movimiento-date">${mov.fecha}<br><small>${mov.hora || ''}</small></div>
+                            <div class="movimiento-cantidad ${cantidadClass}">${signo} ${mov.cantidad} und</div>
+                          </div>`;
             });
-            
             container.innerHTML = html;
+        }
+        
+        // ===== PRODUCTOS MÁS VENDIDOS =====
+        function calcularProductosMasVendidos() {
+            const movimientos = getMovimientos();
+            const ventas = movimientos.filter(m => m.tipo === 'salida');
+            const ventasPorProducto = {};
+            ventas.forEach(v => {
+                if (!ventasPorProducto[v.producto_id]) {
+                    ventasPorProducto[v.producto_id] = { nombre: v.producto_nombre, cantidad: 0 };
+                }
+                ventasPorProducto[v.producto_id].cantidad += v.cantidad;
+            });
+            return Object.values(ventasPorProducto).sort((a, b) => b.cantidad - a.cantidad).slice(0, 5);
+        }
+        
+        function renderizarTopProductos() {
+            const topProductos = calcularProductosMasVendidos();
+            const container = document.getElementById('topProductosContainer');
+            if (!topProductos.length) {
+                container.innerHTML = '<div class="placeholder">No hay datos de ventas suficientes</div>';
+                return;
+            }
+            const maxCantidad = topProductos[0].cantidad;
+            let html = '';
+            topProductos.forEach((prod, index) => {
+                const porcentaje = (prod.cantidad / maxCantidad) * 100;
+                const rankClass = index === 0 ? 'rank-1' : (index === 1 ? 'rank-2' : (index === 2 ? 'rank-3' : ''));
+                html += `<div class="product-rank">
+                            <div class="rank-number ${rankClass}">${index + 1}</div>
+                            <div class="rank-info">
+                                <h4>${prod.nombre}</h4>
+                                <div class="rank-stats"><span>${prod.cantidad} unidades vendidas</span></div>
+                                <div class="rank-progress"><div class="progress-bar" style="width: ${porcentaje}%"></div></div>
+                            </div>
+                         </div>`;
+            });
+            container.innerHTML = html;
+        }
+        
+        // ===== EXPORTACIÓN =====
+        function exportarInventarioCSV() {
+            const productos = getProductos();
+            const productosFiltrados = filtrarProductos(productos);
+            const columnas = ['ID', 'Nombre', 'Categoría', 'Stock', 'Precio Costo', 'Precio Venta', 'Proveedor', 'Valor Total'];
+            const filas = productosFiltrados.map(p => [p.id, p.nombre, p.categoria, p.stock, p.precio_costo, p.precio_venta, p.proveedor || '', p.stock * p.precio_costo]);
+            let csvContent = columnas.join(',') + '\n';
+            filas.forEach(fila => {
+                const filaEscapada = fila.map(celda => (typeof celda === 'string' && (celda.includes(',') || celda.includes('"'))) ? `"${celda.replace(/"/g, '""')}"` : celda);
+                csvContent += filaEscapada.join(',') + '\n';
+            });
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.setAttribute('download', `inventario_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            showNotification(`Exportados ${productosFiltrados.length} productos`);
         }
         
         // ===== GRÁFICOS =====
         function actualizarGraficos() {
             const productos = getProductos();
-            
             const categorias = {};
             productos.forEach(p => { categorias[p.categoria] = (categorias[p.categoria] || 0) + 1; });
-            
             const categoriasLabels = Object.keys(categorias);
             const categoriasData = Object.values(categorias);
             const colores = ['#1F8A86', '#3FA6A0', '#D9C357', '#C08A67', '#B7C3A1', '#D44A5E'];
-            
             if (categoriaChart) categoriaChart.destroy();
             const ctxCategoria = document.getElementById('categoriaChart').getContext('2d');
             categoriaChart = new Chart(ctxCategoria, {
@@ -1013,10 +1118,8 @@
                 data: { labels: categoriasLabels, datasets: [{ label: 'Cantidad', data: categoriasData, backgroundColor: colores.slice(0, categoriasLabels.length), borderRadius: 8 }] },
                 options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } } }
             });
-            
             const stockEstados = { alto: 0, medio: 0, bajo: 0, critico: 0 };
             productos.forEach(p => { const estado = getStockEstadoParaFiltro(p.stock); stockEstados[estado]++; });
-            
             if (stockStatusChart) stockStatusChart.destroy();
             const ctxStock = document.getElementById('stockStatusChart').getContext('2d');
             stockStatusChart = new Chart(ctxStock, {
@@ -1026,7 +1129,7 @@
             });
         }
         
-        // ===== FILTROS Y PAGINACIÓN (igual que commit anterior) =====
+        // ===== FILTROS Y PAGINACIÓN =====
         function aplicarFiltros() {
             filtrosActuales = {
                 busqueda: document.getElementById('searchInput').value.toLowerCase(),
@@ -1052,9 +1155,7 @@
             return productos.filter(prod => {
                 if (filtrosActuales.busqueda) {
                     const busca = filtrosActuales.busqueda;
-                    const coincideNombre = prod.nombre.toLowerCase().includes(busca);
-                    const coincideCodigo = `#${prod.id}`.includes(busca);
-                    if (!coincideNombre && !coincideCodigo) return false;
+                    if (!prod.nombre.toLowerCase().includes(busca) && !`#${prod.id}`.includes(busca)) return false;
                 }
                 if (filtrosActuales.categoria && prod.categoria !== filtrosActuales.categoria) return false;
                 if (filtrosActuales.estadoStock) {
@@ -1074,8 +1175,7 @@
             if (paginaActual > totalPaginas) paginaActual = Math.max(1, totalPaginas);
             const inicio = (paginaActual - 1) * itemsPorPagina;
             const fin = inicio + itemsPorPagina;
-            const productosPagina = productosFiltrados.slice(inicio, fin);
-            renderizarTablaConDatos(productosPagina);
+            renderizarTablaConDatos(productosFiltrados.slice(inicio, fin));
             renderizarPaginacion(totalPaginas, totalItems);
         }
         
@@ -1132,11 +1232,11 @@
                             <td class="precio-cell">${formatCurrency(prod.precio_venta)}</td>
                             <td class="precio-cell">${formatCurrency(valorTotal)}</td>
                             <td class="action-cell">
-                                <button class="action-btn btn-adjust" onclick="abrirModalAjuste(${prod.id})" title="Ajustar Stock"><i class="fas fa-adjust"></i></button>
+                                <button class="action-btn btn-adjust" onclick="abrirModalAjuste(${prod.id})"><i class="fas fa-adjust"></i></button>
                                 <button class="action-btn btn-edit" onclick="editarProducto(${prod.id})"><i class="fas fa-edit"></i></button>
                                 <button class="action-btn btn-delete" onclick="confirmarEliminar(${prod.id})"><i class="fas fa-trash"></i></button>
                             </td>
-                         </tr>`;
+                          </tr>`;
             });
             tbody.innerHTML = html;
         }
@@ -1147,10 +1247,11 @@
             const totalProductos = productosFiltrados.length;
             const valorInventario = productosFiltrados.reduce((sum, p) => sum + (p.stock * p.precio_costo), 0);
             const stockCritico = productosFiltrados.filter(p => p.stock < 10).length;
-            const container = document.getElementById('resumenContainer');
-            container.innerHTML = `<div class="resumen-card"><div class="resumen-value">${totalProductos}</div><div class="resumen-title">Productos</div></div>
-                                   <div class="resumen-card"><div class="resumen-value">${formatCurrency(valorInventario)}</div><div class="resumen-title">Valor total</div></div>
-                                   <div class="resumen-card"><div class="resumen-value">${stockCritico}</div><div class="resumen-title">Stock crítico</div></div>`;
+            document.getElementById('resumenContainer').innerHTML = `
+                <div class="resumen-card"><div class="resumen-value">${totalProductos}</div><div class="resumen-title">Productos</div></div>
+                <div class="resumen-card"><div class="resumen-value">${formatCurrency(valorInventario)}</div><div class="resumen-title">Valor total</div></div>
+                <div class="resumen-card"><div class="resumen-value">${stockCritico}</div><div class="resumen-title">Stock crítico</div></div>
+                <div class="resumen-card"><div class="resumen-value">${topProductos?.[0]?.cantidad || 0}</div><div class="resumen-title">Más vendido (und)</div></div>`;
         }
         
         // ===== CRUD =====
@@ -1175,8 +1276,7 @@
         }
         
         function eliminarProducto(id) {
-            const productos = getProductos();
-            saveProductos(productos.filter(p => p.id !== id));
+            saveProductos(getProductos().filter(p => p.id !== id));
             actualizarUICompleta();
             showNotification('Producto eliminado correctamente');
         }
@@ -1186,6 +1286,7 @@
             actualizarResumenConFiltros();
             actualizarGraficos();
             renderizarMovimientos();
+            renderizarTopProductos();
         }
         
         // ===== MODALES =====
@@ -1278,6 +1379,7 @@
         document.getElementById('confirmarEliminar').addEventListener('click', () => { if (productoAEliminar) { eliminarProducto(productoAEliminar); cerrarModalConfirmar(); } });
         document.getElementById('btnAgregarProducto').addEventListener('click', abrirModalAgregar);
         document.getElementById('btnAjusteStock').addEventListener('click', () => abrirModalAjuste());
+        document.getElementById('btnExportarInventario').addEventListener('click', exportarInventarioCSV);
         document.getElementById('closeModal').addEventListener('click', cerrarModalProducto);
         document.getElementById('cancelarModal').addEventListener('click', cerrarModalProducto);
         document.getElementById('closeConfirmModal').addEventListener('click', cerrarModalConfirmar);
@@ -1297,6 +1399,7 @@
         });
         
         // ===== INICIALIZACIÓN =====
+        let topProductos = [];
         document.addEventListener('DOMContentLoaded', () => {
             initLocalStorage();
             actualizarUICompleta();
