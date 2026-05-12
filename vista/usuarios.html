@@ -182,12 +182,49 @@
     <button class="toggle-sidebar-collapsed" id="toggleSidebarCollapsed"><i class="fas fa-bars"></i></button>
     
     <div class="sidebar" id="sidebar">
-        <button class="toggle-sidebar-btn" id="toggleSidebar"><i class="fas fa-chevron-left"></i></button>
-        <div class="logo-container"><div class="logo"><span class="logo-agro">AGRO</span><span class="logo-vet">VET</span></div><div class="slogan">Yacuanquer - Sistema POS</div></div>
+        <div class="logo-container">
+            <div class="logo">
+                <span class="logo-agro">AGRO</span>
+                <span class="logo-vet">VET</span>
+            </div>
+            <div class="slogan">Yacuanquer - Sistema POS</div>
+        </div>
+        
         <nav class="nav-menu">
-            <a href="/" class="nav-item"><i class="nav-icon fas fa-home"></i><span class="nav-text">Inicio</span></a>
-            <a href="/usuarios" class="nav-item active"><i class="nav-icon fas fa-users"></i><span class="nav-text">Clientes</span></a>
+            <a href="/" class="nav-item">
+                <i class="nav-icon fas fa-home"></i>
+                <span class="nav-text">Inicio</span>
+            </a>
+            <a href="/venta" class="nav-item">
+                <i class="nav-icon fas fa-cash-register"></i>
+                <span class="nav-text">Nueva Venta</span>
+            </a>
+            <a href="/productos" class="nav-item active">
+                <i class="nav-icon fas fa-boxes"></i>
+                <span class="nav-text">Productos</span>
+            </a>
+            <a href="/usuarios" class="nav-item">
+                <i class="nav-icon fas fa-users"></i>
+                <span class="nav-text">Clientes</span>
+            </a>
+            <a href="/historial_venta" class="nav-item">
+                <i class="nav-icon fas fa-history"></i>
+                <span class="nav-text">Historial</span>
+            </a>
+            <a href="/inventario" class="nav-item">
+                <i class="nav-icon fas fa-warehouse"></i>
+                <span class="nav-text">Inventario</span>
+            </a>
+            <a href="/reporte_caja" class="nav-item">
+                <i class="nav-icon fas fa-chart-bar"></i>
+                <span class="nav-text">Reportes</span>
+            </a>
         </nav>
+        
+        <!-- Botón para toggle del sidebar (dentro del sidebar) -->
+        <div class="sidebar-toggle" id="toggleSidebar">
+            <i class="fas fa-chevron-left"></i>
+        </div>
     </div>
     
     <div class="main-content" id="mainContent">
