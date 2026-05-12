@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agrovet Yacuanquer</title>
+    <title>Agrovet Yacuanquer - Clientes y Proveedores</title>
     <style>
         :root {
             --teal: #1F8A86;
@@ -18,347 +18,278 @@
             --exito: #27ae60;
             --error: #e74c3c;
             --info: #3498db;
+            --advertencia: #f39c12;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         
         body { background-color: var(--blanco-hueso); display: flex; min-height: 100vh; }
         
-        .sidebar { width: 250px; background: var(--teal); color: white; position: fixed; height: 100vh; }
-        
-        .main-content { flex: 1; margin-left: 250px; padding: 30px; }
+        .sidebar { width: 250px; background: var(--teal); color: white; position: fixed; height: 100vh; transition: 0.3s; z-index: 1000; }
+        .main-content { flex: 1; margin-left: 250px; padding: 30px; transition: margin-left 0.3s; }
         
         .logo-container { text-align: center; padding: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); }
+        .logo { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 22px; font-weight: 700; }
+        .logo-agro { color: white; }
+        .logo-vet { color: var(--mostaza); }
+        .slogan { font-size: 11px; opacity: 0.8; margin-top: 5px; }
         
-        .nav-item { display: flex; padding: 12px 15px; color: white; text-decoration: none; margin-bottom: 6px; background: rgba(255,255,255,0.05); }
-        
+        .nav-item { display: flex; align-items: center; gap: 10px; padding: 12px 15px; color: white; text-decoration: none; border-radius: 6px; margin-bottom: 6px; background: rgba(255,255,255,0.05); }
         .nav-item:hover { background: rgba(255,255,255,0.15); }
         .nav-item.active { background: rgba(255,255,255,0.2); border-left: 3px solid var(--mostaza); }
+        .nav-icon { width: 20px; }
+        .nav-text { font-size: 14px; font-weight: 500; }
 
-        .table-container { background: white; border-radius: 12px; padding: 25px; margin-top: 20px; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
+        .top-header { background: white; border-radius: 12px; padding: 20px 30px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--terracota); }
+        .header-left h1 { color: var(--teal); font-size: 28px; margin-bottom: 5px; }
+        .header-left p { color: var(--gris-medio); font-size: 14px; }
+        .header-stats { display: flex; gap: 20px; }
+        .stat-badge { background: var(--celeste-fondo); padding: 10px 20px; border-radius: 8px; text-align: center; }
+        .stat-value { font-size: 18px; font-weight: bold; color: var(--teal); }
+        .stat-label { font-size: 12px; color: var(--gris-medio); }
+
+        .tabs-container { background: white; border-radius: 12px; padding: 15px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .tabs { display: flex; gap: 10px; border-bottom: 2px solid var(--gris-claro); padding-bottom: 10px; }
+        .tab-btn { padding: 12px 24px; background: none; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--gris-medio); display: flex; align-items: center; gap: 8px; }
+        .tab-btn.active { background: var(--teal); color: white; }
+        .tab-btn:hover:not(.active) { background: var(--gris-claro); }
+
+        .controls-container { background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+        .search-container { position: relative; flex: 1; min-width: 300px; }
+        .search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--gris-claro); border-radius: 10px; font-size: 16px; }
+        .search-input:focus { outline: none; border-color: var(--teal); }
+        .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--gris-medio); }
+        .filter-container { display: flex; gap: 10px; flex-wrap: wrap; }
+        .filter-select { padding: 12px 15px; border: 2px solid var(--gris-claro); border-radius: 8px; background: white; font-size: 14px; min-width: 180px; }
+
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: linear-gradient(135deg, var(--teal) 0%, #1a7572 100%); color: white; }
+        .btn-primary:hover { background: #1a7572; }
+        .btn-danger { background: var(--error); color: white; }
+        .btn-info { background: var(--info); color: white; }
+        .btn-warning { background: var(--advertencia); color: white; }
+
+        .table-container { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto; display: none; }
+        .table-container.active { display: block; }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
         th { background: var(--gris-claro); padding: 16px 12px; text-align: left; font-weight: 600; }
         td { padding: 20px 12px; border-bottom: 1px solid var(--gris-claro); }
         tr:hover { background: rgba(63, 166, 160, 0.05); }
 
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { padding: 12px 24px; background: var(--gris-claro); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .tab-btn.active { background: var(--teal); color: white; }
+        .status-badge { display: inline-flex; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .status-activo { background: rgba(39, 174, 96, 0.1); color: var(--exito); }
+        .status-inactivo { background: rgba(231, 76, 60, 0.1); color: var(--error); }
+        .status-moroso { background: rgba(243, 156, 18, 0.1); color: var(--advertencia); }
+        .deuda-cero { color: var(--exito); }
+        .deuda-pequena { color: var(--mostaza); }
+        .deuda-grande { color: var(--error); }
 
-        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .btn-primary { background: var(--teal); color: white; }
-        .btn-danger { background: var(--error); color: white; }
-        .btn-secondary { background: var(--gris-claro); color: var(--gris-oscuro); }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; }
         .modal-content { background: white; border-radius: 12px; width: 90%; max-width: 500px; padding: 25px; }
         .modal-header { margin-bottom: 20px; }
-        .modal-body { margin-bottom: 20px; }
-        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
         .form-group { margin-bottom: 15px; }
-        .form-control { width: 100%; padding: 10px; border: 2px solid var(--gris-claro); border-radius: 8px; }
-        .form-control:focus { outline: none; border-color: var(--teal); }
+        .form-label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-control { width: 100%; padding: 12px; border: 2px solid var(--gris-claro); border-radius: 8px; }
+
+        @media (max-width: 768px) {
+            .top-header { flex-direction: column; gap: 20px; text-align: center; }
+            .controls-container { flex-direction: column; align-items: stretch; }
+            .search-container { min-width: 100%; }
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="sidebar">
-        <div class="logo-container">AGROVET</div>
+        <div class="logo-container"><div class="logo"><span class="logo-agro">AGRO</span><span class="logo-vet">VET</span></div><div class="slogan">Yacuanquer - Sistema POS</div></div>
         <nav class="nav-menu">
-            <a href="/" class="nav-item">Inicio</a>
-            <a href="/usuarios" class="nav-item active">Clientes</a>
+            <a href="/" class="nav-item"><i class="nav-icon fas fa-home"></i><span class="nav-text">Inicio</span></a>
+            <a href="/usuarios" class="nav-item active"><i class="nav-icon fas fa-users"></i><span class="nav-text">Clientes</span></a>
         </nav>
     </div>
+    
     <div class="main-content">
-        <header>
-            <h1>Gestión de Clientes y Proveedores</h1>
-            <button class="btn btn-primary" id="btnNuevoCliente" style="margin-top: 15px;">+ Nuevo Cliente</button>
+        <header class="top-header">
+            <div class="header-left"><h1>Gestión de Clientes y Proveedores</h1><p>Administra la información de tus clientes y proveedores</p></div>
+            <div class="header-stats"><div class="stat-badge"><div class="stat-value" id="totalClientes">0</div><div class="stat-label">Total Clientes</div></div><div class="stat-badge"><div class="stat-value" id="totalProveedores">0</div><div class="stat-label">Proveedores</div></div></div>
         </header>
         
-        <div class="tabs">
-            <button class="tab-btn active" onclick="cambiarTab('clientes')">Clientes</button>
-            <button class="tab-btn" onclick="cambiarTab('proveedores')">Proveedores</button>
+        <div class="tabs-container"><div class="tabs"><button class="tab-btn active" data-tab="clientes"><i class="fas fa-user-friends"></i> Clientes</button><button class="tab-btn" data-tab="proveedores"><i class="fas fa-truck"></i> Proveedores</button></div></div>
+        
+        <div class="controls-container" id="clientesControls">
+            <div class="search-container"><i class="fas fa-search search-icon"></i><input type="text" class="search-input" placeholder="Buscar clientes por nombre, cédula o teléfono..." id="searchClientes"></div>
+            <div class="filter-container"><select class="filter-select" id="filterEstadoCliente"><option value="">Todos los estados</option><option value="activo">Activos</option><option value="moroso">Morosos</option></select><select class="filter-select" id="filterDeudaCliente"><option value="">Toda la deuda</option><option value="sin">Sin deuda</option><option value="pequena">Deuda pequeña</option><option value="grande">Deuda grande</option></select><select class="filter-select" id="filterOrdenCliente"><option value="normal">Orden normal</option><option value="nombre_asc">A - Z</option><option value="nombre_desc">Z - A</option></select></div>
+            <button class="btn btn-primary" id="btnNuevoCliente"><i class="fas fa-user-plus"></i> Nuevo Cliente</button>
         </div>
         
-        <div id="tablaClientes" class="table-container">
-            <table>
-                <thead><tr><th>Cédula</th><th>Nombre</th><th>Contacto</th><th>Deuda</th><th>Acciones</th></tr></thead>
-                <tbody id="clientesBody"></tbody>
-            </table>
+        <div class="controls-container" id="proveedoresControls" style="display: none;">
+            <div class="search-container"><i class="fas fa-search search-icon"></i><input type="text" class="search-input" placeholder="Buscar proveedores por nombre, empresa o teléfono..." id="searchProveedores"></div>
+            <div class="filter-container"><select class="filter-select" id="filterTipoProveedor"><option value="">Todos los proveedores</option><option value="activo">Activos</option><option value="inactivo">Inactivos</option></select><select class="filter-select" id="filterOrdenProveedor"><option value="fecha_desc">Más recientes primero</option><option value="nombre_asc">Nombre A-Z</option></select></div>
+            <button class="btn btn-warning" id="btnNuevoProveedor"><i class="fas fa-truck-loading"></i> Nuevo Proveedor</button>
         </div>
         
-        <div id="tablaProveedores" class="table-container" style="display:none">
-            <table>
-                <thead><tr><th>Teléfono</th><th>Empresa</th><th>Proveedor</th><th>Estado</th><th>Acciones</th></tr></thead>
-                <tbody id="proveedoresBody"></tbody>
-            </table>
-            <button class="btn btn-primary" id="btnNuevoProveedor" style="margin-top: 15px;">+ Nuevo Proveedor</button>
-        </div>
+        <div class="table-container active" id="tablaClientes"><table><thead><tr><th>Cédula</th><th>Nombre</th><th>Contacto</th><th>Estado</th><th>Deuda</th><th>Acciones</th></tr></thead><tbody id="clientesBody"></tbody></table></div>
+        <div class="table-container" id="tablaProveedores"><table><thead><tr><th>Teléfono</th><th>Empresa</th><th>Proveedor</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="proveedoresBody"></tbody></table></div>
     </div>
 
-    <!-- Modal Cliente -->
-    <div class="modal" id="modalCliente">
-        <div class="modal-content">
-            <div class="modal-header"><h2 id="modalClienteTitulo">Nuevo Cliente</h2></div>
-            <div class="modal-body">
-                <form id="formCliente">
-                    <input type="hidden" id="clienteCedulaOriginal">
-                    <div class="form-group"><label>Cédula *</label><input type="text" class="form-control" id="clienteCedula" required></div>
-                    <div class="form-group"><label>Nombre *</label><input type="text" class="form-control" id="clienteNombre" required></div>
-                    <div class="form-group"><label>Teléfono</label><input type="text" class="form-control" id="clienteTelefono"></div>
-                    <div class="form-group"><label>Correo</label><input type="email" class="form-control" id="clienteCorreo"></div>
-                    <div class="form-group"><label>Dirección</label><textarea class="form-control" id="clienteDireccion" rows="2"></textarea></div>
-                </form>
-            </div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" id="btnCancelarCliente">Cancelar</button>
-                <button class="btn btn-primary" id="btnGuardarCliente">Guardar</button>
-            </div>
-        </div>
-    </div>
+    <!-- Modales -->
+    <div class="modal" id="modalCliente"><div class="modal-content"><div class="modal-header"><h2 id="modalClienteTitulo">Nuevo Cliente</h2></div><form id="formCliente"><input type="hidden" id="clienteCedulaOriginal"><div class="form-group"><label class="form-label">Cédula *</label><input type="text" class="form-control" id="clienteCedula" required></div><div class="form-group"><label class="form-label">Nombre *</label><input type="text" class="form-control" id="clienteNombre" required></div><div class="form-group"><label class="form-label">Teléfono</label><input type="text" class="form-control" id="clienteTelefono"></div><div class="form-group"><label class="form-label">Correo</label><input type="email" class="form-control" id="clienteCorreo"></div><div class="form-group"><label class="form-label">Dirección</label><textarea class="form-control" id="clienteDireccion" rows="2"></textarea></div><div class="modal-actions"><button type="button" class="btn" id="btnCancelarCliente">Cancelar</button><button type="button" class="btn btn-primary" id="btnGuardarCliente">Guardar</button></div></form></div></div>
 
-    <!-- Modal Proveedor -->
-    <div class="modal" id="modalProveedor">
-        <div class="modal-content">
-            <div class="modal-header"><h2 id="modalProveedorTitulo">Nuevo Proveedor</h2></div>
-            <div class="modal-body">
-                <form id="formProveedor">
-                    <input type="hidden" id="proveedorTelefonoOriginal">
-                    <div class="form-group"><label>Teléfono *</label><input type="text" class="form-control" id="proveedorTelefono" required></div>
-                    <div class="form-group"><label>Empresa *</label><input type="text" class="form-control" id="proveedorEmpresa" required></div>
-                    <div class="form-group"><label>Nombre Proveedor *</label><input type="text" class="form-control" id="proveedorNombre" required></div>
-                    <div class="form-group"><label>Correo</label><input type="email" class="form-control" id="proveedorCorreo"></div>
-                    <div class="form-group"><label>Estado</label><select class="form-control" id="proveedorEstado"><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select></div>
-                </form>
-            </div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" id="btnCancelarProveedor">Cancelar</button>
-                <button class="btn btn-primary" id="btnGuardarProveedor">Guardar</button>
-            </div>
-        </div>
-    </div>
+    <div class="modal" id="modalProveedor"><div class="modal-content"><div class="modal-header"><h2 id="modalProveedorTitulo">Nuevo Proveedor</h2></div><form id="formProveedor"><input type="hidden" id="proveedorTelefonoOriginal"><div class="form-group"><label class="form-label">Teléfono *</label><input type="text" class="form-control" id="proveedorTelefono" required></div><div class="form-group"><label class="form-label">Empresa *</label><input type="text" class="form-control" id="proveedorEmpresa" required></div><div class="form-group"><label class="form-label">Nombre Proveedor *</label><input type="text" class="form-control" id="proveedorNombre" required></div><div class="form-group"><label class="form-label">Correo</label><input type="email" class="form-control" id="proveedorCorreo"></div><div class="form-group"><label class="form-label">Estado</label><select class="form-control" id="proveedorEstado"><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select></div><div class="modal-actions"><button type="button" class="btn" id="btnCancelarProveedor">Cancelar</button><button type="button" class="btn btn-primary" id="btnGuardarProveedor">Guardar</button></div></form></div></div>
 
-    <!-- Modal Confirmación -->
-    <div class="modal" id="modalConfirm">
-        <div class="modal-content">
-            <div class="modal-header"><h2 id="confirmTitulo">Confirmar</h2></div>
-            <div class="modal-body"><p id="confirmMensaje">¿Estás seguro?</p></div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" id="confirmCancelar">Cancelar</button>
-                <button class="btn btn-danger" id="confirmAceptar">Eliminar</button>
-            </div>
-        </div>
-    </div>
+    <div class="modal" id="modalConfirm"><div class="modal-content"><div class="modal-header"><h2 id="confirmTitulo">Confirmar</h2></div><div class="modal-body"><p id="confirmMensaje">¿Estás seguro?</p></div><div class="modal-actions"><button class="btn" id="confirmCancelar">Cancelar</button><button class="btn btn-danger" id="confirmAceptar">Eliminar</button></div></div></div>
 
     <script>
+        let todosClientes = [], todosProveedores = [];
+        let clienteEditando = null, proveedorEditando = null;
+        let elementoAEliminar = null, tipoElementoAEliminar = null;
+        let tabActual = 'clientes';
+
         const MOCK_CLIENTES = [
             { cedula: '123456789', nombre: 'Juan Pérez', telefono: '3001234567', correo: 'juan@email.com', direccion: 'Calle 1', deuda_total: 0, fecha_creacion: new Date().toISOString() },
-            { cedula: '987654321', nombre: 'María Gómez', telefono: '3007654321', correo: 'maria@email.com', direccion: 'Carrera 2', deuda_total: 150000, fecha_creacion: new Date().toISOString() }
+            { cedula: '987654321', nombre: 'María Gómez', telefono: '3007654321', correo: 'maria@email.com', direccion: 'Carrera 2', deuda_total: 150000, fecha_creacion: new Date().toISOString() },
+            { cedula: '555666777', nombre: 'Pedro Ramírez', telefono: '3109998888', correo: 'pedro@email.com', direccion: 'Avenida 3', deuda_total: 25000, fecha_creacion: new Date().toISOString() }
         ];
-        
         const MOCK_PROVEEDORES = [
-            { telefono: '3101112223', nombre_empresa: 'Agroinsumos SA', nombre_proveedor: 'Carlos López', correo: 'carlos@agroinsumos.com', estado: 'activo', producto: 'Fertilizantes, Semillas', fecha_creacion: new Date().toISOString() }
+            { telefono: '3101112223', nombre_empresa: 'Agroinsumos SA', nombre_proveedor: 'Carlos López', correo: 'carlos@agroinsumos.com', estado: 'activo', producto: 'Fertilizantes', fecha_creacion: new Date().toISOString() },
+            { telefono: '3203334445', nombre_empresa: 'Veterinaria Central', nombre_proveedor: 'Ana Martínez', correo: 'ana@vetcentral.com', estado: 'activo', producto: 'Medicamentos', fecha_creacion: new Date().toISOString() }
         ];
 
-        let tabActual = 'clientes';
-        let elementoAEliminar = null;
-        let tipoElementoAEliminar = null;
-        let esEdicionCliente = false;
-        let esEdicionProveedor = false;
-
-        if (!localStorage.getItem('clientes')) localStorage.setItem('clientes', JSON.stringify(MOCK_CLIENTES));
-        if (!localStorage.getItem('proveedores')) localStorage.setItem('proveedores', JSON.stringify(MOCK_PROVEEDORES));
-
-        function formatCurrency(v) { return !v && v !== 0 ? '$ 0' : `$ ${parseFloat(v).toLocaleString('es-CO')}`; }
-
-        function renderClientes() {
-            const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
-            const tbody = document.getElementById('clientesBody');
-            if (!clientes.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No hay clientes</td></tr>'; return; }
-            tbody.innerHTML = clientes.map(c => `<tr><td><strong>${c.cedula}</strong></td><td><strong>${c.nombre}</strong><br><small>${c.direccion || ''}</small></td><td>${c.telefono ? `📞 ${c.telefono}<br>` : ''}${c.correo ? `✉️ ${c.correo}` : ''}</td><td>${formatCurrency(c.deuda_total)}</td><td><button class="btn" style="background:var(--info);color:white" onclick="abrirModalEditarCliente('${c.cedula}')">✏️</button> <button class="btn" style="background:var(--error);color:white" onclick="confirmarEliminar('cliente','${c.cedula}','${c.nombre}')">🗑️</button></td></tr>`).join('');
+        function initLocalStorage() {
+            if (!localStorage.getItem('clientes')) localStorage.setItem('clientes', JSON.stringify(MOCK_CLIENTES));
+            if (!localStorage.getItem('proveedores')) localStorage.setItem('proveedores', JSON.stringify(MOCK_PROVEEDORES));
+            cargarTodosClientes();
+            cargarTodosProveedores();
         }
 
-        function renderProveedores() {
-            const proveedores = JSON.parse(localStorage.getItem('proveedores')) || [];
+        function formatCurrency(v) { return (!v && v !== 0) ? '$ 0' : `$ ${parseFloat(v).toLocaleString('es-CO')}`; }
+        function getDeudaClass(d) { d = parseFloat(d) || 0; if (d === 0) return 'deuda-cero'; if (d < 50000) return 'deuda-pequena'; return 'deuda-grande'; }
+        function getEstadoClass(e, deuda) { if (deuda > 0) return 'status-moroso'; return e === 'activo' ? 'status-activo' : 'status-inactivo'; }
+
+        function cargarTodosClientes() { todosClientes = JSON.parse(localStorage.getItem('clientes')) || []; updateStats(); aplicarFiltrosYOrdenClientes(); }
+        function cargarTodosProveedores() { todosProveedores = JSON.parse(localStorage.getItem('proveedores')) || []; updateStats(); aplicarFiltrosYOrdenProveedores(); }
+
+        function ordenarClientes(c, orden) {
+            const copy = [...c];
+            if (orden === 'nombre_asc') return copy.sort((a,b) => (a.nombre||'').toLowerCase().localeCompare((b.nombre||'').toLowerCase()));
+            if (orden === 'nombre_desc') return copy.sort((a,b) => (b.nombre||'').toLowerCase().localeCompare((a.nombre||'').toLowerCase()));
+            return copy;
+        }
+
+        function aplicarFiltrosYOrdenClientes() {
+            let filtrados = [...todosClientes];
+            const busqueda = document.getElementById('searchClientes')?.value.toLowerCase() || '';
+            const estado = document.getElementById('filterEstadoCliente')?.value || '';
+            const deuda = document.getElementById('filterDeudaCliente')?.value || '';
+            const orden = document.getElementById('filterOrdenCliente')?.value || 'normal';
+            
+            if (busqueda) filtrados = filtrados.filter(c => (c.cedula||'').includes(busqueda) || (c.nombre||'').toLowerCase().includes(busqueda) || (c.telefono||'').includes(busqueda));
+            if (estado === 'moroso') filtrados = filtrados.filter(c => parseFloat(c.deuda_total||0) > 0);
+            if (estado === 'activo') filtrados = filtrados.filter(c => parseFloat(c.deuda_total||0) === 0);
+            if (deuda === 'sin') filtrados = filtrados.filter(c => parseFloat(c.deuda_total||0) === 0);
+            if (deuda === 'pequena') filtrados = filtrados.filter(c => { let d = parseFloat(c.deuda_total||0); return d > 0 && d < 50000; });
+            if (deuda === 'grande') filtrados = filtrados.filter(c => parseFloat(c.deuda_total||0) >= 50000);
+            
+            renderClientes(ordenarClientes(filtrados, orden));
+        }
+
+        function ordenarProveedores(p, orden) {
+            const copy = [...p];
+            if (orden === 'nombre_asc') return copy.sort((a,b) => (a.nombre_proveedor||'').toLowerCase().localeCompare((b.nombre_proveedor||'').toLowerCase()));
+            if (orden === 'fecha_desc') return copy.sort((a,b) => new Date(b.fecha_creacion||0) - new Date(a.fecha_creacion||0));
+            return copy;
+        }
+
+        function aplicarFiltrosYOrdenProveedores() {
+            let filtrados = [...todosProveedores];
+            const busqueda = document.getElementById('searchProveedores')?.value.toLowerCase() || '';
+            const estado = document.getElementById('filterTipoProveedor')?.value || '';
+            const orden = document.getElementById('filterOrdenProveedor')?.value || 'fecha_desc';
+            
+            if (busqueda) filtrados = filtrados.filter(p => (p.telefono||'').includes(busqueda) || (p.nombre_empresa||'').toLowerCase().includes(busqueda) || (p.nombre_proveedor||'').toLowerCase().includes(busqueda));
+            if (estado) filtrados = filtrados.filter(p => p.estado === estado);
+            
+            renderProveedores(ordenarProveedores(filtrados, orden));
+        }
+
+        function renderClientes(clientes) {
+            const tbody = document.getElementById('clientesBody');
+            if (!clientes.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">No hay clientes</td></tr>'; return; }
+            tbody.innerHTML = clientes.map(c => `
+                <tr>
+                    <td>${c.cedula}</td>
+                    <td><strong>${c.nombre}</strong><br><small>${c.direccion || ''}</small></td>
+                    <td>${c.telefono ? `<i class="fas fa-phone"></i> ${c.telefono}<br>` : ''}${c.correo ? `<i class="fas fa-envelope"></i> ${c.correo}` : ''}</td>
+                    <td><span class="status-badge ${getEstadoClass(c.estado_actual, c.deuda_total)}">${c.deuda_total > 0 ? 'Moroso' : 'Activo'}</span></td>
+                    <td class="${getDeudaClass(c.deuda_total)}">${formatCurrency(c.deuda_total)}</td>
+                    <td><button class="btn btn-info" onclick="abrirModalEditarCliente('${c.cedula}')"><i class="fas fa-edit"></i></button> <button class="btn btn-danger" onclick="confirmarEliminar('cliente','${c.cedula}','${c.nombre}')"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            `).join('');
+        }
+
+        function renderProveedores(proveedores) {
             const tbody = document.getElementById('proveedoresBody');
             if (!proveedores.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No hay proveedores</td></tr>'; return; }
-            tbody.innerHTML = proveedores.map(p => `<tr><td><strong>${p.telefono}</strong></td><td>${p.nombre_empresa}</td><td>${p.nombre_proveedor}</td><td><span style="background:${p.estado==='activo'?'rgba(39,174,96,0.1)':'rgba(231,76,60,0.1)'};color:${p.estado==='activo'?'var(--exito)':'var(--error)'};padding:4px 12px;border-radius:20px">${p.estado==='activo'?'Activo':'Inactivo'}</span></td><td><button class="btn" style="background:var(--info);color:white" onclick="abrirModalEditarProveedor('${p.telefono}')">✏️</button> <button class="btn" style="background:var(--error);color:white" onclick="confirmarEliminar('proveedor','${p.telefono}','${p.nombre_empresa}')">🗑️</button></td></tr>`).join('');
+            tbody.innerHTML = proveedores.map(p => `
+                <tr>
+                    <td>${p.telefono}</td>
+                    <td>${p.nombre_empresa}</td>
+                    <td>${p.nombre_proveedor}</td>
+                    <td><span class="status-badge ${p.estado === 'activo' ? 'status-activo' : 'status-inactivo'}">${p.estado === 'activo' ? 'Activo' : 'Inactivo'}</span></td>
+                    <td><button class="btn btn-info" onclick="abrirModalEditarProveedor('${p.telefono}')"><i class="fas fa-edit"></i></button> <button class="btn btn-danger" onclick="confirmarEliminar('proveedor','${p.telefono}','${p.nombre_empresa}')"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            `).join('');
         }
 
         function cambiarTab(tab) {
             tabActual = tab;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            const tablaClientes = document.getElementById('tablaClientes');
-            const tablaProveedores = document.getElementById('tablaProveedores');
-            if (tab === 'clientes') {
-                tablaClientes.style.display = 'block';
-                tablaProveedores.style.display = 'none';
-                document.querySelectorAll('.tab-btn')[0].classList.add('active');
-                renderClientes();
-            } else {
-                tablaClientes.style.display = 'none';
-                tablaProveedores.style.display = 'block';
-                document.querySelectorAll('.tab-btn')[1].classList.add('active');
-                renderProveedores();
-            }
+            document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
+            document.getElementById('clientesControls').style.display = tab === 'clientes' ? 'flex' : 'none';
+            document.getElementById('proveedoresControls').style.display = tab === 'proveedores' ? 'flex' : 'none';
+            document.getElementById('tablaClientes').classList.toggle('active', tab === 'clientes');
+            document.getElementById('tablaProveedores').classList.toggle('active', tab === 'proveedores');
+            if (tab === 'clientes') aplicarFiltrosYOrdenClientes();
+            else aplicarFiltrosYOrdenProveedores();
         }
 
-        function abrirModalNuevoCliente() {
-            esEdicionCliente = false;
-            document.getElementById('modalClienteTitulo').textContent = 'Nuevo Cliente';
-            document.getElementById('clienteCedulaOriginal').value = '';
-            document.getElementById('clienteCedula').value = '';
-            document.getElementById('clienteNombre').value = '';
-            document.getElementById('clienteTelefono').value = '';
-            document.getElementById('clienteCorreo').value = '';
-            document.getElementById('clienteDireccion').value = '';
-            document.getElementById('modalCliente').style.display = 'flex';
+        function abrirModalNuevoCliente() { clienteEditando = null; document.getElementById('modalClienteTitulo').innerText = 'Nuevo Cliente'; limpiarFormCliente(); document.getElementById('modalCliente').style.display = 'flex'; }
+        function abrirModalEditarCliente(cedula) { clienteEditando = cedula; const c = todosClientes.find(c => c.cedula === cedula); document.getElementById('modalClienteTitulo').innerText = 'Editar Cliente'; document.getElementById('clienteCedulaOriginal').value = cedula; document.getElementById('clienteCedula').value = c.cedula; document.getElementById('clienteNombre').value = c.nombre; document.getElementById('clienteTelefono').value = c.telefono || ''; document.getElementById('clienteCorreo').value = c.correo || ''; document.getElementById('clienteDireccion').value = c.direccion || ''; document.getElementById('modalCliente').style.display = 'flex'; }
+        function limpiarFormCliente() { document.getElementById('clienteCedulaOriginal').value = ''; document.getElementById('clienteCedula').value = ''; document.getElementById('clienteNombre').value = ''; document.getElementById('clienteTelefono').value = ''; document.getElementById('clienteCorreo').value = ''; document.getElementById('clienteDireccion').value = ''; }
+        function guardarCliente() { const cedula = document.getElementById('clienteCedula').value.trim(); const nombre = document.getElementById('clienteNombre').value.trim(); if (!cedula || !nombre) { alert('Cédula y nombre son requeridos'); return; } let clientes = JSON.parse(localStorage.getItem('clientes')); if (!clienteEditando && clientes.find(c => c.cedula === cedula)) { alert('Ya existe un cliente con esa cédula'); return; } const nuevo = { cedula, nombre, telefono: document.getElementById('clienteTelefono').value, correo: document.getElementById('clienteCorreo').value, direccion: document.getElementById('clienteDireccion').value, deuda_total: 0, fecha_creacion: new Date().toISOString() }; if (clienteEditando) { const idx = clientes.findIndex(c => c.cedula === clienteEditando); if (idx !== -1) { nuevo.deuda_total = clientes[idx].deuda_total || 0; clientes[idx] = nuevo; } } else { clientes.push(nuevo); } localStorage.setItem('clientes', JSON.stringify(clientes)); document.getElementById('modalCliente').style.display = 'none'; cargarTodosClientes(); }
+
+        function abrirModalNuevoProveedor() { proveedorEditando = null; limpiarFormProveedor(); document.getElementById('modalProveedorTitulo').innerText = 'Nuevo Proveedor'; document.getElementById('modalProveedor').style.display = 'flex'; }
+        function abrirModalEditarProveedor(telefono) { proveedorEditando = telefono; const p = todosProveedores.find(p => p.telefono === telefono); document.getElementById('proveedorTelefonoOriginal').value = telefono; document.getElementById('proveedorTelefono').value = p.telefono; document.getElementById('proveedorEmpresa').value = p.nombre_empresa; document.getElementById('proveedorNombre').value = p.nombre_proveedor; document.getElementById('proveedorCorreo').value = p.correo || ''; document.getElementById('proveedorEstado').value = p.estado; document.getElementById('modalProveedorTitulo').innerText = 'Editar Proveedor'; document.getElementById('modalProveedor').style.display = 'flex'; }
+        function limpiarFormProveedor() { document.getElementById('proveedorTelefonoOriginal').value = ''; document.getElementById('proveedorTelefono').value = ''; document.getElementById('proveedorEmpresa').value = ''; document.getElementById('proveedorNombre').value = ''; document.getElementById('proveedorCorreo').value = ''; document.getElementById('proveedorEstado').value = 'activo'; }
+        function guardarProveedor() { const telefono = document.getElementById('proveedorTelefono').value.trim(); const empresa = document.getElementById('proveedorEmpresa').value.trim(); const nombre = document.getElementById('proveedorNombre').value.trim(); if (!telefono || !empresa || !nombre) { alert('Teléfono, empresa y nombre son requeridos'); return; } let proveedores = JSON.parse(localStorage.getItem('proveedores')); if (!proveedorEditando && proveedores.find(p => p.telefono === telefono)) { alert('Ya existe un proveedor con ese teléfono'); return; } const nuevo = { telefono, nombre_empresa: empresa, nombre_proveedor: nombre, correo: document.getElementById('proveedorCorreo').value, estado: document.getElementById('proveedorEstado').value, producto: '', fecha_creacion: new Date().toISOString() }; if (proveedorEditando) { const idx = proveedores.findIndex(p => p.telefono === proveedorEditando); if (idx !== -1) proveedores[idx] = nuevo; } else { proveedores.push(nuevo); } localStorage.setItem('proveedores', JSON.stringify(proveedores)); document.getElementById('modalProveedor').style.display = 'none'; cargarTodosProveedores(); }
+
+        function confirmarEliminar(tipo, id, nombre) { elementoAEliminar = id; tipoElementoAEliminar = tipo; document.getElementById('confirmTitulo').innerText = `Eliminar ${tipo === 'cliente' ? 'Cliente' : 'Proveedor'}`; document.getElementById('confirmMensaje').innerHTML = `¿Eliminar <strong>${nombre}</strong>?<br><small style="color:var(--error)">Esta acción no se puede deshacer</small>`; document.getElementById('modalConfirm').style.display = 'flex'; }
+        function eliminarElemento() { if (tipoElementoAEliminar === 'cliente') { let clientes = JSON.parse(localStorage.getItem('clientes')); clientes = clientes.filter(c => c.cedula !== elementoAEliminar); localStorage.setItem('clientes', JSON.stringify(clientes)); cargarTodosClientes(); } else if (tipoElementoAEliminar === 'proveedor') { let proveedores = JSON.parse(localStorage.getItem('proveedores')); proveedores = proveedores.filter(p => p.telefono !== elementoAEliminar); localStorage.setItem('proveedores', JSON.stringify(proveedores)); cargarTodosProveedores(); } document.getElementById('modalConfirm').style.display = 'none'; elementoAEliminar = null; tipoElementoAEliminar = null; }
+
+        function updateStats() { document.getElementById('totalClientes').innerText = todosClientes.length; document.getElementById('totalProveedores').innerText = todosProveedores.length; }
+
+        function setupEventListeners() {
+            document.getElementById('btnNuevoCliente')?.addEventListener('click', abrirModalNuevoCliente);
+            document.getElementById('btnNuevoProveedor')?.addEventListener('click', abrirModalNuevoProveedor);
+            document.getElementById('btnGuardarCliente')?.addEventListener('click', guardarCliente);
+            document.getElementById('btnCancelarCliente')?.addEventListener('click', () => document.getElementById('modalCliente').style.display = 'none');
+            document.getElementById('btnGuardarProveedor')?.addEventListener('click', guardarProveedor);
+            document.getElementById('btnCancelarProveedor')?.addEventListener('click', () => document.getElementById('modalProveedor').style.display = 'none');
+            document.getElementById('confirmCancelar')?.addEventListener('click', () => document.getElementById('modalConfirm').style.display = 'none');
+            document.getElementById('confirmAceptar')?.addEventListener('click', eliminarElemento);
+            document.getElementById('searchClientes')?.addEventListener('input', () => aplicarFiltrosYOrdenClientes());
+            document.getElementById('filterEstadoCliente')?.addEventListener('change', () => aplicarFiltrosYOrdenClientes());
+            document.getElementById('filterDeudaCliente')?.addEventListener('change', () => aplicarFiltrosYOrdenClientes());
+            document.getElementById('filterOrdenCliente')?.addEventListener('change', () => aplicarFiltrosYOrdenClientes());
+            document.getElementById('searchProveedores')?.addEventListener('input', () => aplicarFiltrosYOrdenProveedores());
+            document.getElementById('filterTipoProveedor')?.addEventListener('change', () => aplicarFiltrosYOrdenProveedores());
+            document.getElementById('filterOrdenProveedor')?.addEventListener('change', () => aplicarFiltrosYOrdenProveedores());
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => cambiarTab(btn.dataset.tab)));
         }
 
-        function abrirModalEditarCliente(cedula) {
-            esEdicionCliente = true;
-            const clientes = JSON.parse(localStorage.getItem('clientes'));
-            const cliente = clientes.find(c => c.cedula === cedula);
-            document.getElementById('modalClienteTitulo').textContent = 'Editar Cliente';
-            document.getElementById('clienteCedulaOriginal').value = cedula;
-            document.getElementById('clienteCedula').value = cliente.cedula;
-            document.getElementById('clienteNombre').value = cliente.nombre;
-            document.getElementById('clienteTelefono').value = cliente.telefono || '';
-            document.getElementById('clienteCorreo').value = cliente.correo || '';
-            document.getElementById('clienteDireccion').value = cliente.direccion || '';
-            document.getElementById('modalCliente').style.display = 'flex';
-        }
-
-        function guardarCliente() {
-            const cedula = document.getElementById('clienteCedula').value.trim();
-            const nombre = document.getElementById('clienteNombre').value.trim();
-            if (!cedula || !nombre) { alert('Cédula y nombre son requeridos'); return; }
-            const clientes = JSON.parse(localStorage.getItem('clientes'));
-            const cedulaOriginal = document.getElementById('clienteCedulaOriginal').value;
-            
-            if (!esEdicionCliente && clientes.find(c => c.cedula === cedula)) {
-                alert('Ya existe un cliente con esa cédula');
-                return;
-            }
-            
-            const nuevoCliente = {
-                cedula, nombre,
-                telefono: document.getElementById('clienteTelefono').value,
-                correo: document.getElementById('clienteCorreo').value,
-                direccion: document.getElementById('clienteDireccion').value,
-                deuda_total: 0,
-                fecha_creacion: new Date().toISOString()
-            };
-            
-            if (esEdicionCliente) {
-                const index = clientes.findIndex(c => c.cedula === cedulaOriginal);
-                if (index !== -1) {
-                    nuevoCliente.deuda_total = clientes[index].deuda_total || 0;
-                    clientes[index] = nuevoCliente;
-                }
-            } else {
-                clientes.push(nuevoCliente);
-            }
-            
-            localStorage.setItem('clientes', JSON.stringify(clientes));
-            document.getElementById('modalCliente').style.display = 'none';
-            renderClientes();
-        }
-
-        function abrirModalNuevoProveedor() {
-            esEdicionProveedor = false;
-            document.getElementById('modalProveedorTitulo').textContent = 'Nuevo Proveedor';
-            document.getElementById('proveedorTelefonoOriginal').value = '';
-            document.getElementById('proveedorTelefono').value = '';
-            document.getElementById('proveedorEmpresa').value = '';
-            document.getElementById('proveedorNombre').value = '';
-            document.getElementById('proveedorCorreo').value = '';
-            document.getElementById('proveedorEstado').value = 'activo';
-            document.getElementById('modalProveedor').style.display = 'flex';
-        }
-
-        function abrirModalEditarProveedor(telefono) {
-            esEdicionProveedor = true;
-            const proveedores = JSON.parse(localStorage.getItem('proveedores'));
-            const proveedor = proveedores.find(p => p.telefono === telefono);
-            document.getElementById('modalProveedorTitulo').textContent = 'Editar Proveedor';
-            document.getElementById('proveedorTelefonoOriginal').value = telefono;
-            document.getElementById('proveedorTelefono').value = proveedor.telefono;
-            document.getElementById('proveedorEmpresa').value = proveedor.nombre_empresa;
-            document.getElementById('proveedorNombre').value = proveedor.nombre_proveedor;
-            document.getElementById('proveedorCorreo').value = proveedor.correo || '';
-            document.getElementById('proveedorEstado').value = proveedor.estado;
-            document.getElementById('modalProveedor').style.display = 'flex';
-        }
-
-        function guardarProveedor() {
-            const telefono = document.getElementById('proveedorTelefono').value.trim();
-            const empresa = document.getElementById('proveedorEmpresa').value.trim();
-            const nombre = document.getElementById('proveedorNombre').value.trim();
-            if (!telefono || !empresa || !nombre) { alert('Teléfono, empresa y nombre son requeridos'); return; }
-            const proveedores = JSON.parse(localStorage.getItem('proveedores'));
-            const telefonoOriginal = document.getElementById('proveedorTelefonoOriginal').value;
-            
-            if (!esEdicionProveedor && proveedores.find(p => p.telefono === telefono)) {
-                alert('Ya existe un proveedor con ese teléfono');
-                return;
-            }
-            
-            const nuevoProveedor = {
-                telefono, nombre_empresa: empresa, nombre_proveedor: nombre,
-                correo: document.getElementById('proveedorCorreo').value,
-                estado: document.getElementById('proveedorEstado').value,
-                producto: '',
-                fecha_creacion: new Date().toISOString()
-            };
-            
-            if (esEdicionProveedor) {
-                const index = proveedores.findIndex(p => p.telefono === telefonoOriginal);
-                if (index !== -1) proveedores[index] = nuevoProveedor;
-            } else {
-                proveedores.push(nuevoProveedor);
-            }
-            
-            localStorage.setItem('proveedores', JSON.stringify(proveedores));
-            document.getElementById('modalProveedor').style.display = 'none';
-            renderProveedores();
-        }
-
-        function confirmarEliminar(tipo, id, nombre) {
-            elementoAEliminar = id;
-            tipoElementoAEliminar = tipo;
-            document.getElementById('confirmTitulo').textContent = `Eliminar ${tipo === 'cliente' ? 'Cliente' : 'Proveedor'}`;
-            document.getElementById('confirmMensaje').innerHTML = `¿Eliminar <strong>${nombre}</strong>?<br><small style="color:var(--error)">Esta acción no se puede deshacer</small>`;
-            document.getElementById('modalConfirm').style.display = 'flex';
-        }
-
-        function eliminarElemento() {
-            if (tipoElementoAEliminar === 'cliente') {
-                let clientes = JSON.parse(localStorage.getItem('clientes'));
-                clientes = clientes.filter(c => c.cedula !== elementoAEliminar);
-                localStorage.setItem('clientes', JSON.stringify(clientes));
-                renderClientes();
-            } else if (tipoElementoAEliminar === 'proveedor') {
-                let proveedores = JSON.parse(localStorage.getItem('proveedores'));
-                proveedores = proveedores.filter(p => p.telefono !== elementoAEliminar);
-                localStorage.setItem('proveedores', JSON.stringify(proveedores));
-                renderProveedores();
-            }
-            document.getElementById('modalConfirm').style.display = 'none';
-            elementoAEliminar = null;
-            tipoElementoAEliminar = null;
-        }
-
-        // Eventos
-        document.getElementById('btnNuevoCliente').addEventListener('click', abrirModalNuevoCliente);
-        document.getElementById('btnNuevoProveedor').addEventListener('click', abrirModalNuevoProveedor);
-        document.getElementById('btnGuardarCliente').addEventListener('click', guardarCliente);
-        document.getElementById('btnCancelarCliente').addEventListener('click', () => document.getElementById('modalCliente').style.display = 'none');
-        document.getElementById('btnGuardarProveedor').addEventListener('click', guardarProveedor);
-        document.getElementById('btnCancelarProveedor').addEventListener('click', () => document.getElementById('modalProveedor').style.display = 'none');
-        document.getElementById('confirmCancelar').addEventListener('click', () => document.getElementById('modalConfirm').style.display = 'none');
-        document.getElementById('confirmAceptar').addEventListener('click', eliminarElemento);
-
-        renderClientes();
+        initLocalStorage();
+        setupEventListeners();
     </script>
 </body>
 </html>
