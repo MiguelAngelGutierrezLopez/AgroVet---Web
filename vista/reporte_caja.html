@@ -19,6 +19,8 @@
             --error: #e74c3c;
             --advertencia: #f39c12;
             --info: #3498db;
+            --total-caja: #9b59b6;
+            --banco: #2c3e50;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -52,7 +54,9 @@
         .header-left p { color: var(--gris-medio); font-size: 14px; }
         .header-stats { display: flex; gap: 20px; }
         .stat-badge { background: var(--celeste-fondo); padding: 10px 20px; border-radius: 8px; text-align: center; min-width: 140px; }
-        .stat-value { font-size: 18px; font-weight: bold; color: var(--teal); }
+        .stat-value.ingresos { color: var(--exito); }
+        .stat-value.egresos { color: var(--error); }
+        .stat-value.total-caja { color: var(--total-caja); font-size: 20px; }
         .stat-label { font-size: 12px; color: var(--gris-medio); }
         
         .periodo-container { background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
@@ -63,6 +67,31 @@
         .periodo-btn { padding: 10px 20px; border: 2px solid var(--gris-claro); background: white; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
         .periodo-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
         
+        .resumen-financiero { background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .dashboard-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin-bottom: 30px; }
+        .dashboard-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-top: 4px solid; transition: transform 0.2s; }
+        .dashboard-card:hover { transform: translateY(-3px); }
+        .card-lg { grid-column: span 2; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .card-title { font-size: 16px; color: var(--gris-medio); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px; }
+        .card-value { font-size: 32px; font-weight: bold; margin: 15px 0; }
+        .card-detail { font-size: 14px; color: var(--gris-medio); margin-top: 10px; }
+        .card-ingresos { border-color: var(--exito); }
+        .card-egresos { border-color: var(--error); }
+        .card-total { border-color: var(--total-caja); border-width: 5px; background: linear-gradient(135deg, #f8f5ff 0%, #f0ebff 100%); }
+        .card-icon { width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; }
+        .icon-ingresos { background: var(--exito); }
+        .icon-egresos { background: var(--error); }
+        .icon-total { background: var(--total-caja); width: 60px; height: 60px; font-size: 28px; }
+        .card-value.ingresos { color: var(--exito); }
+        .card-value.egresos { color: var(--error); }
+        .card-value.total { color: var(--total-caja); font-size: 36px; }
+        
+        .formula-card { background: linear-gradient(135deg, #f0f7ff 0%, #e6f0ff 100%); border-left: 4px solid var(--info); padding: 20px; margin-top: 20px; border-radius: 8px; }
+        .formula-title { font-size: 14px; color: var(--info); font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .formula-text { font-size: 13px; color: var(--gris-oscuro); line-height: 1.5; }
+        .formula-highlight { background: var(--total-caja); color: white; padding: 2px 8px; border-radius: 4px; font-weight: 600; margin: 0 3px; }
+        
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); display: flex; justify-content: center; align-items: center; z-index: 9999; display: none; }
         .spinner { width: 50px; height: 50px; border: 5px solid var(--gris-claro); border-top: 5px solid var(--teal); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -72,10 +101,8 @@
         .notification-error { background: var(--error); color: white; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         
-        @media (max-width: 768px) {
-            .top-header { flex-direction: column; gap: 20px; text-align: center; }
-            .periodo-buttons { flex-wrap: wrap; justify-content: center; }
-        }
+        @media (max-width: 1200px) { .dashboard-container { grid-template-columns: repeat(2, 1fr); } .card-lg { grid-column: span 2; } }
+        @media (max-width: 768px) { .top-header { flex-direction: column; gap: 20px; text-align: center; } .periodo-buttons { flex-wrap: wrap; justify-content: center; } .dashboard-container { grid-template-columns: 1fr; } .card-lg { grid-column: span 1; } }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -139,11 +166,63 @@
                 </div>
             </div>
         </div>
+        
+        <div class="resumen-financiero">
+            <h2 class="periodo-title" style="margin-bottom: 25px;">
+                <i class="fas fa-chart-pie"></i> Resumen Financiero
+                <span id="periodoActual" style="font-size: 16px; color: var(--gris-medio); margin-left: 10px;">(Hoy)</span>
+            </h2>
+            
+            <div class="dashboard-container">
+                <div class="dashboard-card card-ingresos">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-arrow-down"></i> Ingresos Manuales</div>
+                        <div class="card-icon icon-ingresos"><i class="fas fa-hand-holding-usd"></i></div>
+                    </div>
+                    <div class="card-value ingresos" id="resumenIngresos">$0</div>
+                    <div class="card-detail" id="resumenIngresosSub">0 transacciones</div>
+                </div>
+                
+                <div class="dashboard-card card-egresos">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-arrow-up"></i> Egresos Manuales</div>
+                        <div class="card-icon icon-egresos"><i class="fas fa-money-bill-wave"></i></div>
+                    </div>
+                    <div class="card-value egresos" id="resumenEgresos">$0</div>
+                    <div class="card-detail" id="resumenEgresosSub">0 transacciones</div>
+                </div>
+                
+                <div class="dashboard-card card-lg card-total">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-calculator"></i> TOTAL CAJA</div>
+                        <div class="card-icon icon-total"><i class="fas fa-cash-register"></i></div>
+                    </div>
+                    <div class="card-value total" id="totalCajaDashboard">$0</div>
+                    <div class="card-detail">Sumatoria de todos los flujos de efectivo</div>
+                    
+                    <div class="formula-card">
+                        <div class="formula-title"><i class="fas fa-calculator"></i> FÓRMULA DE CÁLCULO</div>
+                        <div class="formula-text">
+                            <span class="formula-highlight">Ingresos Manuales</span> + 
+                            <span class="formula-highlight">Ventas Contado</span> + 
+                            <span class="formula-highlight">Anticipos</span> + 
+                            <span class="formula-highlight">Abonos</span> - 
+                            <span class="formula-highlight">Egresos Manuales</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         let periodoActual = "hoy";
         let sidebarCollapsed = false;
+        
+        function formatCurrency(valor) {
+            if (typeof valor !== 'number') valor = parseFloat(valor) || 0;
+            return `$${valor.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
         
         function showNotification(msg, type) {
             const n = document.createElement('div');
@@ -155,6 +234,16 @@
         
         function showLoading(mostrar) {
             document.getElementById('loadingOverlay').style.display = mostrar ? 'flex' : 'none';
+        }
+        
+        function getPeriodoNombre(periodo) {
+            switch(periodo) {
+                case 'hoy': return 'Hoy';
+                case 'semana': return 'Esta Semana';
+                case 'mes': return 'Este Mes';
+                case 'anio': return 'Este Año';
+                default: return 'Período Personalizado';
+            }
         }
         
         function toggleSidebar() {
@@ -189,26 +278,18 @@
             }
         }
         
-        function getPeriodoNombre(periodo) {
-            switch(periodo) {
-                case 'hoy': return 'Hoy';
-                case 'semana': return 'Esta Semana';
-                case 'mes': return 'Este Mes';
-                case 'anio': return 'Este Año';
-                default: return 'Período Personalizado';
-            }
-        }
-        
         document.addEventListener('DOMContentLoaded', function() {
             cargarEstadoSidebar();
             document.getElementById('toggleSidebar').addEventListener('click', toggleSidebar);
             document.getElementById('toggleSidebarCollapsed').addEventListener('click', toggleSidebar);
+            document.getElementById('periodoActual').textContent = `(${getPeriodoNombre(periodoActual)})`;
             
             document.querySelectorAll('.periodo-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.periodo-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     periodoActual = this.dataset.periodo;
+                    document.getElementById('periodoActual').textContent = `(${getPeriodoNombre(periodoActual)})`;
                     showNotification(`Período cambiado a ${getPeriodoNombre(periodoActual)}`, 'success');
                 });
             });
