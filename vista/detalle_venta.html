@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agrovet Yacuanquer - POS</title>
     <style>
-        /* ===== VARIABLES DE COLOR ===== */
+        /* Mantener todo el CSS de los commits anteriores */
         :root {
             --teal: #1F8A86;
             --terracota: #C08A67;
@@ -22,9 +22,12 @@
             --error: #e74c3c;
             --advertencia: #f39c12;
             --info: #3498db;
+            --stock-alto: #2ecc71;
+            --stock-medio: #f39c12;
+            --stock-bajo: #e74c3c;
+            --stock-critico: #c0392b;
         }
         
-        /* ===== RESET Y ESTILOS BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -38,10 +41,8 @@
             display: flex;
             min-height: 100vh;
             overflow-x: hidden;
-            transition: all 0.3s ease;
         }
         
-        /* ===== SIDEBAR ===== */
         .sidebar {
             width: 250px;
             background: var(--teal);
@@ -51,7 +52,6 @@
             height: 100vh;
             box-shadow: 3px 0 10px rgba(0,0,0,0.1);
             z-index: 1000;
-            transition: all 0.3s ease;
         }
         
         .logo-container {
@@ -103,7 +103,6 @@
         .nav-icon { width: 24px; font-size: 18px; }
         .nav-text { font-size: 14px; font-weight: 500; }
         
-        /* ===== CONTENIDO PRINCIPAL ===== */
         .main-content {
             flex: 1;
             margin-left: 250px;
@@ -111,7 +110,6 @@
             min-height: 100vh;
         }
         
-        /* ===== HEADER ===== */
         .top-header {
             background: white;
             border-radius: 12px;
@@ -132,7 +130,6 @@
             font-size: 13px;
         }
         
-        /* ===== SECCIONES ===== */
         .section {
             background: white;
             border-radius: 12px;
@@ -150,7 +147,6 @@
             gap: 10px;
         }
         
-        /* ===== BOTONES ===== */
         .btn {
             padding: 10px 18px;
             border: none;
@@ -174,51 +170,35 @@
             box-shadow: 0 4px 8px rgba(31, 138, 134, 0.2);
         }
         
-        .btn-success {
-            background: linear-gradient(135deg, var(--exito) 0%, #219653 100%);
-            color: white;
-        }
-        
-        .btn-warning {
-            background: linear-gradient(135deg, var(--advertencia) 0%, #d68910 100%);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: var(--gris-claro);
-            color: var(--gris-oscuro);
-        }
-        
-        /* ===== PLACEHOLDER ===== */
         .placeholder {
             text-align: center;
-            padding: 60px 20px;
+            padding: 40px;
             color: var(--gris-medio);
             background: var(--blanco-hueso);
             border-radius: 8px;
             border: 1px dashed var(--gris-claro);
         }
         
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .main-content {
-                margin-left: 0;
-                padding: 15px;
-            }
-            
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            
-            .sidebar.active {
-                transform: translateX(0);
-            }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: var(--exito);
+            color: white;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Sidebar y contenido igual que Commit 1, con las clases actualizadas -->
     <div class="sidebar">
         <div class="logo-container">
             <div class="logo">
@@ -268,18 +248,117 @@
         
         <div class="section">
             <h2 class="section-title"><i class="fas fa-chart-pie"></i> Resumen del Inventario</h2>
-            <div class="placeholder">Gráficos y estadísticas se mostrarán aquí</div>
+            <div id="resumenContainer" class="placeholder">Cargando datos...</div>
         </div>
         
         <div class="section">
             <h2 class="section-title"><i class="fas fa-filter"></i> Filtros de Búsqueda</h2>
-            <div class="placeholder">Controles de filtrado y búsqueda</div>
+            <div id="filtrosContainer" class="placeholder">Controles de filtrado próximamente</div>
         </div>
         
         <div class="section">
             <h2 class="section-title"><i class="fas fa-list-alt"></i> Listado de Productos</h2>
-            <div class="placeholder">Tabla de inventario se mostrará aquí</div>
+            <div id="tablaContainer" class="placeholder">Tabla de productos próximamente</div>
         </div>
     </div>
+    
+    <script>
+        // ===== MOCK DE DATOS =====
+        const productosMock = [
+            { id: 1, nombre: "Vacuna Triple Felina", categoria: "VACUNAS", stock: 45, precio_costo: 25000, precio_venta: 35000, proveedor: "Labovet" },
+            { id: 2, nombre: "Antiparasitario Interno", categoria: "MEDICAMENTOS", stock: 12, precio_costo: 18000, precio_venta: 28000, proveedor: "Veterinaria Central" },
+            { id: 3, nombre: "Shampoo Antipulgas", categoria: "EQUIPOS", stock: 8, precio_costo: 15000, precio_venta: 25000, proveedor: "PetCare" },
+            { id: 4, nombre: "Vitamina B12", categoria: "SUPLEMENTOS", stock: 90, precio_costo: 5000, precio_venta: 10000, proveedor: "Labovet" },
+            { id: 5, nombre: "Jeringas 3ml", categoria: "EQUIPOS", stock: 150, precio_costo: 800, precio_venta: 1500, proveedor: "Medical Supplies" }
+        ];
+        
+        const movimientosMock = [
+            { id: 1, producto_id: 1, tipo: "salida", cantidad: 5, fecha: "2026-05-10", motivo: "venta" },
+            { id: 2, producto_id: 2, tipo: "entrada", cantidad: 20, fecha: "2026-05-09", motivo: "compra" },
+            { id: 3, producto_id: 3, tipo: "salida", cantidad: 3, fecha: "2026-05-08", motivo: "venta" }
+        ];
+        
+        // ===== LOCALSTORAGE =====
+        function initLocalStorage() {
+            if (!localStorage.getItem('productos')) {
+                localStorage.setItem('productos', JSON.stringify(productosMock));
+                console.log('Datos iniciales cargados en localStorage');
+            }
+            
+            if (!localStorage.getItem('movimientos')) {
+                localStorage.setItem('movimientos', JSON.stringify(movimientosMock));
+                console.log('Movimientos iniciales cargados');
+            }
+        }
+        
+        function getProductos() {
+            return JSON.parse(localStorage.getItem('productos')) || [];
+        }
+        
+        function getMovimientos() {
+            return JSON.parse(localStorage.getItem('movimientos')) || [];
+        }
+        
+        function saveProductos(productos) {
+            localStorage.setItem('productos', JSON.stringify(productos));
+        }
+        
+        function saveMovimientos(movimientos) {
+            localStorage.setItem('movimientos', JSON.stringify(movimientos));
+        }
+        
+        // ===== FUNCIONES DE ESTADÍSTICAS =====
+        function calcularEstadisticas() {
+            const productos = getProductos();
+            const totalProductos = productos.length;
+            const valorInventario = productos.reduce((sum, p) => sum + (p.stock * p.precio_costo), 0);
+            const stockCritico = productos.filter(p => p.stock < 10).length;
+            
+            return { totalProductos, valorInventario, stockCritico };
+        }
+        
+        function mostrarResumen() {
+            const stats = calcularEstadisticas();
+            const container = document.getElementById('resumenContainer');
+            
+            if (container) {
+                container.innerHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                        <div style="text-align: center; padding: 15px; background: var(--celeste-fondo); border-radius: 8px;">
+                            <div style="font-size: 28px; font-weight: bold; color: var(--teal);">${stats.totalProductos}</div>
+                            <div style="font-size: 12px; color: var(--gris-medio);">Total Productos</div>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: var(--celeste-fondo); border-radius: 8px;">
+                            <div style="font-size: 28px; font-weight: bold; color: var(--teal);">$${stats.valorInventario.toLocaleString()}</div>
+                            <div style="font-size: 12px; color: var(--gris-medio);">Valor Inventario</div>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: var(--celeste-fondo); border-radius: 8px;">
+                            <div style="font-size: 28px; font-weight: bold; color: var(--error);">${stats.stockCritico}</div>
+                            <div style="font-size: 12px; color: var(--gris-medio);">Stock Crítico</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 3000);
+        }
+        
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', () => {
+            initLocalStorage();
+            mostrarResumen();
+            showNotification('Sistema inicializado correctamente');
+            
+            console.log('Productos cargados:', getProductos());
+            console.log('Movimientos cargados:', getMovimientos());
+        });
+    </script>
 </body>
 </html>
