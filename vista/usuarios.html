@@ -4,6 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agrovet Yacuanquer</title>
+    <style>
+        :root {
+            --teal: #1F8A86;
+            --terracota: #C08A67;
+            --mostaza: #D9C357;
+            --turquesa: #3FA6A0;
+            --celeste-fondo: #E3F0F3;
+            --blanco-hueso: #F7F7F4;
+            --gris-oscuro: #2c3e50;
+            --gris-medio: #7f8c8d;
+            --gris-claro: #ecf0f1;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        
+        body { background-color: var(--blanco-hueso); display: flex; min-height: 100vh; }
+        
+        .sidebar { width: 250px; background: var(--teal); color: white; position: fixed; height: 100vh; }
+        
+        .main-content { flex: 1; margin-left: 250px; padding: 30px; }
+        
+        .logo-container { text-align: center; padding: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); }
+        
+        .nav-item { display: flex; padding: 12px 15px; color: white; text-decoration: none; margin-bottom: 6px; background: rgba(255,255,255,0.05); }
+        
+        .nav-item:hover { background: rgba(255,255,255,0.15); }
+        .nav-item.active { background: rgba(255,255,255,0.2); border-left: 3px solid var(--mostaza); }
+    </style>
 </head>
 <body>
     <div class="sidebar">
