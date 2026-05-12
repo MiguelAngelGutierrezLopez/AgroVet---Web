@@ -136,6 +136,11 @@
             font-size: 13px;
         }
         
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
         /* ===== SECCIONES ===== */
         .section {
             background: white;
@@ -152,6 +157,35 @@
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+        
+        /* ===== GRÁFICOS ===== */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .chart-card h3 {
+            color: var(--teal);
+            font-size: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chart-container {
+            height: 250px;
+            position: relative;
         }
         
         /* ===== BOTONES ===== */
@@ -180,6 +214,11 @@
         
         .btn-success {
             background: linear-gradient(135deg, var(--exito) 0%, #219653 100%);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--advertencia) 0%, #d68910 100%);
             color: white;
         }
         
@@ -262,6 +301,7 @@
         
         .btn-edit:hover { background: var(--info); color: white; }
         .btn-delete:hover { background: var(--error); color: white; }
+        .btn-adjust:hover { background: var(--advertencia); color: white; }
         
         /* ===== FILTROS ===== */
         .filters-grid {
@@ -371,6 +411,37 @@
             margin-top: 5px;
         }
         
+        /* ===== MOVIMIENTOS ===== */
+        .movimiento-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            border-bottom: 1px solid var(--gris-claro);
+        }
+        
+        .movimiento-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .icon-entrada { background: var(--exito); }
+        .icon-salida { background: var(--error); }
+        .icon-ajuste { background: var(--advertencia); }
+        
+        .movimiento-info { flex: 1; }
+        .movimiento-info h4 { font-size: 14px; margin-bottom: 3px; }
+        .movimiento-details { font-size: 11px; color: var(--gris-medio); }
+        .movimiento-date { font-size: 11px; color: var(--gris-medio); min-width: 90px; }
+        .movimiento-cantidad { font-weight: bold; font-size: 13px; }
+        .cantidad-entrada { color: var(--exito); }
+        .cantidad-salida { color: var(--error); }
+        
         /* ===== MODALES ===== */
         .modal {
             display: none;
@@ -472,6 +543,7 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="sidebar">
@@ -521,12 +593,33 @@
                 <h1><i class="fas fa-warehouse"></i> Inventario</h1>
                 <p>Gestión de stock, productos y movimientos</p>
             </div>
-            <button class="btn btn-success" id="btnAgregarProducto">
-                <i class="fas fa-plus"></i> Nuevo Producto
-            </button>
+            <div class="action-buttons">
+                <button class="btn btn-success" id="btnAgregarProducto">
+                    <i class="fas fa-plus"></i> Nuevo Producto
+                </button>
+                <button class="btn btn-warning" id="btnAjusteStock">
+                    <i class="fas fa-adjust"></i> Ajustar Stock
+                </button>
+            </div>
         </div>
         
-        <!-- SECCIÓN DE FILTROS -->
+        <!-- GRÁFICOS -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <h3><i class="fas fa-chart-bar"></i> Distribución por Categoría</h3>
+                <div class="chart-container">
+                    <canvas id="categoriaChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3><i class="fas fa-chart-pie"></i> Estado de Stock</h3>
+                <div class="chart-container">
+                    <canvas id="stockStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FILTROS -->
         <div class="section">
             <h2 class="section-title"><i class="fas fa-filter"></i> Filtros de Búsqueda</h2>
             <div class="filters-grid">
@@ -595,6 +688,14 @@
             </div>
             <div id="paginationContainer" class="pagination-container"></div>
         </div>
+        
+        <!-- MOVIMIENTOS RECIENTES -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-exchange-alt"></i> Movimientos Recientes</h2>
+            <div id="movimientosContainer">
+                <div class="placeholder" style="text-align: center; padding: 40px;">Cargando movimientos...</div>
+            </div>
+        </div>
     </div>
     
     <!-- MODAL PARA PRODUCTO -->
@@ -661,8 +762,52 @@
         </div>
     </div>
     
+    <!-- MODAL AJUSTE DE STOCK -->
+    <div class="modal" id="modalAjusteStock">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-adjust"></i> Ajustar Stock</h3>
+                <button class="modal-close" id="closeAjusteModal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Producto</label>
+                <select id="ajusteProducto" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Tipo de Movimiento</label>
+                <select id="ajusteTipo" class="form-control">
+                    <option value="entrada">Entrada (+) - Compra / Devolución</option>
+                    <option value="salida">Salida (-) - Venta / Consumo</option>
+                    <option value="ajuste">Ajuste - Corrección manual</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Cantidad</label>
+                <input type="number" id="ajusteCantidad" class="form-control" min="1" value="1">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Motivo</label>
+                <select id="ajusteMotivo" class="form-control">
+                    <option value="compra">Compra a proveedor</option>
+                    <option value="venta">Venta realizada</option>
+                    <option value="devolucion">Devolución</option>
+                    <option value="perdida">Pérdida / Daño</option>
+                    <option value="conteo">Ajuste por conteo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Observaciones</label>
+                <textarea id="ajusteObservaciones" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelarAjuste">Cancelar</button>
+                <button class="btn btn-primary" id="confirmarAjuste">Aplicar Ajuste</button>
+            </div>
+        </div>
+    </div>
+    
     <script>
-        // ===== DATOS MOCK INICIALES =====
+        // ===== DATOS MOCK =====
         const productosMock = [
             { id: 1, nombre: "Vacuna Triple Felina", categoria: "VACUNAS", stock: 45, precio_costo: 25000, precio_venta: 35000, proveedor: "Labovet" },
             { id: 2, nombre: "Antiparasitario Interno", categoria: "MEDICAMENTOS", stock: 12, precio_costo: 18000, precio_venta: 28000, proveedor: "Veterinaria Central" },
@@ -674,16 +819,28 @@
             { id: 8, nombre: "Suplemento Articular", categoria: "SUPLEMENTOS", stock: 55, precio_costo: 28000, precio_venta: 42000, proveedor: "Veterinaria Central" }
         ];
         
+        const movimientosMock = [
+            { id: 1, producto_id: 1, producto_nombre: "Vacuna Triple Felina", tipo: "salida", cantidad: 5, fecha: "2026-05-10", hora: "10:30", motivo: "venta", observaciones: "" },
+            { id: 2, producto_id: 2, producto_nombre: "Antiparasitario Interno", tipo: "entrada", cantidad: 20, fecha: "2026-05-09", hora: "14:15", motivo: "compra", observaciones: "" },
+            { id: 3, producto_id: 3, producto_nombre: "Shampoo Antipulgas", tipo: "salida", cantidad: 3, fecha: "2026-05-08", hora: "09:45", motivo: "venta", observaciones: "" },
+            { id: 4, producto_id: 5, producto_nombre: "Jeringas 3ml", tipo: "entrada", cantidad: 50, fecha: "2026-05-07", hora: "11:20", motivo: "compra", observaciones: "" }
+        ];
+        
         let productoAEliminar = null;
         let paginaActual = 1;
         let itemsPorPagina = 10;
         let productosFiltradosCache = [];
         let filtrosActuales = { busqueda: '', categoria: '', estadoStock: '' };
+        let categoriaChart = null;
+        let stockStatusChart = null;
         
         // ===== LOCALSTORAGE =====
         function initLocalStorage() {
             if (!localStorage.getItem('productos')) {
                 localStorage.setItem('productos', JSON.stringify(productosMock));
+            }
+            if (!localStorage.getItem('movimientos')) {
+                localStorage.setItem('movimientos', JSON.stringify(movimientosMock));
             }
         }
         
@@ -693,6 +850,14 @@
         
         function saveProductos(productos) {
             localStorage.setItem('productos', JSON.stringify(productos));
+        }
+        
+        function getMovimientos() {
+            return JSON.parse(localStorage.getItem('movimientos')) || [];
+        }
+        
+        function saveMovimientos(movimientos) {
+            localStorage.setItem('movimientos', JSON.stringify(movimientos));
         }
         
         function getNextId() {
@@ -734,7 +899,134 @@
             setTimeout(() => notification.remove(), 3000);
         }
         
-        // ===== FILTROS =====
+        // ===== SISTEMA DE MOVIMIENTOS =====
+        function registrarMovimiento(productoId, productoNombre, tipo, cantidad, motivo, observaciones = '') {
+            const movimientos = getMovimientos();
+            const nuevoMovimiento = {
+                id: Date.now(),
+                producto_id: productoId,
+                producto_nombre: productoNombre,
+                tipo: tipo,
+                cantidad: parseInt(cantidad),
+                fecha: new Date().toISOString().split('T')[0],
+                hora: new Date().toLocaleTimeString(),
+                motivo: motivo,
+                observaciones: observaciones
+            };
+            movimientos.unshift(nuevoMovimiento);
+            saveMovimientos(movimientos);
+            
+            if (movimientos.length > 100) {
+                saveMovimientos(movimientos.slice(0, 100));
+            }
+        }
+        
+        function ajustarStock(productoId, tipo, cantidad, motivo, observaciones) {
+            const productos = getProductos();
+            const productoIndex = productos.findIndex(p => p.id === productoId);
+            
+            if (productoIndex === -1) {
+                showNotification('Producto no encontrado', true);
+                return false;
+            }
+            
+            const producto = productos[productoIndex];
+            let nuevaCantidad = producto.stock;
+            
+            switch(tipo) {
+                case 'entrada':
+                    nuevaCantidad += cantidad;
+                    break;
+                case 'salida':
+                    if (producto.stock < cantidad) {
+                        showNotification(`Stock insuficiente. Solo hay ${producto.stock} unidades`, true);
+                        return false;
+                    }
+                    nuevaCantidad -= cantidad;
+                    break;
+                case 'ajuste':
+                    nuevaCantidad = cantidad;
+                    break;
+            }
+            
+            productos[productoIndex].stock = nuevaCantidad;
+            saveProductos(productos);
+            
+            registrarMovimiento(productoId, producto.nombre, tipo, cantidad, motivo, observaciones);
+            
+            showNotification(`Stock de "${producto.nombre}" actualizado a ${nuevaCantidad} unidades`);
+            return true;
+        }
+        
+        function renderizarMovimientos() {
+            const movimientos = getMovimientos();
+            const container = document.getElementById('movimientosContainer');
+            
+            if (!movimientos.length) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--gris-medio);">No hay movimientos registrados</div>';
+                return;
+            }
+            
+            let html = '';
+            movimientos.slice(0, 8).forEach(mov => {
+                const iconClass = mov.tipo === 'entrada' ? 'icon-entrada' : (mov.tipo === 'salida' ? 'icon-salida' : 'icon-ajuste');
+                const icono = mov.tipo === 'entrada' ? 'fa-arrow-down' : (mov.tipo === 'salida' ? 'fa-arrow-up' : 'fa-adjust');
+                const cantidadClass = mov.tipo === 'entrada' ? 'cantidad-entrada' : 'cantidad-salida';
+                const signo = mov.tipo === 'entrada' ? '+' : '-';
+                
+                const motivos = { compra: 'Compra', venta: 'Venta', devolucion: 'Devolución', perdida: 'Pérdida', conteo: 'Conteo' };
+                const motivoLabel = motivos[mov.motivo] || mov.motivo;
+                
+                html += `
+                    <div class="movimiento-item">
+                        <div class="movimiento-icon ${iconClass}">
+                            <i class="fas ${icono}"></i>
+                        </div>
+                        <div class="movimiento-info">
+                            <h4>${mov.producto_nombre}</h4>
+                            <div class="movimiento-details">${motivoLabel} • ${mov.observaciones || 'Sin observaciones'}</div>
+                        </div>
+                        <div class="movimiento-date">${mov.fecha}<br><small>${mov.hora || ''}</small></div>
+                        <div class="movimiento-cantidad ${cantidadClass}">${signo} ${mov.cantidad} und</div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // ===== GRÁFICOS =====
+        function actualizarGraficos() {
+            const productos = getProductos();
+            
+            const categorias = {};
+            productos.forEach(p => { categorias[p.categoria] = (categorias[p.categoria] || 0) + 1; });
+            
+            const categoriasLabels = Object.keys(categorias);
+            const categoriasData = Object.values(categorias);
+            const colores = ['#1F8A86', '#3FA6A0', '#D9C357', '#C08A67', '#B7C3A1', '#D44A5E'];
+            
+            if (categoriaChart) categoriaChart.destroy();
+            const ctxCategoria = document.getElementById('categoriaChart').getContext('2d');
+            categoriaChart = new Chart(ctxCategoria, {
+                type: 'bar',
+                data: { labels: categoriasLabels, datasets: [{ label: 'Cantidad', data: categoriasData, backgroundColor: colores.slice(0, categoriasLabels.length), borderRadius: 8 }] },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } } }
+            });
+            
+            const stockEstados = { alto: 0, medio: 0, bajo: 0, critico: 0 };
+            productos.forEach(p => { const estado = getStockEstadoParaFiltro(p.stock); stockEstados[estado]++; });
+            
+            if (stockStatusChart) stockStatusChart.destroy();
+            const ctxStock = document.getElementById('stockStatusChart').getContext('2d');
+            stockStatusChart = new Chart(ctxStock, {
+                type: 'doughnut',
+                data: { labels: ['Stock Alto (≥75)', 'Stock Medio (25-74)', 'Stock Bajo (10-24)', 'Stock Crítico (<10)'], datasets: [{ data: [stockEstados.alto, stockEstados.medio, stockEstados.bajo, stockEstados.critico], backgroundColor: ['#2ecc71', '#f39c12', '#e74c3c', '#c0392b'], borderWidth: 0 }] },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+        
+        // ===== FILTROS Y PAGINACIÓN (igual que commit anterior) =====
         function aplicarFiltros() {
             filtrosActuales = {
                 busqueda: document.getElementById('searchInput').value.toLowerCase(),
@@ -773,71 +1065,39 @@
             });
         }
         
-        // ===== PAGINACIÓN =====
         function renderizarTablaConPaginacion() {
             const productos = getProductos();
             const productosFiltrados = filtrarProductos(productos);
             productosFiltradosCache = productosFiltrados;
-            
             const totalItems = productosFiltrados.length;
             const totalPaginas = Math.ceil(totalItems / itemsPorPagina);
-            
-            if (paginaActual > totalPaginas) paginaActual = 1;
-            
+            if (paginaActual > totalPaginas) paginaActual = Math.max(1, totalPaginas);
             const inicio = (paginaActual - 1) * itemsPorPagina;
             const fin = inicio + itemsPorPagina;
             const productosPagina = productosFiltrados.slice(inicio, fin);
-            
             renderizarTablaConDatos(productosPagina);
             renderizarPaginacion(totalPaginas, totalItems);
         }
         
         function renderizarPaginacion(totalPaginas, totalItems) {
             const container = document.getElementById('paginationContainer');
-            if (totalPaginas <= 1 && totalItems <= itemsPorPagina) {
-                container.innerHTML = '';
-                return;
-            }
-            
-            let html = `
-                <button class="page-btn" onclick="cambiarPagina(1)" ${paginaActual === 1 ? 'disabled' : ''}>
-                    <i class="fas fa-angle-double-left"></i>
-                </button>
-                <button class="page-btn" onclick="cambiarPagina(${paginaActual - 1})" ${paginaActual === 1 ? 'disabled' : ''}>
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-            `;
-            
+            if (totalPaginas <= 1 && totalItems <= itemsPorPagina) { container.innerHTML = ''; return; }
+            let html = `<button class="page-btn" onclick="cambiarPagina(1)" ${paginaActual === 1 ? 'disabled' : ''}><i class="fas fa-angle-double-left"></i></button>
+                        <button class="page-btn" onclick="cambiarPagina(${paginaActual - 1})" ${paginaActual === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
             const maxBotones = 5;
             let inicioPag = Math.max(1, paginaActual - Math.floor(maxBotones / 2));
             let finPag = Math.min(totalPaginas, inicioPag + maxBotones - 1);
-            
-            if (finPag - inicioPag + 1 < maxBotones) {
-                inicioPag = Math.max(1, finPag - maxBotones + 1);
-            }
-            
-            for (let i = inicioPag; i <= finPag; i++) {
-                html += `<button class="page-btn ${i === paginaActual ? 'active' : ''}" onclick="cambiarPagina(${i})">${i}</button>`;
-            }
-            
-            html += `
-                <button class="page-btn" onclick="cambiarPagina(${paginaActual + 1})" ${paginaActual === totalPaginas ? 'disabled' : ''}>
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-                <button class="page-btn" onclick="cambiarPagina(${totalPaginas})" ${paginaActual === totalPaginas ? 'disabled' : ''}>
-                    <i class="fas fa-angle-double-right"></i>
-                </button>
-                <span class="pagination-info">
-                    Mostrando ${((paginaActual-1)*itemsPorPagina)+1} - ${Math.min(paginaActual*itemsPorPagina, totalItems)} de ${totalItems}
-                </span>
-                <select class="items-per-page" onchange="cambiarItemsPorPagina(this.value)">
-                    <option value="5" ${itemsPorPagina === 5 ? 'selected' : ''}>5 por página</option>
-                    <option value="10" ${itemsPorPagina === 10 ? 'selected' : ''}>10 por página</option>
-                    <option value="25" ${itemsPorPagina === 25 ? 'selected' : ''}>25 por página</option>
-                    <option value="50" ${itemsPorPagina === 50 ? 'selected' : ''}>50 por página</option>
-                </select>
-            `;
-            
+            if (finPag - inicioPag + 1 < maxBotones) inicioPag = Math.max(1, finPag - maxBotones + 1);
+            for (let i = inicioPag; i <= finPag; i++) html += `<button class="page-btn ${i === paginaActual ? 'active' : ''}" onclick="cambiarPagina(${i})">${i}</button>`;
+            html += `<button class="page-btn" onclick="cambiarPagina(${paginaActual + 1})" ${paginaActual === totalPaginas ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>
+                     <button class="page-btn" onclick="cambiarPagina(${totalPaginas})" ${paginaActual === totalPaginas ? 'disabled' : ''}><i class="fas fa-angle-double-right"></i></button>
+                     <span class="pagination-info">Mostrando ${((paginaActual-1)*itemsPorPagina)+1} - ${Math.min(paginaActual*itemsPorPagina, totalItems)} de ${totalItems}</span>
+                     <select class="items-per-page" onchange="cambiarItemsPorPagina(this.value)">
+                         <option value="5" ${itemsPorPagina === 5 ? 'selected' : ''}>5 por página</option>
+                         <option value="10" ${itemsPorPagina === 10 ? 'selected' : ''}>10 por página</option>
+                         <option value="25" ${itemsPorPagina === 25 ? 'selected' : ''}>25 por página</option>
+                         <option value="50" ${itemsPorPagina === 50 ? 'selected' : ''}>50 por página</option>
+                     </select>`;
             container.innerHTML = html;
         }
         
@@ -856,36 +1116,28 @@
         
         function renderizarTablaConDatos(productos) {
             const tbody = document.getElementById('inventarioBody');
-            
-            if (!productos.length) {
-                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No hay productos que coincidan con los filtros</td></tr>';
-                return;
-            }
-            
+            if (!productos.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No hay productos que coincidan con los filtros</td></tr>'; return; }
             let html = '';
             productos.forEach(prod => {
                 const estadoClase = getStockEstadoClase(prod.stock);
                 const estadoLabel = getStockLabel(prod.stock);
                 const valorTotal = prod.stock * prod.precio_costo;
-                
-                html += `
-                    <tr>
-                        <td>#${String(prod.id).padStart(4, '0')}</td>
-                        <td><strong>${prod.nombre}</strong><br><small style="color: #7f8c8d;">${prod.proveedor || 'Sin proveedor'}</small></td>
-                        <td>${prod.categoria}</td>
-                        <td>${prod.stock} unidades</td>
-                        <td><span class="stock-badge ${estadoClase}">${estadoLabel}</span></td>
-                        <td class="precio-cell">${formatCurrency(prod.precio_costo)}</td>
-                        <td class="precio-cell">${formatCurrency(prod.precio_venta)}</td>
-                        <td class="precio-cell">${formatCurrency(valorTotal)}</td>
-                        <td class="action-cell">
-                            <button class="action-btn btn-edit" onclick="editarProducto(${prod.id})"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn btn-delete" onclick="confirmarEliminar(${prod.id})"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `;
+                html += `<tr>
+                            <td>#${String(prod.id).padStart(4, '0')}</td>
+                            <td><strong>${prod.nombre}</strong><br><small>${prod.proveedor || 'Sin proveedor'}</small></td>
+                            <td>${prod.categoria}</td>
+                            <td>${prod.stock} und</td>
+                            <td><span class="stock-badge ${estadoClase}">${estadoLabel}</span></td>
+                            <td class="precio-cell">${formatCurrency(prod.precio_costo)}</td>
+                            <td class="precio-cell">${formatCurrency(prod.precio_venta)}</td>
+                            <td class="precio-cell">${formatCurrency(valorTotal)}</td>
+                            <td class="action-cell">
+                                <button class="action-btn btn-adjust" onclick="abrirModalAjuste(${prod.id})" title="Ajustar Stock"><i class="fas fa-adjust"></i></button>
+                                <button class="action-btn btn-edit" onclick="editarProducto(${prod.id})"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn btn-delete" onclick="confirmarEliminar(${prod.id})"><i class="fas fa-trash"></i></button>
+                            </td>
+                         </tr>`;
             });
-            
             tbody.innerHTML = html;
         }
         
@@ -895,25 +1147,13 @@
             const totalProductos = productosFiltrados.length;
             const valorInventario = productosFiltrados.reduce((sum, p) => sum + (p.stock * p.precio_costo), 0);
             const stockCritico = productosFiltrados.filter(p => p.stock < 10).length;
-            
             const container = document.getElementById('resumenContainer');
-            container.innerHTML = `
-                <div class="resumen-card">
-                    <div class="resumen-value">${totalProductos}</div>
-                    <div class="resumen-title">Productos mostrados</div>
-                </div>
-                <div class="resumen-card">
-                    <div class="resumen-value">${formatCurrency(valorInventario)}</div>
-                    <div class="resumen-title">Valor total</div>
-                </div>
-                <div class="resumen-card">
-                    <div class="resumen-value">${stockCritico}</div>
-                    <div class="resumen-title">Stock crítico</div>
-                </div>
-            `;
+            container.innerHTML = `<div class="resumen-card"><div class="resumen-value">${totalProductos}</div><div class="resumen-title">Productos</div></div>
+                                   <div class="resumen-card"><div class="resumen-value">${formatCurrency(valorInventario)}</div><div class="resumen-title">Valor total</div></div>
+                                   <div class="resumen-card"><div class="resumen-value">${stockCritico}</div><div class="resumen-title">Stock crítico</div></div>`;
         }
         
-        // ===== CRUD OPERACIONES =====
+        // ===== CRUD =====
         function agregarProducto(producto) {
             const productos = getProductos();
             producto.id = getNextId();
@@ -936,8 +1176,7 @@
         
         function eliminarProducto(id) {
             const productos = getProductos();
-            const nuevosProductos = productos.filter(p => p.id !== id);
-            saveProductos(nuevosProductos);
+            saveProductos(productos.filter(p => p.id !== id));
             actualizarUICompleta();
             showNotification('Producto eliminado correctamente');
         }
@@ -945,6 +1184,8 @@
         function actualizarUICompleta() {
             renderizarTablaConPaginacion();
             actualizarResumenConFiltros();
+            actualizarGraficos();
+            renderizarMovimientos();
         }
         
         // ===== MODALES =====
@@ -961,8 +1202,7 @@
         }
         
         window.editarProducto = function(id) {
-            const productos = getProductos();
-            const producto = productos.find(p => p.id === id);
+            const producto = getProductos().find(p => p.id === id);
             if (producto) {
                 document.getElementById('modalTitle').textContent = 'Editar Producto';
                 document.getElementById('productoId').value = producto.id;
@@ -981,19 +1221,45 @@
             document.getElementById('modalConfirmar').style.display = 'flex';
         };
         
-        function cerrarModalProducto() {
-            document.getElementById('modalProducto').style.display = 'none';
+        function cerrarModalProducto() { document.getElementById('modalProducto').style.display = 'none'; }
+        function cerrarModalConfirmar() { document.getElementById('modalConfirmar').style.display = 'none'; productoAEliminar = null; }
+        
+        function cargarSelectProductosParaAjuste() {
+            const productos = getProductos();
+            const select = document.getElementById('ajusteProducto');
+            select.innerHTML = '<option value="">Seleccionar producto...</option>';
+            productos.forEach(p => { select.innerHTML += `<option value="${p.id}">#${p.id} - ${p.nombre} (Stock: ${p.stock})</option>`; });
         }
         
-        function cerrarModalConfirmar() {
-            document.getElementById('modalConfirmar').style.display = 'none';
-            productoAEliminar = null;
+        window.abrirModalAjuste = function(productoId = null) {
+            cargarSelectProductosParaAjuste();
+            if (productoId) document.getElementById('ajusteProducto').value = productoId;
+            document.getElementById('ajusteCantidad').value = '1';
+            document.getElementById('ajusteTipo').value = 'entrada';
+            document.getElementById('ajusteMotivo').value = 'compra';
+            document.getElementById('ajusteObservaciones').value = '';
+            document.getElementById('modalAjusteStock').style.display = 'flex';
+        };
+        
+        function cerrarModalAjuste() { document.getElementById('modalAjusteStock').style.display = 'none'; }
+        
+        function aplicarAjuste() {
+            const productoId = parseInt(document.getElementById('ajusteProducto').value);
+            const tipo = document.getElementById('ajusteTipo').value;
+            const cantidad = parseInt(document.getElementById('ajusteCantidad').value);
+            const motivo = document.getElementById('ajusteMotivo').value;
+            const observaciones = document.getElementById('ajusteObservaciones').value;
+            if (!productoId) { showNotification('Seleccione un producto', true); return; }
+            if (!cantidad || cantidad <= 0) { showNotification('Ingrese una cantidad válida', true); return; }
+            if (ajustarStock(productoId, tipo, cantidad, motivo, observaciones)) {
+                cerrarModalAjuste();
+                actualizarUICompleta();
+            }
         }
         
         // ===== EVENTOS =====
         document.getElementById('productoForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            
             const id = document.getElementById('productoId').value;
             const nombre = document.getElementById('nombre').value;
             const categoria = document.getElementById('categoria').value;
@@ -1001,40 +1267,24 @@
             const precio_costo = parseFloat(document.getElementById('precioCosto').value);
             const precio_venta = parseFloat(document.getElementById('precioVenta').value);
             const proveedor = document.getElementById('proveedor').value;
-            
-            if (!nombre || !categoria || !precio_costo || !precio_venta) {
-                showNotification('Por favor complete todos los campos requeridos', true);
-                return;
-            }
-            
-            if (precio_venta <= precio_costo) {
-                showNotification('El precio de venta debe ser mayor al precio de costo', true);
-                return;
-            }
-            
+            if (!nombre || !categoria || !precio_costo || !precio_venta) { showNotification('Complete todos los campos requeridos', true); return; }
+            if (precio_venta <= precio_costo) { showNotification('El precio de venta debe ser mayor al precio de costo', true); return; }
             const productoData = { nombre, categoria, stock, precio_costo, precio_venta, proveedor };
-            
-            if (id) {
-                actualizarProducto(parseInt(id), productoData);
-            } else {
-                agregarProducto(productoData);
-            }
-            
+            if (id) actualizarProducto(parseInt(id), productoData);
+            else agregarProducto(productoData);
             cerrarModalProducto();
         });
         
-        document.getElementById('confirmarEliminar').addEventListener('click', () => {
-            if (productoAEliminar) {
-                eliminarProducto(productoAEliminar);
-                cerrarModalConfirmar();
-            }
-        });
-        
+        document.getElementById('confirmarEliminar').addEventListener('click', () => { if (productoAEliminar) { eliminarProducto(productoAEliminar); cerrarModalConfirmar(); } });
         document.getElementById('btnAgregarProducto').addEventListener('click', abrirModalAgregar);
+        document.getElementById('btnAjusteStock').addEventListener('click', () => abrirModalAjuste());
         document.getElementById('closeModal').addEventListener('click', cerrarModalProducto);
         document.getElementById('cancelarModal').addEventListener('click', cerrarModalProducto);
         document.getElementById('closeConfirmModal').addEventListener('click', cerrarModalConfirmar);
         document.getElementById('cancelarEliminar').addEventListener('click', cerrarModalConfirmar);
+        document.getElementById('closeAjusteModal').addEventListener('click', cerrarModalAjuste);
+        document.getElementById('cancelarAjuste').addEventListener('click', cerrarModalAjuste);
+        document.getElementById('confirmarAjuste').addEventListener('click', aplicarAjuste);
         document.getElementById('searchInput').addEventListener('input', aplicarFiltros);
         document.getElementById('categoriaFilter').addEventListener('change', aplicarFiltros);
         document.getElementById('stockFilter').addEventListener('change', aplicarFiltros);
@@ -1043,6 +1293,7 @@
         window.addEventListener('click', (e) => {
             if (e.target === document.getElementById('modalProducto')) cerrarModalProducto();
             if (e.target === document.getElementById('modalConfirmar')) cerrarModalConfirmar();
+            if (e.target === document.getElementById('modalAjusteStock')) cerrarModalAjuste();
         });
         
         // ===== INICIALIZACIÓN =====
