@@ -45,5 +45,27 @@
         <h1>Gestión de Clientes y Proveedores</h1>
         <div id="contenido"></div>
     </div>
+
+    <script>
+        // Mock de datos iniciales
+        const MOCK_CLIENTES = [
+            { cedula: '123456789', nombre: 'Juan Pérez', telefono: '3001234567', correo: 'juan@email.com', direccion: 'Calle 1', deuda_total: 0, fecha_creacion: new Date().toISOString() },
+            { cedula: '987654321', nombre: 'María Gómez', telefono: '3007654321', correo: 'maria@email.com', direccion: 'Carrera 2', deuda_total: 150000, fecha_creacion: new Date().toISOString() }
+        ];
+        
+        const MOCK_PROVEEDORES = [
+            { telefono: '3101112223', nombre_empresa: 'Agroinsumos SA', nombre_proveedor: 'Carlos López', correo: 'carlos@agroinsumos.com', estado: 'activo', producto: 'Fertilizantes, Semillas', fecha_creacion: new Date().toISOString() }
+        ];
+
+        // Inicializar localStorage si está vacío
+        if (!localStorage.getItem('clientes')) {
+            localStorage.setItem('clientes', JSON.stringify(MOCK_CLIENTES));
+        }
+        if (!localStorage.getItem('proveedores')) {
+            localStorage.setItem('proveedores', JSON.stringify(MOCK_PROVEEDORES));
+        }
+
+        console.log('Datos inicializados:', JSON.parse(localStorage.getItem('clientes')));
+    </script>
 </body>
 </html>
