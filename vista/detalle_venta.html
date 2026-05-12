@@ -1073,11 +1073,17 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <!-- SKIP LINK PARA ACCESIBILIDAD -->
-    <a href="#mainContent" class="skip-link">Saltar al contenido principal</a>
+   <!-- BOTÓN FLOTANTE PARA SIDEBAR OCULTO -->
+    <button class="toggle-sidebar-collapsed" id="toggleSidebarCollapsed" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
     
     <!-- SIDEBAR IZQUIERDO -->
     <div class="sidebar" id="sidebar">
+        <button class="toggle-sidebar-btn" id="toggleSidebar" onclick="toggleSidebar()">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        
         <div class="logo-container">
             <div class="logo">
                 <span class="logo-agro">AGRO</span>
@@ -1091,11 +1097,11 @@
                 <i class="nav-icon fas fa-home"></i>
                 <span class="nav-text">Inicio</span>
             </a>
-            <a href="/venta" class="nav-item">
+            <a href="/venta" class="nav-item active">
                 <i class="nav-icon fas fa-cash-register"></i>
                 <span class="nav-text">Nueva Venta</span>
             </a>
-            <a href="/productos" class="nav-item active">
+            <a href="/productos" class="nav-item">
                 <i class="nav-icon fas fa-boxes"></i>
                 <span class="nav-text">Productos</span>
             </a>
@@ -1116,11 +1122,6 @@
                 <span class="nav-text">Reportes</span>
             </a>
         </nav>
-        
-        <!-- Botón para toggle del sidebar (dentro del sidebar) -->
-        <div class="sidebar-toggle" id="toggleSidebar">
-            <i class="fas fa-chevron-left"></i>
-        </div>
     </div>
     
     
