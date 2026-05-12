@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agrovet Yacuanquer - POS</title>
     <style>
-        /* Mantener TODO el CSS de commits anteriores */
+        /* ===== VARIABLES DE COLOR ===== */
         :root {
             --teal: #1F8A86;
             --terracota: #C08A67;
@@ -21,15 +21,184 @@
             --exito: #27ae60;
             --error: #e74c3c;
             --advertencia: #f39c12;
+            --info: #3498db;
             --stock-alto: #2ecc71;
             --stock-medio: #f39c12;
             --stock-bajo: #e74c3c;
             --stock-critico: #c0392b;
         }
         
-        /* Estilos CSS completos de commits anteriores... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
         
-        /* ===== ESTILOS DE TABLA ===== */
+        body {
+            background-color: var(--blanco-hueso);
+            color: var(--gris-oscuro);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 250px;
+            background: var(--teal);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 3px 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            text-align: center;
+            padding: 15px 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .logo-agro { color: white; }
+        .logo-vet { color: var(--mostaza); }
+        .slogan {
+            font-size: 10px;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+        
+        .nav-menu {
+            padding: 0 15px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+        
+        .nav-item.active {
+            background: rgba(255,255,255,0.15);
+            border-left: 3px solid var(--mostaza);
+        }
+        
+        .nav-icon { width: 24px; font-size: 18px; }
+        .nav-text { font-size: 14px; font-weight: 500; }
+        
+        /* ===== CONTENIDO PRINCIPAL ===== */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 25px;
+            min-height: 100vh;
+        }
+        
+        /* ===== HEADER ===== */
+        .top-header {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--turquesa);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .top-header h1 {
+            color: var(--teal);
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .top-header p {
+            color: var(--gris-medio);
+            font-size: 13px;
+        }
+        
+        /* ===== SECCIONES ===== */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            color: var(--teal);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* ===== BOTONES ===== */
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--teal) 0%, #1a7572 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(31, 138, 134, 0.2);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--exito) 0%, #219653 100%);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--error) 0%, #c0392b 100%);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--advertencia) 0%, #d68910 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: var(--gris-claro);
+            color: var(--gris-oscuro);
+        }
+        
+        /* ===== TABLA ===== */
         .table-container {
             overflow-x: auto;
         }
@@ -74,6 +243,155 @@
         .precio-cell {
             font-weight: 600;
             color: var(--teal);
+        }
+        
+        .action-cell {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: none;
+            background: var(--gris-claro);
+            color: var(--gris-oscuro);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .btn-edit:hover { background: var(--info); color: white; }
+        .btn-delete:hover { background: var(--error); color: white; }
+        
+        /* ===== MODALES ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            color: var(--teal);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gris-medio);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 13px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--gris-claro);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--teal);
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--gris-claro);
+        }
+        
+        /* ===== NOTIFICACIONES ===== */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: var(--exito);
+            color: white;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .notification.error {
+            background: var(--error);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* ===== RESUMEN ===== */
+        .resumen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .resumen-card {
+            text-align: center;
+            padding: 20px;
+            background: var(--celeste-fondo);
+            border-radius: 10px;
+        }
+        
+        .resumen-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--teal);
+        }
+        
+        .resumen-title {
+            font-size: 12px;
+            color: var(--gris-medio);
+            margin-top: 5px;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -122,13 +440,20 @@
     
     <div class="main-content">
         <div class="top-header">
-            <h1><i class="fas fa-warehouse"></i> Inventario</h1>
-            <p>Gestión de stock, productos y movimientos</p>
+            <div>
+                <h1><i class="fas fa-warehouse"></i> Inventario</h1>
+                <p>Gestión de stock, productos y movimientos</p>
+            </div>
+            <button class="btn btn-success" id="btnAgregarProducto">
+                <i class="fas fa-plus"></i> Nuevo Producto
+            </button>
         </div>
         
         <div class="section">
             <h2 class="section-title"><i class="fas fa-chart-pie"></i> Resumen del Inventario</h2>
-            <div id="resumenContainer" class="placeholder">Cargando datos...</div>
+            <div id="resumenContainer" class="resumen-grid">
+                <div class="resumen-card">Cargando...</div>
+            </div>
         </div>
         
         <div class="section">
@@ -145,47 +470,111 @@
                             <th>Precio Costo</th>
                             <th>Precio Venta</th>
                             <th>Valor Total</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="inventarioBody">
-                        <tr><td colspan="8" style="text-align: center;">Cargando productos...</td></tr>
+                        <tr><td colspan="9" style="text-align: center;">Cargando productos...</td><tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
     
+    <!-- MODAL PARA PRODUCTO -->
+    <div class="modal" id="modalProducto">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Agregar Producto</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <form id="productoForm">
+                <input type="hidden" id="productoId">
+                <div class="form-group">
+                    <label class="form-label">Nombre del Producto *</label>
+                    <input type="text" class="form-control" id="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Categoría *</label>
+                    <select class="form-control" id="categoria" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="ALIMENTOS">Alimentos</option>
+                        <option value="MEDICAMENTOS">Medicamentos</option>
+                        <option value="SUPLEMENTOS">Suplementos</option>
+                        <option value="VACUNAS">Vacunas</option>
+                        <option value="EQUIPOS">Equipos</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Stock Inicial *</label>
+                    <input type="number" class="form-control" id="stock" min="0" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Precio Costo *</label>
+                    <input type="number" class="form-control" id="precioCosto" min="0" step="100" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Precio Venta *</label>
+                    <input type="number" class="form-control" id="precioVenta" min="0" step="100" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Proveedor</label>
+                    <input type="text" class="form-control" id="proveedor">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelarModal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- MODAL DE CONFIRMACIÓN PARA ELIMINAR -->
+    <div class="modal" id="modalConfirmar">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirmar Eliminación</h3>
+                <button class="modal-close" id="closeConfirmModal">&times;</button>
+            </div>
+            <p>¿Estás seguro de que deseas eliminar este producto?</p>
+            <p style="color: var(--error); font-size: 13px; margin-top: 10px;">Esta acción no se puede deshacer.</p>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelarEliminar">Cancelar</button>
+                <button class="btn btn-danger" id="confirmarEliminar">Eliminar</button>
+            </div>
+        </div>
+    </div>
+    
     <script>
-        // ===== DATOS MOCK (mismos del commit anterior) =====
+        // ===== DATOS MOCK INICIALES =====
         const productosMock = [
             { id: 1, nombre: "Vacuna Triple Felina", categoria: "VACUNAS", stock: 45, precio_costo: 25000, precio_venta: 35000, proveedor: "Labovet" },
             { id: 2, nombre: "Antiparasitario Interno", categoria: "MEDICAMENTOS", stock: 12, precio_costo: 18000, precio_venta: 28000, proveedor: "Veterinaria Central" },
             { id: 3, nombre: "Shampoo Antipulgas", categoria: "EQUIPOS", stock: 8, precio_costo: 15000, precio_venta: 25000, proveedor: "PetCare" },
             { id: 4, nombre: "Vitamina B12", categoria: "SUPLEMENTOS", stock: 90, precio_costo: 5000, precio_venta: 10000, proveedor: "Labovet" },
-            { id: 5, nombre: "Jeringas 3ml", categoria: "EQUIPOS", stock: 150, precio_costo: 800, precio_venta: 1500, proveedor: "Medical Supplies" },
-            { id: 6, nombre: "Antibiótico Oral", categoria: "MEDICAMENTOS", stock: 3, precio_costo: 32000, precio_venta: 45000, proveedor: "Labovet" },
-            { id: 7, nombre: "Collar Antipulgas", categoria: "EQUIPOS", stock: 22, precio_costo: 12000, precio_venta: 18000, proveedor: "PetCare" },
-            { id: 8, nombre: "Suplemento Articular", categoria: "SUPLEMENTOS", stock: 55, precio_costo: 28000, precio_venta: 42000, proveedor: "Veterinaria Central" }
+            { id: 5, nombre: "Jeringas 3ml", categoria: "EQUIPOS", stock: 150, precio_costo: 800, precio_venta: 1500, proveedor: "Medical Supplies" }
         ];
         
-        const movimientosMock = [
-            { id: 1, producto_id: 1, tipo: "salida", cantidad: 5, fecha: "2026-05-10", motivo: "venta" },
-            { id: 2, producto_id: 2, tipo: "entrada", cantidad: 20, fecha: "2026-05-09", motivo: "compra" },
-            { id: 3, producto_id: 3, tipo: "salida", cantidad: 3, fecha: "2026-05-08", motivo: "venta" }
-        ];
+        let productoAEliminar = null;
         
         // ===== LOCALSTORAGE =====
         function initLocalStorage() {
             if (!localStorage.getItem('productos')) {
                 localStorage.setItem('productos', JSON.stringify(productosMock));
             }
-            if (!localStorage.getItem('movimientos')) {
-                localStorage.setItem('movimientos', JSON.stringify(movimientosMock));
-            }
         }
         
         function getProductos() {
             return JSON.parse(localStorage.getItem('productos')) || [];
+        }
+        
+        function saveProductos(productos) {
+            localStorage.setItem('productos', JSON.stringify(productos));
+        }
+        
+        function getNextId() {
+            const productos = getProductos();
+            return productos.length > 0 ? Math.max(...productos.map(p => p.id)) + 1 : 1;
         }
         
         // ===== FUNCIONES DE FORMATO =====
@@ -194,7 +583,6 @@
         }
         
         function getStockEstadoClase(stock) {
-            if (stock <= 0) return 'stock-critico-badge';
             if (stock < 10) return 'stock-critico-badge';
             if (stock < 25) return 'stock-bajo-badge';
             if (stock < 75) return 'stock-medio-badge';
@@ -202,20 +590,56 @@
         }
         
         function getStockLabel(stock) {
-            if (stock <= 0) return 'AGOTADO';
             if (stock < 10) return 'CRÍTICO';
             if (stock < 25) return 'BAJO';
             if (stock < 75) return 'MEDIO';
             return 'ALTO';
         }
         
-        // ===== RENDERIZADO DE TABLA =====
+        function showNotification(message, isError = false) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${isError ? 'error' : ''}`;
+            notification.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${message}`;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+        
+        // ===== CRUD OPERACIONES =====
+        function agregarProducto(producto) {
+            const productos = getProductos();
+            producto.id = getNextId();
+            productos.push(producto);
+            saveProductos(productos);
+            actualizarUI();
+            showNotification('Producto agregado correctamente');
+        }
+        
+        function actualizarProducto(id, datosActualizados) {
+            const productos = getProductos();
+            const index = productos.findIndex(p => p.id === id);
+            if (index !== -1) {
+                productos[index] = { ...productos[index], ...datosActualizados };
+                saveProductos(productos);
+                actualizarUI();
+                showNotification('Producto actualizado correctamente');
+            }
+        }
+        
+        function eliminarProducto(id) {
+            const productos = getProductos();
+            const nuevosProductos = productos.filter(p => p.id !== id);
+            saveProductos(nuevosProductos);
+            actualizarUI();
+            showNotification('Producto eliminado correctamente');
+        }
+        
+        // ===== RENDERIZADO =====
         function renderizarTabla() {
             const productos = getProductos();
             const tbody = document.getElementById('inventarioBody');
             
             if (!productos.length) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No hay productos registrados</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No hay productos registrados</td></tr>';
                 return;
             }
             
@@ -235,6 +659,14 @@
                         <td class="precio-cell">${formatCurrency(prod.precio_costo)}</td>
                         <td class="precio-cell">${formatCurrency(prod.precio_venta)}</td>
                         <td class="precio-cell">${formatCurrency(valorTotal)}</td>
+                        <td class="action-cell">
+                            <button class="action-btn btn-edit" onclick="editarProducto(${prod.id})" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn btn-delete" onclick="confirmarEliminar(${prod.id})" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
                     </tr>
                 `;
             });
@@ -242,42 +674,133 @@
             tbody.innerHTML = html;
         }
         
-        // ===== ESTADÍSTICAS =====
-        function calcularEstadisticas() {
+        function actualizarResumen() {
             const productos = getProductos();
             const totalProductos = productos.length;
             const valorInventario = productos.reduce((sum, p) => sum + (p.stock * p.precio_costo), 0);
             const stockCritico = productos.filter(p => p.stock < 10).length;
-            return { totalProductos, valorInventario, stockCritico };
-        }
-        
-        function actualizarResumen() {
-            const stats = calcularEstadisticas();
-            const container = document.getElementById('resumenContainer');
             
+            const container = document.getElementById('resumenContainer');
             container.innerHTML = `
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
-                    <div style="text-align: center; padding: 15px; background: #E3F0F3; border-radius: 8px;">
-                        <div style="font-size: 28px; font-weight: bold; color: #1F8A86;">${stats.totalProductos}</div>
-                        <div style="font-size: 12px;">Total Productos</div>
-                    </div>
-                    <div style="text-align: center; padding: 15px; background: #E3F0F3; border-radius: 8px;">
-                        <div style="font-size: 28px; font-weight: bold; color: #1F8A86;">${formatCurrency(stats.valorInventario)}</div>
-                        <div style="font-size: 12px;">Valor Inventario</div>
-                    </div>
-                    <div style="text-align: center; padding: 15px; background: #E3F0F3; border-radius: 8px;">
-                        <div style="font-size: 28px; font-weight: bold; color: #e74c3c;">${stats.stockCritico}</div>
-                        <div style="font-size: 12px;">Stock Crítico</div>
-                    </div>
+                <div class="resumen-card">
+                    <div class="resumen-value">${totalProductos}</div>
+                    <div class="resumen-title">Total Productos</div>
+                </div>
+                <div class="resumen-card">
+                    <div class="resumen-value">${formatCurrency(valorInventario)}</div>
+                    <div class="resumen-title">Valor Inventario</div>
+                </div>
+                <div class="resumen-card">
+                    <div class="resumen-value">${stockCritico}</div>
+                    <div class="resumen-title">Stock Crítico</div>
                 </div>
             `;
         }
         
+        function actualizarUI() {
+            renderizarTabla();
+            actualizarResumen();
+        }
+        
+        // ===== MODALES =====
+        function abrirModalAgregar() {
+            document.getElementById('modalTitle').textContent = 'Agregar Producto';
+            document.getElementById('productoId').value = '';
+            document.getElementById('nombre').value = '';
+            document.getElementById('categoria').value = '';
+            document.getElementById('stock').value = '0';
+            document.getElementById('precioCosto').value = '';
+            document.getElementById('precioVenta').value = '';
+            document.getElementById('proveedor').value = '';
+            document.getElementById('modalProducto').style.display = 'flex';
+        }
+        
+        window.editarProducto = function(id) {
+            const productos = getProductos();
+            const producto = productos.find(p => p.id === id);
+            if (producto) {
+                document.getElementById('modalTitle').textContent = 'Editar Producto';
+                document.getElementById('productoId').value = producto.id;
+                document.getElementById('nombre').value = producto.nombre;
+                document.getElementById('categoria').value = producto.categoria;
+                document.getElementById('stock').value = producto.stock;
+                document.getElementById('precioCosto').value = producto.precio_costo;
+                document.getElementById('precioVenta').value = producto.precio_venta;
+                document.getElementById('proveedor').value = producto.proveedor || '';
+                document.getElementById('modalProducto').style.display = 'flex';
+            }
+        };
+        
+        window.confirmarEliminar = function(id) {
+            productoAEliminar = id;
+            document.getElementById('modalConfirmar').style.display = 'flex';
+        };
+        
+        function cerrarModalProducto() {
+            document.getElementById('modalProducto').style.display = 'none';
+        }
+        
+        function cerrarModalConfirmar() {
+            document.getElementById('modalConfirmar').style.display = 'none';
+            productoAEliminar = null;
+        }
+        
+        // ===== EVENTOS =====
+        document.getElementById('productoForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const id = document.getElementById('productoId').value;
+            const nombre = document.getElementById('nombre').value;
+            const categoria = document.getElementById('categoria').value;
+            const stock = parseInt(document.getElementById('stock').value);
+            const precio_costo = parseFloat(document.getElementById('precioCosto').value);
+            const precio_venta = parseFloat(document.getElementById('precioVenta').value);
+            const proveedor = document.getElementById('proveedor').value;
+            
+            if (!nombre || !categoria || !precio_costo || !precio_venta) {
+                showNotification('Por favor complete todos los campos requeridos', true);
+                return;
+            }
+            
+            if (precio_venta <= precio_costo) {
+                showNotification('El precio de venta debe ser mayor al precio de costo', true);
+                return;
+            }
+            
+            const productoData = { nombre, categoria, stock, precio_costo, precio_venta, proveedor };
+            
+            if (id) {
+                actualizarProducto(parseInt(id), productoData);
+            } else {
+                agregarProducto(productoData);
+            }
+            
+            cerrarModalProducto();
+        });
+        
+        document.getElementById('confirmarEliminar').addEventListener('click', () => {
+            if (productoAEliminar) {
+                eliminarProducto(productoAEliminar);
+                cerrarModalConfirmar();
+            }
+        });
+        
+        document.getElementById('btnAgregarProducto').addEventListener('click', abrirModalAgregar);
+        document.getElementById('closeModal').addEventListener('click', cerrarModalProducto);
+        document.getElementById('cancelarModal').addEventListener('click', cerrarModalProducto);
+        document.getElementById('closeConfirmModal').addEventListener('click', cerrarModalConfirmar);
+        document.getElementById('cancelarEliminar').addEventListener('click', cerrarModalConfirmar);
+        
+        // Cerrar modal al hacer clic fuera
+        window.addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modalProducto')) cerrarModalProducto();
+            if (e.target === document.getElementById('modalConfirmar')) cerrarModalConfirmar();
+        });
+        
         // ===== INICIALIZACIÓN =====
         document.addEventListener('DOMContentLoaded', () => {
             initLocalStorage();
-            actualizarResumen();
-            renderizarTabla();
+            actualizarUI();
         });
     </script>
 </body>
