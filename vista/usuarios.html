@@ -68,6 +68,7 @@
         .btn-danger { background: var(--error); color: white; }
         .btn-info { background: var(--info); color: white; }
         .btn-warning { background: var(--advertencia); color: white; }
+        .btn-sm { padding: 8px 16px; font-size: 12px; }
 
         .table-container { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto; display: none; }
         .table-container.active { display: block; }
@@ -75,6 +76,12 @@
         th { background: var(--gris-claro); padding: 16px 12px; text-align: left; font-weight: 600; }
         td { padding: 20px 12px; border-bottom: 1px solid var(--gris-claro); }
         tr:hover { background: rgba(63, 166, 160, 0.05); }
+
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--gris-claro); }
+        .page-btn { width: 36px; height: 36px; border-radius: 8px; border: 2px solid var(--gris-claro); background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .page-btn:hover { border-color: var(--teal); color: var(--teal); }
+        .page-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
+        .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .status-badge { display: inline-flex; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
         .status-activo { background: rgba(39, 174, 96, 0.1); color: var(--exito); }
@@ -87,10 +94,12 @@
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; }
         .modal-content { background: white; border-radius: 12px; width: 90%; max-width: 500px; padding: 25px; }
         .modal-header { margin-bottom: 20px; }
+        .modal-header h2 { color: var(--teal); }
         .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
         .form-group { margin-bottom: 15px; }
-        .form-label { display: block; margin-bottom: 8px; font-weight: 600; }
-        .form-control { width: 100%; padding: 12px; border: 2px solid var(--gris-claro); border-radius: 8px; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--gris-oscuro); }
+        .form-control { width: 100%; padding: 12px; border: 2px solid var(--gris-claro); border-radius: 8px; font-size: 14px; }
+        .form-control:focus { outline: none; border-color: var(--teal); }
 
         @media (max-width: 768px) {
             .top-header { flex-direction: column; gap: 20px; text-align: center; }
@@ -129,8 +138,15 @@
             <button class="btn btn-warning" id="btnNuevoProveedor"><i class="fas fa-truck-loading"></i> Nuevo Proveedor</button>
         </div>
         
-        <div class="table-container active" id="tablaClientes"><table><thead><tr><th>Cédula</th><th>Nombre</th><th>Contacto</th><th>Estado</th><th>Deuda</th><th>Acciones</th></tr></thead><tbody id="clientesBody"></tbody></table></div>
-        <div class="table-container" id="tablaProveedores"><table><thead><tr><th>Teléfono</th><th>Empresa</th><th>Proveedor</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="proveedoresBody"></tbody></table></div>
+        <div class="table-container active" id="tablaClientes">
+            <table class="clientes-table"><thead><tr><th>Cédula</th><th>Nombre</th><th>Contacto</th><th>Estado</th><th>Deuda</th><th>Acciones</th></tr></thead><tbody id="clientesBody"></tbody></table>
+            <div class="pagination" id="paginationClientes"></div>
+        </div>
+        
+        <div class="table-container" id="tablaProveedores">
+            <table class="proveedores-table"><thead><tr><th>Teléfono</th><th>Empresa</th><th>Proveedor</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="proveedoresBody"></tbody></table>
+            <div class="pagination" id="paginationProveedores"></div>
+        </div>
     </div>
 
     <!-- Modales -->
@@ -141,7 +157,10 @@
     <div class="modal" id="modalConfirm"><div class="modal-content"><div class="modal-header"><h2 id="confirmTitulo">Confirmar</h2></div><div class="modal-body"><p id="confirmMensaje">¿Estás seguro?</p></div><div class="modal-actions"><button class="btn" id="confirmCancelar">Cancelar</button><button class="btn btn-danger" id="confirmAceptar">Eliminar</button></div></div></div>
 
     <script>
+        const ITEMS_PER_PAGE = 5;
         let todosClientes = [], todosProveedores = [];
+        let currentPageClientes = 1, currentPageProveedores = 1;
+        let totalPagesClientes = 1, totalPagesProveedores = 1;
         let clienteEditando = null, proveedorEditando = null;
         let elementoAEliminar = null, tipoElementoAEliminar = null;
         let tabActual = 'clientes';
@@ -149,11 +168,16 @@
         const MOCK_CLIENTES = [
             { cedula: '123456789', nombre: 'Juan Pérez', telefono: '3001234567', correo: 'juan@email.com', direccion: 'Calle 1', deuda_total: 0, fecha_creacion: new Date().toISOString() },
             { cedula: '987654321', nombre: 'María Gómez', telefono: '3007654321', correo: 'maria@email.com', direccion: 'Carrera 2', deuda_total: 150000, fecha_creacion: new Date().toISOString() },
-            { cedula: '555666777', nombre: 'Pedro Ramírez', telefono: '3109998888', correo: 'pedro@email.com', direccion: 'Avenida 3', deuda_total: 25000, fecha_creacion: new Date().toISOString() }
+            { cedula: '555666777', nombre: 'Pedro Ramírez', telefono: '3109998888', correo: 'pedro@email.com', direccion: 'Avenida 3', deuda_total: 25000, fecha_creacion: new Date().toISOString() },
+            { cedula: '111222333', nombre: 'Luisa Fernández', telefono: '3154445555', correo: 'luisa@email.com', direccion: 'Calle 5', deuda_total: 0, fecha_creacion: new Date().toISOString() },
+            { cedula: '444555666', nombre: 'Carlos Méndez', telefono: '3176667777', correo: 'carlos@email.com', direccion: 'Carrera 8', deuda_total: 200000, fecha_creacion: new Date().toISOString() },
+            { cedula: '777888999', nombre: 'Ana Torres', telefono: '3118889999', correo: 'ana@email.com', direccion: 'Avenida 10', deuda_total: 0, fecha_creacion: new Date().toISOString() }
         ];
         const MOCK_PROVEEDORES = [
             { telefono: '3101112223', nombre_empresa: 'Agroinsumos SA', nombre_proveedor: 'Carlos López', correo: 'carlos@agroinsumos.com', estado: 'activo', producto: 'Fertilizantes', fecha_creacion: new Date().toISOString() },
-            { telefono: '3203334445', nombre_empresa: 'Veterinaria Central', nombre_proveedor: 'Ana Martínez', correo: 'ana@vetcentral.com', estado: 'activo', producto: 'Medicamentos', fecha_creacion: new Date().toISOString() }
+            { telefono: '3203334445', nombre_empresa: 'Veterinaria Central', nombre_proveedor: 'Ana Martínez', correo: 'ana@vetcentral.com', estado: 'activo', producto: 'Medicamentos', fecha_creacion: new Date().toISOString() },
+            { telefono: '3115556667', nombre_empresa: 'Semillas del Campo', nombre_proveedor: 'Roberto Jiménez', correo: 'roberto@semillas.com', estado: 'activo', producto: 'Semillas', fecha_creacion: new Date().toISOString() },
+            { telefono: '3127778889', nombre_empresa: 'Equipos Agro', nombre_proveedor: 'Laura Vargas', correo: 'laura@equiposagro.com', estado: 'inactivo', producto: 'Maquinaria', fecha_creacion: new Date().toISOString() }
         ];
 
         function initLocalStorage() {
@@ -177,7 +201,7 @@
             return copy;
         }
 
-        function aplicarFiltrosYOrdenClientes() {
+        function obtenerClientesFiltrados() {
             let filtrados = [...todosClientes];
             const busqueda = document.getElementById('searchClientes')?.value.toLowerCase() || '';
             const estado = document.getElementById('filterEstadoCliente')?.value || '';
@@ -191,7 +215,17 @@
             if (deuda === 'pequena') filtrados = filtrados.filter(c => { let d = parseFloat(c.deuda_total||0); return d > 0 && d < 50000; });
             if (deuda === 'grande') filtrados = filtrados.filter(c => parseFloat(c.deuda_total||0) >= 50000);
             
-            renderClientes(ordenarClientes(filtrados, orden));
+            return { filtrados: ordenarClientes(filtrados, orden), total: filtrados.length };
+        }
+
+        function aplicarFiltrosYOrdenClientes() {
+            const { filtrados, total } = obtenerClientesFiltrados();
+            totalPagesClientes = Math.ceil(total / ITEMS_PER_PAGE);
+            if (currentPageClientes > totalPagesClientes) currentPageClientes = Math.max(1, totalPagesClientes);
+            const start = (currentPageClientes - 1) * ITEMS_PER_PAGE;
+            const paginados = filtrados.slice(start, start + ITEMS_PER_PAGE);
+            renderClientes(paginados);
+            renderPaginationClientes(total, totalPagesClientes);
         }
 
         function ordenarProveedores(p, orden) {
@@ -201,7 +235,7 @@
             return copy;
         }
 
-        function aplicarFiltrosYOrdenProveedores() {
+        function obtenerProveedoresFiltrados() {
             let filtrados = [...todosProveedores];
             const busqueda = document.getElementById('searchProveedores')?.value.toLowerCase() || '';
             const estado = document.getElementById('filterTipoProveedor')?.value || '';
@@ -210,37 +244,75 @@
             if (busqueda) filtrados = filtrados.filter(p => (p.telefono||'').includes(busqueda) || (p.nombre_empresa||'').toLowerCase().includes(busqueda) || (p.nombre_proveedor||'').toLowerCase().includes(busqueda));
             if (estado) filtrados = filtrados.filter(p => p.estado === estado);
             
-            renderProveedores(ordenarProveedores(filtrados, orden));
+            return { filtrados: ordenarProveedores(filtrados, orden), total: filtrados.length };
+        }
+
+        function aplicarFiltrosYOrdenProveedores() {
+            const { filtrados, total } = obtenerProveedoresFiltrados();
+            totalPagesProveedores = Math.ceil(total / ITEMS_PER_PAGE);
+            if (currentPageProveedores > totalPagesProveedores) currentPageProveedores = Math.max(1, totalPagesProveedores);
+            const start = (currentPageProveedores - 1) * ITEMS_PER_PAGE;
+            const paginados = filtrados.slice(start, start + ITEMS_PER_PAGE);
+            renderProveedores(paginados);
+            renderPaginationProveedores(total, totalPagesProveedores);
         }
 
         function renderClientes(clientes) {
             const tbody = document.getElementById('clientesBody');
-            if (!clientes.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">No hay clientes</td></tr>'; return; }
+            if (!clientes.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px"><i class="fas fa-users" style="font-size:48px;color:var(--gris-medio);margin-bottom:15px;display:block"></i><h3>No se encontraron clientes</h3></td></tr>'; return; }
             tbody.innerHTML = clientes.map(c => `
                 <tr>
                     <td>${c.cedula}</td>
                     <td><strong>${c.nombre}</strong><br><small>${c.direccion || ''}</small></td>
                     <td>${c.telefono ? `<i class="fas fa-phone"></i> ${c.telefono}<br>` : ''}${c.correo ? `<i class="fas fa-envelope"></i> ${c.correo}` : ''}</td>
                     <td><span class="status-badge ${getEstadoClass(c.estado_actual, c.deuda_total)}">${c.deuda_total > 0 ? 'Moroso' : 'Activo'}</span></td>
-                    <td class="${getDeudaClass(c.deuda_total)}">${formatCurrency(c.deuda_total)}</td>
-                    <td><button class="btn btn-info" onclick="abrirModalEditarCliente('${c.cedula}')"><i class="fas fa-edit"></i></button> <button class="btn btn-danger" onclick="confirmarEliminar('cliente','${c.cedula}','${c.nombre}')"><i class="fas fa-trash"></i></button></td>
+                    <td class="${getDeudaClass(c.deuda_total)}"><strong>${formatCurrency(c.deuda_total)}</strong></td>
+                    <td><button class="btn btn-info btn-sm" onclick="abrirModalEditarCliente('${c.cedula}')"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" onclick="confirmarEliminar('cliente','${c.cedula}','${c.nombre}')"><i class="fas fa-trash"></i></button></td>
                 </tr>
             `).join('');
         }
 
+        function renderPaginationClientes(total, totalPages) {
+            const div = document.getElementById('paginationClientes');
+            if (totalPages <= 1) { div.style.display = 'none'; return; }
+            div.style.display = 'flex';
+            let html = `<button class="page-btn" onclick="changePageClientes(${currentPageClientes - 1})" ${currentPageClientes === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
+            for (let i = Math.max(1, currentPageClientes - 2); i <= Math.min(totalPages, currentPageClientes + 2); i++) {
+                html += `<button class="page-btn ${i === currentPageClientes ? 'active' : ''}" onclick="changePageClientes(${i})">${i}</button>`;
+            }
+            html += `<button class="page-btn" onclick="changePageClientes(${currentPageClientes + 1})" ${currentPageClientes === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
+            div.innerHTML = html;
+        }
+
+        function changePageClientes(page) { if (page >= 1 && page <= totalPagesClientes) { currentPageClientes = page; aplicarFiltrosYOrdenClientes(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
+
         function renderProveedores(proveedores) {
             const tbody = document.getElementById('proveedoresBody');
-            if (!proveedores.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No hay proveedores</td></tr>'; return; }
+            if (!proveedores.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px"><i class="fas fa-truck" style="font-size:48px;color:var(--gris-medio);margin-bottom:15px;display:block"></i><h3>No se encontraron proveedores</h3></td></tr>'; return; }
             tbody.innerHTML = proveedores.map(p => `
                 <tr>
                     <td>${p.telefono}</td>
-                    <td>${p.nombre_empresa}</td>
+                    <td><strong>${p.nombre_empresa}</strong></td>
                     <td>${p.nombre_proveedor}</td>
                     <td><span class="status-badge ${p.estado === 'activo' ? 'status-activo' : 'status-inactivo'}">${p.estado === 'activo' ? 'Activo' : 'Inactivo'}</span></td>
-                    <td><button class="btn btn-info" onclick="abrirModalEditarProveedor('${p.telefono}')"><i class="fas fa-edit"></i></button> <button class="btn btn-danger" onclick="confirmarEliminar('proveedor','${p.telefono}','${p.nombre_empresa}')"><i class="fas fa-trash"></i></button></td>
+                    <td><button class="btn btn-info btn-sm" onclick="abrirModalEditarProveedor('${p.telefono}')"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" onclick="confirmarEliminar('proveedor','${p.telefono}','${p.nombre_empresa}')"><i class="fas fa-trash"></i></button></td>
                 </tr>
             `).join('');
         }
+
+        function renderPaginationProveedores(total, totalPages) {
+            const div = document.getElementById('paginationProveedores');
+            if (totalPages <= 1) { div.style.display = 'none'; return; }
+            div.style.display = 'flex';
+            let html = `<button class="page-btn" onclick="changePageProveedores(${currentPageProveedores - 1})" ${currentPageProveedores === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
+            for (let i = Math.max(1, currentPageProveedores - 2); i <= Math.min(totalPages, currentPageProveedores + 2); i++) {
+                html += `<button class="page-btn ${i === currentPageProveedores ? 'active' : ''}" onclick="changePageProveedores(${i})">${i}</button>`;
+            }
+            html += `<button class="page-btn" onclick="changePageProveedores(${currentPageProveedores + 1})" ${currentPageProveedores === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
+            div.innerHTML = html;
+        }
+
+        function changePageProveedores(page) { if (page >= 1 && page <= totalPagesProveedores) { currentPageProveedores = page; aplicarFiltrosYOrdenProveedores(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
 
         function cambiarTab(tab) {
             tabActual = tab;
@@ -278,18 +350,21 @@
             document.getElementById('btnCancelarProveedor')?.addEventListener('click', () => document.getElementById('modalProveedor').style.display = 'none');
             document.getElementById('confirmCancelar')?.addEventListener('click', () => document.getElementById('modalConfirm').style.display = 'none');
             document.getElementById('confirmAceptar')?.addEventListener('click', eliminarElemento);
-            document.getElementById('searchClientes')?.addEventListener('input', () => aplicarFiltrosYOrdenClientes());
-            document.getElementById('filterEstadoCliente')?.addEventListener('change', () => aplicarFiltrosYOrdenClientes());
-            document.getElementById('filterDeudaCliente')?.addEventListener('change', () => aplicarFiltrosYOrdenClientes());
-            document.getElementById('filterOrdenCliente')?.addEventListener('change', () => aplicarFiltrosYOrdenClientes());
-            document.getElementById('searchProveedores')?.addEventListener('input', () => aplicarFiltrosYOrdenProveedores());
-            document.getElementById('filterTipoProveedor')?.addEventListener('change', () => aplicarFiltrosYOrdenProveedores());
-            document.getElementById('filterOrdenProveedor')?.addEventListener('change', () => aplicarFiltrosYOrdenProveedores());
+            document.getElementById('searchClientes')?.addEventListener('input', () => { currentPageClientes = 1; aplicarFiltrosYOrdenClientes(); });
+            document.getElementById('filterEstadoCliente')?.addEventListener('change', () => { currentPageClientes = 1; aplicarFiltrosYOrdenClientes(); });
+            document.getElementById('filterDeudaCliente')?.addEventListener('change', () => { currentPageClientes = 1; aplicarFiltrosYOrdenClientes(); });
+            document.getElementById('filterOrdenCliente')?.addEventListener('change', () => { currentPageClientes = 1; aplicarFiltrosYOrdenClientes(); });
+            document.getElementById('searchProveedores')?.addEventListener('input', () => { currentPageProveedores = 1; aplicarFiltrosYOrdenProveedores(); });
+            document.getElementById('filterTipoProveedor')?.addEventListener('change', () => { currentPageProveedores = 1; aplicarFiltrosYOrdenProveedores(); });
+            document.getElementById('filterOrdenProveedor')?.addEventListener('change', () => { currentPageProveedores = 1; aplicarFiltrosYOrdenProveedores(); });
             document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => cambiarTab(btn.dataset.tab)));
         }
 
         initLocalStorage();
         setupEventListeners();
+
+        window.changePageClientes = changePageClientes;
+        window.changePageProveedores = changePageProveedores;
     </script>
 </body>
 </html>
