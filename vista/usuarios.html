@@ -31,6 +31,13 @@
         
         .nav-item:hover { background: rgba(255,255,255,0.15); }
         .nav-item.active { background: rgba(255,255,255,0.2); border-left: 3px solid var(--mostaza); }
+
+        /* Estilos para tablas */
+        .table-container { background: white; border-radius: 12px; padding: 25px; margin-top: 20px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--gris-claro); padding: 16px 12px; text-align: left; font-weight: 600; }
+        td { padding: 20px 12px; border-bottom: 1px solid var(--gris-claro); }
+        tr:hover { background: rgba(63, 166, 160, 0.05); }
     </style>
 </head>
 <body>
@@ -42,8 +49,28 @@
         </nav>
     </div>
     <div class="main-content">
-        <h1>Gestión de Clientes y Proveedores</h1>
-        <div id="contenido"></div>
+        <header class="top-header">
+            <h1>Gestión de Clientes y Proveedores</h1>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="cambiarTab('clientes')">Clientes</button>
+            <button class="tab-btn" onclick="cambiarTab('proveedores')">Proveedores</button>
+        </div>
+        
+        <div id="tablaClientes" class="table-container">
+            <table>
+                <thead><tr><th>Cédula</th><th>Nombre</th><th>Contacto</th><th>Deuda</th><th>Acciones</th></tr></thead>
+                <tbody id="clientesBody"></tbody>
+            </table>
+        </div>
+        
+        <div id="tablaProveedores" class="table-container" style="display:none">
+            <table>
+                <thead><tr><th>Teléfono</th><th>Empresa</th><th>Proveedor</th><th>Estado</th><th>Acciones</th></tr></thead>
+                <tbody id="proveedoresBody"></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
@@ -57,7 +84,9 @@
             { telefono: '3101112223', nombre_empresa: 'Agroinsumos SA', nombre_proveedor: 'Carlos López', correo: 'carlos@agroinsumos.com', estado: 'activo', producto: 'Fertilizantes, Semillas', fecha_creacion: new Date().toISOString() }
         ];
 
-        // Inicializar localStorage si está vacío
+        let tabActual = 'clientes';
+
+        // Inicializar localStorage
         if (!localStorage.getItem('clientes')) {
             localStorage.setItem('clientes', JSON.stringify(MOCK_CLIENTES));
         }
@@ -65,7 +94,116 @@
             localStorage.setItem('proveedores', JSON.stringify(MOCK_PROVEEDORES));
         }
 
-        console.log('Datos inicializados:', JSON.parse(localStorage.getItem('clientes')));
+        function formatCurrency(v) {
+            if (!v && v !== 0) return '$ 0';
+            const n = parseFloat(v);
+            return isNaN(n) ? '$ 0' : `$ ${n.toLocaleString('es-CO')}`;
+        }
+
+        function renderClientes() {
+            const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+            const tbody = document.getElementById('clientesBody');
+            if (!clientes.length) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No hay clientes</td></tr>';
+                return;
+            }
+            tbody.innerHTML = clientes.map(c => `
+                <tr>
+                    <td><strong>${c.cedula}</strong></td>
+                    <td><strong>${c.nombre}</strong><br><small>${c.direccion || ''}</small></td>
+                    <td>${c.telefono ? `<i class="fas fa-phone"></i> ${c.telefono}<br>` : ''}${c.correo ? `<i class="fas fa-envelope"></i> ${c.correo}` : ''}</td>
+                    <td class="${c.deuda_total > 0 ? 'deuda-grande' : 'deuda-cero'}">${formatCurrency(c.deuda_total)}</td>
+                    <td>
+                        <button onclick="editarCliente('${c.cedula}')">Editar</button>
+                        <button onclick="eliminarCliente('${c.cedula}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderProveedores() {
+            const proveedores = JSON.parse(localStorage.getItem('proveedores')) || [];
+            const tbody = document.getElementById('proveedoresBody');
+            if (!proveedores.length) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No hay proveedores</td></tr>';
+                return;
+            }
+            tbody.innerHTML = proveedores.map(p => `
+                <tr>
+                    <td><strong>${p.telefono}</strong></td>
+                    <td>${p.nombre_empresa}</td>
+                    <td>${p.nombre_proveedor}</td>
+                    <td><span class="status-${p.estado}">${p.estado === 'activo' ? 'Activo' : 'Inactivo'}</span></td>
+                    <td>
+                        <button onclick="editarProveedor('${p.telefono}')">Editar</button>
+                        <button onclick="eliminarProveedor('${p.telefono}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function cambiarTab(tab) {
+            tabActual = tab;
+            const tablaClientes = document.getElementById('tablaClientes');
+            const tablaProveedores = document.getElementById('tablaProveedores');
+            const btns = document.querySelectorAll('.tab-btn');
+            
+            btns.forEach(btn => btn.classList.remove('active'));
+            if (tab === 'clientes') {
+                tablaClientes.style.display = 'block';
+                tablaProveedores.style.display = 'none';
+                btns[0].classList.add('active');
+                renderClientes();
+            } else {
+                tablaClientes.style.display = 'none';
+                tablaProveedores.style.display = 'block';
+                btns[1].classList.add('active');
+                renderProveedores();
+            }
+        }
+
+        function editarCliente(cedula) {
+            const clientes = JSON.parse(localStorage.getItem('clientes'));
+            const cliente = clientes.find(c => c.cedula === cedula);
+            const nuevoNombre = prompt('Nuevo nombre:', cliente.nombre);
+            if (nuevoNombre) {
+                cliente.nombre = nuevoNombre;
+                localStorage.setItem('clientes', JSON.stringify(clientes));
+                renderClientes();
+            }
+        }
+
+        function eliminarCliente(cedula) {
+            if (confirm('¿Eliminar cliente?')) {
+                let clientes = JSON.parse(localStorage.getItem('clientes'));
+                clientes = clientes.filter(c => c.cedula !== cedula);
+                localStorage.setItem('clientes', JSON.stringify(clientes));
+                renderClientes();
+            }
+        }
+
+        function editarProveedor(telefono) {
+            const proveedores = JSON.parse(localStorage.getItem('proveedores'));
+            const proveedor = proveedores.find(p => p.telefono === telefono);
+            const nuevoNombre = prompt('Nuevo nombre del proveedor:', proveedor.nombre_proveedor);
+            if (nuevoNombre) {
+                proveedor.nombre_proveedor = nuevoNombre;
+                localStorage.setItem('proveedores', JSON.stringify(proveedores));
+                renderProveedores();
+            }
+        }
+
+        function eliminarProveedor(telefono) {
+            if (confirm('¿Eliminar proveedor?')) {
+                let proveedores = JSON.parse(localStorage.getItem('proveedores'));
+                proveedores = proveedores.filter(p => p.telefono !== telefono);
+                localStorage.setItem('proveedores', JSON.stringify(proveedores));
+                renderProveedores();
+            }
+        }
+
+        // Render inicial
+        renderClientes();
     </script>
 </body>
 </html>
