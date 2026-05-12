@@ -43,6 +43,23 @@
             overflow-x: hidden;
         }
         
+        /* ===== SKIP LINK (accesibilidad) ===== */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--teal);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            z-index: 9999;
+            border-radius: 0 0 8px 0;
+            font-weight: 600;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+        
         /* ===== SIDEBAR ===== */
         .sidebar {
             width: 250px;
@@ -53,7 +70,7 @@
             height: 100vh;
             box-shadow: 3px 0 10px rgba(0,0,0,0.1);
             z-index: 1000;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .sidebar.collapsed {
@@ -69,6 +86,10 @@
         .sidebar.collapsed .nav-item {
             justify-content: center;
             padding: 12px;
+        }
+        
+        .sidebar.collapsed .logo-container {
+            padding: 15px 0;
         }
         
         .sidebar-toggle {
@@ -91,6 +112,7 @@
         
         .sidebar-toggle:hover {
             transform: scale(1.1);
+            background: #e6b843;
         }
         
         .sidebar-toggle-collapsed {
@@ -127,6 +149,7 @@
         .logo {
             font-size: 24px;
             font-weight: bold;
+            transition: all 0.3s ease;
         }
         
         .logo-agro { color: white; }
@@ -135,6 +158,7 @@
             font-size: 10px;
             opacity: 0.7;
             margin-top: 5px;
+            transition: all 0.3s ease;
         }
         
         .nav-menu {
@@ -150,7 +174,8 @@
             text-decoration: none;
             border-radius: 8px;
             margin-bottom: 5px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
         }
         
         .nav-item:hover {
@@ -163,6 +188,24 @@
             border-left: 3px solid var(--mostaza);
         }
         
+        /* Tooltips para navegación colapsada */
+        .sidebar.collapsed .nav-item:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-left: 10px;
+            padding: 6px 12px;
+            background: var(--gris-oscuro);
+            color: white;
+            font-size: 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            z-index: 1002;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
         .nav-icon { width: 24px; font-size: 18px; }
         .nav-text { font-size: 14px; font-weight: 500; }
         
@@ -172,7 +215,7 @@
             margin-left: 250px;
             padding: 25px;
             min-height: 100vh;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .main-content.expanded {
@@ -192,6 +235,7 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
+            transition: all 0.3s ease;
         }
         
         .top-header h1 {
@@ -218,7 +262,24 @@
             padding: 20px;
             margin-bottom: 25px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.4s ease forwards;
         }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section:nth-child(1) { animation-delay: 0.05s; }
+        .section:nth-child(2) { animation-delay: 0.1s; }
+        .section:nth-child(3) { animation-delay: 0.15s; }
+        .section:nth-child(4) { animation-delay: 0.2s; }
+        .section:nth-child(5) { animation-delay: 0.25s; }
         
         .section-title {
             font-size: 18px;
@@ -242,6 +303,12 @@
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .chart-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
         
         .chart-card h3 {
@@ -266,10 +333,33 @@
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            position: relative;
+        }
+        
+        /* Tooltips en botones */
+        .btn[data-tooltip] {
+            position: relative;
+        }
+        
+        .btn[data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 8px;
+            padding: 5px 10px;
+            background: var(--gris-oscuro);
+            color: white;
+            font-size: 11px;
+            border-radius: 6px;
+            white-space: nowrap;
+            z-index: 1000;
+            font-weight: normal;
         }
         
         .btn-primary {
@@ -279,7 +369,7 @@
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(31, 138, 134, 0.2);
+            box-shadow: 0 4px 12px rgba(31, 138, 134, 0.3);
         }
         
         .btn-success {
@@ -287,9 +377,19 @@
             color: white;
         }
         
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+        
         .btn-warning {
             background: linear-gradient(135deg, var(--advertencia) 0%, #d68910 100%);
             color: white;
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
         }
         
         .btn-danger {
@@ -302,9 +402,30 @@
             color: var(--gris-oscuro);
         }
         
+        .btn-secondary:hover {
+            background: var(--gris-medio);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        /* Loading state en botones */
+        .btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        .btn.loading i {
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
         /* ===== TABLA ===== */
         .table-container {
             overflow-x: auto;
+            border-radius: 8px;
         }
         
         .inventario-table {
@@ -325,9 +446,10 @@
         .inventario-table td {
             padding: 14px 10px;
             border-bottom: 1px solid var(--gris-claro);
+            transition: background 0.2s ease;
         }
         
-        .inventario-table tr:hover {
+        .inventario-table tr:hover td {
             background: var(--blanco-hueso);
         }
         
@@ -362,11 +484,28 @@
             background: var(--gris-claro);
             color: var(--gris-oscuro);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            position: relative;
         }
         
         .action-btn:hover {
-            transform: scale(1.05);
+            transform: scale(1.1);
+        }
+        
+        .action-btn[data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 8px;
+            padding: 5px 10px;
+            background: var(--gris-oscuro);
+            color: white;
+            font-size: 11px;
+            border-radius: 6px;
+            white-space: nowrap;
+            z-index: 1000;
         }
         
         .btn-edit:hover { background: var(--info); color: white; }
@@ -397,11 +536,13 @@
             border: 2px solid var(--gris-claro);
             border-radius: 8px;
             font-size: 14px;
+            transition: all 0.3s ease;
         }
         
         .filter-select:focus, .filter-input:focus {
             outline: none;
             border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(31, 138, 134, 0.1);
         }
         
         /* ===== PAGINACIÓN ===== */
@@ -423,12 +564,13 @@
             border: 1px solid var(--gris-claro);
             background: white;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
         }
         
-        .page-btn:hover {
+        .page-btn:hover:not(:disabled) {
             border-color: var(--teal);
             color: var(--teal);
+            transform: translateY(-1px);
         }
         
         .page-btn.active {
@@ -437,7 +579,7 @@
             border-color: var(--teal);
         }
         
-        .page-btn.disabled {
+        .page-btn.disabled, .page-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
@@ -453,6 +595,8 @@
             padding: 6px 10px;
             border: 1px solid var(--gris-claro);
             border-radius: 6px;
+            background: white;
+            cursor: pointer;
         }
         
         /* ===== RESUMEN ===== */
@@ -467,6 +611,13 @@
             padding: 20px;
             background: var(--celeste-fondo);
             border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: default;
+        }
+        
+        .resumen-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         
         .resumen-value {
@@ -488,6 +639,11 @@
             gap: 15px;
             padding: 12px;
             border-bottom: 1px solid var(--gris-claro);
+            transition: background 0.2s ease;
+        }
+        
+        .movimiento-item:hover {
+            background: var(--blanco-hueso);
         }
         
         .movimiento-icon {
@@ -519,6 +675,11 @@
             gap: 15px;
             padding: 12px;
             border-bottom: 1px solid var(--gris-claro);
+            transition: background 0.2s ease;
+        }
+        
+        .product-rank:hover {
+            background: var(--blanco-hueso);
         }
         
         .rank-number {
@@ -558,7 +719,7 @@
             height: 100%;
             background: var(--teal);
             border-radius: 3px;
-            transition: width 0.3s;
+            transition: width 0.5s ease;
         }
         
         /* ===== MODALES ===== */
@@ -573,6 +734,7 @@
             z-index: 2000;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(3px);
         }
         
         .modal-content {
@@ -583,6 +745,18 @@
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
         
         .modal-header {
@@ -603,6 +777,11 @@
             font-size: 24px;
             cursor: pointer;
             color: var(--gris-medio);
+            transition: color 0.2s;
+        }
+        
+        .modal-close:hover {
+            color: var(--error);
         }
         
         .form-group {
@@ -622,12 +801,13 @@
             border: 2px solid var(--gris-claro);
             border-radius: 8px;
             font-size: 14px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
         
         .form-control:focus {
             outline: none;
             border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(31, 138, 134, 0.1);
         }
         
         .modal-footer {
@@ -660,7 +840,7 @@
             gap: 12px;
             min-width: 280px;
             max-width: 400px;
-            animation: slideIn 0.3s ease;
+            animation: slideInRight 0.3s ease;
             border-left: 4px solid;
         }
         
@@ -700,19 +880,19 @@
             cursor: pointer;
             color: var(--gris-medio);
             font-size: 14px;
-            transition: all 0.2s;
+            transition: color 0.2s;
         }
         
         .notification-close:hover {
             color: var(--gris-oscuro);
         }
         
-        @keyframes slideIn {
+        @keyframes slideInRight {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
         
-        @keyframes slideOut {
+        @keyframes slideOutRight {
             from { transform: translateX(0); opacity: 1; }
             to { transform: translateX(100%); opacity: 0; }
         }
@@ -723,22 +903,179 @@
             color: var(--gris-medio);
         }
         
-        /* ===== RESPONSIVE SIDEBAR ===== */
-        @media (max-width: 768px) {
-            .sidebar.collapsed {
-                width: 0;
-                padding: 0;
-                overflow: hidden;
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 1200px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+            .resumen-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+            }
+            .sidebar .logo span,
+            .sidebar .slogan,
+            .sidebar .nav-text {
+                display: none;
+            }
+            .sidebar .nav-item {
+                justify-content: center;
+                padding: 15px;
+            }
+            .sidebar .logo-container {
+                padding: 15px 0;
+            }
+            .main-content {
+                margin-left: 70px;
             }
             .main-content.expanded {
                 margin-left: 0;
             }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 250px;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .sidebar.collapsed {
+                transform: translateX(-100%);
+                width: 250px;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .main-content.expanded {
+                margin-left: 0;
+            }
+            .top-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .action-buttons {
+                justify-content: center;
+            }
+            .resumen-grid {
+                grid-template-columns: 1fr;
+            }
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+            .table-container {
+                overflow-x: auto;
+            }
+            .inventario-table {
+                min-width: 800px;
+            }
+            .movimiento-item {
+                flex-wrap: wrap;
+            }
+            .movimiento-date {
+                margin-left: 55px;
+            }
+            .modal-content {
+                width: 95%;
+                margin: 20px;
+                padding: 20px;
+            }
+            .pagination-container {
+                gap: 5px;
+            }
+            .page-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+            .pagination-info {
+                width: 100%;
+                text-align: center;
+                margin-left: 0;
+                margin-top: 10px;
+            }
+            .items-per-page {
+                margin-left: 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 15px;
+            }
+            .top-header {
+                padding: 15px;
+            }
+            .section {
+                padding: 15px;
+            }
+            .btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            .resumen-value {
+                font-size: 22px;
+            }
+            .chart-card {
+                padding: 15px;
+            }
+            .chart-container {
+                height: 200px;
+            }
+            .notification {
+                min-width: 260px;
+                max-width: calc(100vw - 40px);
+                padding: 10px 15px;
+            }
+        }
+        
+        /* ===== FOCUS VISIBLE (accesibilidad) ===== */
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        .page-btn:focus-visible {
+            outline: 3px solid var(--teal);
+            outline-offset: 2px;
+        }
+        
+        /* ===== SCROLL SUAVE ===== */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* ===== SCROLLBAR PERSONALIZADO ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--gris-claro);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--teal);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1a7572;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- SKIP LINK PARA ACCESIBILIDAD -->
+    <a href="#mainContent" class="skip-link">Saltar al contenido principal</a>
+    
     <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
         <div class="logo-container">
@@ -750,31 +1087,31 @@
         </div>
         
         <nav class="nav-menu">
-            <a href="/" class="nav-item">
+            <a href="/" class="nav-item" data-tooltip="Inicio">
                 <i class="nav-icon fas fa-home"></i>
                 <span class="nav-text">Inicio</span>
             </a>
-            <a href="/venta" class="nav-item">
+            <a href="/venta" class="nav-item" data-tooltip="Nueva Venta">
                 <i class="nav-icon fas fa-cash-register"></i>
                 <span class="nav-text">Nueva Venta</span>
             </a>
-            <a href="/productos" class="nav-item">
+            <a href="/productos" class="nav-item" data-tooltip="Productos">
                 <i class="nav-icon fas fa-boxes"></i>
                 <span class="nav-text">Productos</span>
             </a>
-            <a href="/usuarios" class="nav-item">
+            <a href="/usuarios" class="nav-item" data-tooltip="Clientes">
                 <i class="nav-icon fas fa-users"></i>
                 <span class="nav-text">Clientes</span>
             </a>
-            <a href="/historial" class="nav-item">
+            <a href="/historial" class="nav-item" data-tooltip="Historial">
                 <i class="nav-icon fas fa-history"></i>
                 <span class="nav-text">Historial</span>
             </a>
-            <a href="/inventario" class="nav-item active">
+            <a href="/inventario" class="nav-item active" data-tooltip="Inventario">
                 <i class="nav-icon fas fa-warehouse"></i>
                 <span class="nav-text">Inventario</span>
             </a>
-            <a href="/reportes" class="nav-item">
+            <a href="/reportes" class="nav-item" data-tooltip="Reportes">
                 <i class="nav-icon fas fa-chart-bar"></i>
                 <span class="nav-text">Reportes</span>
             </a>
@@ -796,13 +1133,13 @@
                 <p>Gestión de stock, productos y movimientos</p>
             </div>
             <div class="action-buttons">
-                <button class="btn btn-success" id="btnAgregarProducto">
+                <button class="btn btn-success" id="btnAgregarProducto" data-tooltip="Agregar nuevo producto (Ctrl+N)">
                     <i class="fas fa-plus"></i> Nuevo Producto
                 </button>
-                <button class="btn btn-warning" id="btnAjusteStock">
+                <button class="btn btn-warning" id="btnAjusteStock" data-tooltip="Ajustar stock de producto">
                     <i class="fas fa-adjust"></i> Ajustar Stock
                 </button>
-                <button class="btn btn-secondary" id="btnExportarInventario">
+                <button class="btn btn-secondary" id="btnExportarInventario" data-tooltip="Exportar inventario a CSV">
                     <i class="fas fa-file-csv"></i> Exportar CSV
                 </button>
             </div>
@@ -830,7 +1167,7 @@
             <div class="filters-grid">
                 <div class="filter-group">
                     <label class="filter-label">Buscar producto</label>
-                    <input type="text" id="searchInput" class="filter-input" placeholder="Nombre o código...">
+                    <input type="text" id="searchInput" class="filter-input" placeholder="Nombre o código... (Ctrl+F)" data-tooltip="Buscar por nombre o código">
                 </div>
                 <div class="filter-group">
                     <label class="filter-label">Categoría</label>
@@ -855,7 +1192,9 @@
                 </div>
                 <div class="filter-group">
                     <label class="filter-label">&nbsp;</label>
-                    <button id="limpiarFiltros" class="btn btn-secondary">Limpiar Filtros</button>
+                    <button id="limpiarFiltros" class="btn btn-secondary" data-tooltip="Restablecer todos los filtros">
+                        <i class="fas fa-broom"></i> Limpiar Filtros
+                    </button>
                 </div>
             </div>
         </div>
@@ -914,7 +1253,7 @@
     <!-- NOTIFICATION CONTAINER -->
     <div id="notificationContainer" class="notification-container"></div>
     
-    <!-- MODALES (iguales a commit anterior) -->
+    <!-- MODALES (iguales a commits anteriores) -->
     <div class="modal" id="modalProducto">
         <div class="modal-content">
             <div class="modal-header">
@@ -925,7 +1264,7 @@
                 <input type="hidden" id="productoId">
                 <div class="form-group">
                     <label class="form-label">Nombre del Producto *</label>
-                    <input type="text" class="form-control" id="nombre" required>
+                    <input type="text" class="form-control" id="nombre" required autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Categoría *</label>
@@ -952,7 +1291,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Proveedor</label>
-                    <input type="text" class="form-control" id="proveedor">
+                    <input type="text" class="form-control" id="proveedor" autocomplete="off">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="cancelarModal">Cancelar</button>
@@ -1075,13 +1414,13 @@
             
             const closeBtn = notification.querySelector('.notification-close');
             closeBtn.addEventListener('click', () => {
-                notification.style.animation = 'slideOut 0.3s ease';
+                notification.style.animation = 'slideOutRight 0.3s ease';
                 setTimeout(() => notification.remove(), 300);
             });
             
             setTimeout(() => {
                 if (notification.parentNode) {
-                    notification.style.animation = 'slideOut 0.3s ease';
+                    notification.style.animation = 'slideOutRight 0.3s ease';
                     setTimeout(() => notification.remove(), 300);
                 }
             }, duration);
@@ -1434,6 +1773,7 @@
             if (pagina < 1 || pagina > totalPaginas) return;
             paginaActual = pagina;
             renderizarTablaConPaginacion();
+            document.getElementById('inventarioTable').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
         function cambiarItemsPorPagina(cantidad) {
@@ -1452,20 +1792,20 @@
                 const estadoLabel = getStockLabel(prod.stock);
                 const valorTotal = prod.stock * prod.precio_costo;
                 html += `<tr>
-                             <td>#${String(prod.id).padStart(4, '0')}</td>
-                             <td><strong>${prod.nombre}</strong><br><small>${prod.proveedor || 'Sin proveedor'}</small></td>
-                             <td>${prod.categoria}</td>
-                             <td>${prod.stock} und</td>
-                             <td><span class="stock-badge ${estadoClase}">${estadoLabel}</span></td>
-                             <td class="precio-cell">${formatCurrency(prod.precio_costo)}</td>
-                             <td class="precio-cell">${formatCurrency(prod.precio_venta)}</td>
-                             <td class="precio-cell">${formatCurrency(valorTotal)}</td>
-                             <td class="action-cell">
-                                 <button class="action-btn btn-adjust" onclick="abrirModalAjuste(${prod.id})"><i class="fas fa-adjust"></i></button>
-                                 <button class="action-btn btn-edit" onclick="editarProducto(${prod.id})"><i class="fas fa-edit"></i></button>
-                                 <button class="action-btn btn-delete" onclick="confirmarEliminar(${prod.id})"><i class="fas fa-trash"></i></button>
-                             </td>
-                           </tr>`;
+                              <td>#${String(prod.id).padStart(4, '0')}</td>
+                              <td><strong>${prod.nombre}</strong><br><small>${prod.proveedor || 'Sin proveedor'}</small></td>
+                              <td>${prod.categoria}</td>
+                              <td>${prod.stock} und</td>
+                              <td><span class="stock-badge ${estadoClase}">${estadoLabel}</span></td>
+                              <td class="precio-cell">${formatCurrency(prod.precio_costo)}</td>
+                              <td class="precio-cell">${formatCurrency(prod.precio_venta)}</td>
+                              <td class="precio-cell">${formatCurrency(valorTotal)}</td>
+                              <td class="action-cell">
+                                  <button class="action-btn btn-adjust" onclick="abrirModalAjuste(${prod.id})" data-tooltip="Ajustar stock"><i class="fas fa-adjust"></i></button>
+                                  <button class="action-btn btn-edit" onclick="editarProducto(${prod.id})" data-tooltip="Editar producto"><i class="fas fa-edit"></i></button>
+                                  <button class="action-btn btn-delete" onclick="confirmarEliminar(${prod.id})" data-tooltip="Eliminar producto"><i class="fas fa-trash"></i></button>
+                              </td>
+                            </tr>`;
             });
             tbody.innerHTML = html;
         }
@@ -1594,6 +1934,30 @@
             }
         }
         
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'n') {
+                e.preventDefault();
+                abrirModalAgregar();
+                showNotification('Atajo: Ctrl+N - Nuevo producto', 'info', 1500);
+            }
+            if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+                showNotification('Atajo: Ctrl+F - Buscar producto', 'info', 1500);
+            }
+            if (e.key === 'Escape') {
+                cerrarModalProducto();
+                cerrarModalConfirmar();
+                cerrarModalAjuste();
+            }
+            if (e.ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                actualizarUICompleta();
+                showNotification('Datos actualizados', 'success', 1500);
+            }
+        });
+        
         // ===== EVENTOS =====
         document.getElementById('toggleSidebar').addEventListener('click', toggleSidebar);
         document.getElementById('toggleSidebarCollapsed').addEventListener('click', toggleSidebar);
@@ -1644,6 +2008,17 @@
             actualizarUICompleta();
             verificarAlertasStock();
             showNotification('Bienvenido al Sistema de Inventario', 'success', 3000);
+            showNotification('Atajos: Ctrl+N (nuevo), Ctrl+F (buscar), Esc (cerrar)', 'info', 5000);
+            
+            // Añadir tooltips a elementos dinámicos después de renderizar
+            const observer = new MutationObserver(() => {
+                document.querySelectorAll('[data-tooltip]').forEach(el => {
+                    if (!el.hasAttribute('data-tooltip-original')) {
+                        el.setAttribute('data-tooltip-original', el.getAttribute('data-tooltip'));
+                    }
+                });
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
         });
     </script>
 </body>
