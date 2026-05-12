@@ -1076,7 +1076,7 @@
     <!-- SKIP LINK PARA ACCESIBILIDAD -->
     <a href="#mainContent" class="skip-link">Saltar al contenido principal</a>
     
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR IZQUIERDO -->
     <div class="sidebar" id="sidebar">
         <div class="logo-container">
             <div class="logo">
@@ -1087,40 +1087,42 @@
         </div>
         
         <nav class="nav-menu">
-            <a href="/" class="nav-item" data-tooltip="Inicio">
+            <a href="/" class="nav-item">
                 <i class="nav-icon fas fa-home"></i>
                 <span class="nav-text">Inicio</span>
             </a>
-            <a href="/venta" class="nav-item" data-tooltip="Nueva Venta">
+            <a href="/venta" class="nav-item">
                 <i class="nav-icon fas fa-cash-register"></i>
                 <span class="nav-text">Nueva Venta</span>
             </a>
-            <a href="/productos" class="nav-item" data-tooltip="Productos">
+            <a href="/productos" class="nav-item active">
                 <i class="nav-icon fas fa-boxes"></i>
                 <span class="nav-text">Productos</span>
             </a>
-            <a href="/usuarios" class="nav-item" data-tooltip="Clientes">
+            <a href="/usuarios" class="nav-item">
                 <i class="nav-icon fas fa-users"></i>
                 <span class="nav-text">Clientes</span>
             </a>
-            <a href="/historial" class="nav-item" data-tooltip="Historial">
+            <a href="/historial_venta" class="nav-item">
                 <i class="nav-icon fas fa-history"></i>
                 <span class="nav-text">Historial</span>
             </a>
-            <a href="/inventario" class="nav-item active" data-tooltip="Inventario">
+            <a href="/inventario" class="nav-item">
                 <i class="nav-icon fas fa-warehouse"></i>
                 <span class="nav-text">Inventario</span>
             </a>
-            <a href="/reportes" class="nav-item" data-tooltip="Reportes">
+            <a href="/reporte_caja" class="nav-item">
                 <i class="nav-icon fas fa-chart-bar"></i>
                 <span class="nav-text">Reportes</span>
             </a>
         </nav>
         
+        <!-- Botón para toggle del sidebar (dentro del sidebar) -->
         <div class="sidebar-toggle" id="toggleSidebar">
             <i class="fas fa-chevron-left"></i>
         </div>
     </div>
+    
     
     <div class="sidebar-toggle-collapsed" id="toggleSidebarCollapsed" style="display: none;">
         <i class="fas fa-bars"></i>
