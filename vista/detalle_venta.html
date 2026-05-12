@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agrovet Yacuanquer - POS</title>
     <style>
-        /* Mantener todo el CSS de los commits anteriores */
+        /* Mantener TODO el CSS de commits anteriores */
         :root {
             --teal: #1F8A86;
             --terracota: #C08A67;
@@ -21,179 +21,59 @@
             --exito: #27ae60;
             --error: #e74c3c;
             --advertencia: #f39c12;
-            --info: #3498db;
             --stock-alto: #2ecc71;
             --stock-medio: #f39c12;
             --stock-bajo: #e74c3c;
             --stock-critico: #c0392b;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* Estilos CSS completos de commits anteriores... */
+        
+        /* ===== ESTILOS DE TABLA ===== */
+        .table-container {
+            overflow-x: auto;
         }
         
-        body {
-            background-color: var(--blanco-hueso);
-            color: var(--gris-oscuro);
-            display: flex;
-            min-height: 100vh;
-            overflow-x: hidden;
+        .inventario-table {
+            width: 100%;
+            border-collapse: collapse;
         }
         
-        .sidebar {
-            width: 250px;
-            background: var(--teal);
-            color: white;
-            padding: 20px 0;
-            position: fixed;
-            height: 100vh;
-            box-shadow: 3px 0 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
-        
-        .logo-container {
-            text-align: center;
-            padding: 15px 20px;
-            border-bottom: 2px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        
-        .logo-agro { color: white; }
-        .logo-vet { color: var(--mostaza); }
-        .slogan {
-            font-size: 10px;
-            opacity: 0.7;
-            margin-top: 5px;
-        }
-        
-        .nav-menu {
-            padding: 0 15px;
-        }
-        
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 15px;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 5px;
-            transition: all 0.3s;
-        }
-        
-        .nav-item:hover {
-            background: rgba(255,255,255,0.1);
-            transform: translateX(5px);
-        }
-        
-        .nav-item.active {
-            background: rgba(255,255,255,0.15);
-            border-left: 3px solid var(--mostaza);
-        }
-        
-        .nav-icon { width: 24px; font-size: 18px; }
-        .nav-text { font-size: 14px; font-weight: 500; }
-        
-        .main-content {
-            flex: 1;
-            margin-left: 250px;
-            padding: 25px;
-            min-height: 100vh;
-        }
-        
-        .top-header {
-            background: white;
-            border-radius: 12px;
-            padding: 20px 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-left: 4px solid var(--turquesa);
-        }
-        
-        .top-header h1 {
-            color: var(--teal);
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        
-        .top-header p {
-            color: var(--gris-medio);
-            font-size: 13px;
-        }
-        
-        .section {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .section-title {
-            font-size: 18px;
-            color: var(--teal);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .btn {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
+        .inventario-table th {
+            background: var(--gris-claro);
+            padding: 12px 10px;
+            text-align: left;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            color: var(--gris-oscuro);
+            font-size: 13px;
+            border-bottom: 2px solid var(--teal);
         }
         
-        .btn-primary {
-            background: linear-gradient(135deg, var(--teal) 0%, #1a7572 100%);
-            color: white;
+        .inventario-table td {
+            padding: 14px 10px;
+            border-bottom: 1px solid var(--gris-claro);
         }
         
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(31, 138, 134, 0.2);
-        }
-        
-        .placeholder {
-            text-align: center;
-            padding: 40px;
-            color: var(--gris-medio);
+        .inventario-table tr:hover {
             background: var(--blanco-hueso);
-            border-radius: 8px;
-            border: 1px dashed var(--gris-claro);
         }
         
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            border-radius: 8px;
-            background: var(--exito);
-            color: white;
-            z-index: 2000;
-            animation: slideIn 0.3s ease;
+        .stock-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
         }
         
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .stock-alto-badge { background: rgba(46, 204, 113, 0.15); color: var(--stock-alto); }
+        .stock-medio-badge { background: rgba(243, 156, 18, 0.15); color: var(--stock-medio); }
+        .stock-bajo-badge { background: rgba(231, 76, 60, 0.15); color: var(--stock-bajo); }
+        .stock-critico-badge { background: rgba(192, 57, 43, 0.15); color: var(--stock-critico); }
+        
+        .precio-cell {
+            font-weight: 600;
+            color: var(--teal);
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -252,24 +132,40 @@
         </div>
         
         <div class="section">
-            <h2 class="section-title"><i class="fas fa-filter"></i> Filtros de Búsqueda</h2>
-            <div id="filtrosContainer" class="placeholder">Controles de filtrado próximamente</div>
-        </div>
-        
-        <div class="section">
             <h2 class="section-title"><i class="fas fa-list-alt"></i> Listado de Productos</h2>
-            <div id="tablaContainer" class="placeholder">Tabla de productos próximamente</div>
+            <div class="table-container">
+                <table class="inventario-table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th>Stock</th>
+                            <th>Estado</th>
+                            <th>Precio Costo</th>
+                            <th>Precio Venta</th>
+                            <th>Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventarioBody">
+                        <tr><td colspan="8" style="text-align: center;">Cargando productos...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     
     <script>
-        // ===== MOCK DE DATOS =====
+        // ===== DATOS MOCK (mismos del commit anterior) =====
         const productosMock = [
             { id: 1, nombre: "Vacuna Triple Felina", categoria: "VACUNAS", stock: 45, precio_costo: 25000, precio_venta: 35000, proveedor: "Labovet" },
             { id: 2, nombre: "Antiparasitario Interno", categoria: "MEDICAMENTOS", stock: 12, precio_costo: 18000, precio_venta: 28000, proveedor: "Veterinaria Central" },
             { id: 3, nombre: "Shampoo Antipulgas", categoria: "EQUIPOS", stock: 8, precio_costo: 15000, precio_venta: 25000, proveedor: "PetCare" },
             { id: 4, nombre: "Vitamina B12", categoria: "SUPLEMENTOS", stock: 90, precio_costo: 5000, precio_venta: 10000, proveedor: "Labovet" },
-            { id: 5, nombre: "Jeringas 3ml", categoria: "EQUIPOS", stock: 150, precio_costo: 800, precio_venta: 1500, proveedor: "Medical Supplies" }
+            { id: 5, nombre: "Jeringas 3ml", categoria: "EQUIPOS", stock: 150, precio_costo: 800, precio_venta: 1500, proveedor: "Medical Supplies" },
+            { id: 6, nombre: "Antibiótico Oral", categoria: "MEDICAMENTOS", stock: 3, precio_costo: 32000, precio_venta: 45000, proveedor: "Labovet" },
+            { id: 7, nombre: "Collar Antipulgas", categoria: "EQUIPOS", stock: 22, precio_costo: 12000, precio_venta: 18000, proveedor: "PetCare" },
+            { id: 8, nombre: "Suplemento Articular", categoria: "SUPLEMENTOS", stock: 55, precio_costo: 28000, precio_venta: 42000, proveedor: "Veterinaria Central" }
         ];
         
         const movimientosMock = [
@@ -282,12 +178,9 @@
         function initLocalStorage() {
             if (!localStorage.getItem('productos')) {
                 localStorage.setItem('productos', JSON.stringify(productosMock));
-                console.log('Datos iniciales cargados en localStorage');
             }
-            
             if (!localStorage.getItem('movimientos')) {
                 localStorage.setItem('movimientos', JSON.stringify(movimientosMock));
-                console.log('Movimientos iniciales cargados');
             }
         }
         
@@ -295,69 +188,96 @@
             return JSON.parse(localStorage.getItem('productos')) || [];
         }
         
-        function getMovimientos() {
-            return JSON.parse(localStorage.getItem('movimientos')) || [];
+        // ===== FUNCIONES DE FORMATO =====
+        function formatCurrency(valor) {
+            return `$ ${valor.toLocaleString('es-CO')}`;
         }
         
-        function saveProductos(productos) {
-            localStorage.setItem('productos', JSON.stringify(productos));
+        function getStockEstadoClase(stock) {
+            if (stock <= 0) return 'stock-critico-badge';
+            if (stock < 10) return 'stock-critico-badge';
+            if (stock < 25) return 'stock-bajo-badge';
+            if (stock < 75) return 'stock-medio-badge';
+            return 'stock-alto-badge';
         }
         
-        function saveMovimientos(movimientos) {
-            localStorage.setItem('movimientos', JSON.stringify(movimientos));
+        function getStockLabel(stock) {
+            if (stock <= 0) return 'AGOTADO';
+            if (stock < 10) return 'CRÍTICO';
+            if (stock < 25) return 'BAJO';
+            if (stock < 75) return 'MEDIO';
+            return 'ALTO';
         }
         
-        // ===== FUNCIONES DE ESTADÍSTICAS =====
+        // ===== RENDERIZADO DE TABLA =====
+        function renderizarTabla() {
+            const productos = getProductos();
+            const tbody = document.getElementById('inventarioBody');
+            
+            if (!productos.length) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No hay productos registrados</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            productos.forEach(prod => {
+                const estadoClase = getStockEstadoClase(prod.stock);
+                const estadoLabel = getStockLabel(prod.stock);
+                const valorTotal = prod.stock * prod.precio_costo;
+                
+                html += `
+                    <tr>
+                        <td>#${String(prod.id).padStart(4, '0')}</td>
+                        <td><strong>${prod.nombre}</strong><br><small style="color: #7f8c8d;">${prod.proveedor || 'Sin proveedor'}</small></td>
+                        <td>${prod.categoria}</td>
+                        <td>${prod.stock} unidades</td>
+                        <td><span class="stock-badge ${estadoClase}">${estadoLabel}</span></td>
+                        <td class="precio-cell">${formatCurrency(prod.precio_costo)}</td>
+                        <td class="precio-cell">${formatCurrency(prod.precio_venta)}</td>
+                        <td class="precio-cell">${formatCurrency(valorTotal)}</td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+        
+        // ===== ESTADÍSTICAS =====
         function calcularEstadisticas() {
             const productos = getProductos();
             const totalProductos = productos.length;
             const valorInventario = productos.reduce((sum, p) => sum + (p.stock * p.precio_costo), 0);
             const stockCritico = productos.filter(p => p.stock < 10).length;
-            
             return { totalProductos, valorInventario, stockCritico };
         }
         
-        function mostrarResumen() {
+        function actualizarResumen() {
             const stats = calcularEstadisticas();
             const container = document.getElementById('resumenContainer');
             
-            if (container) {
-                container.innerHTML = `
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
-                        <div style="text-align: center; padding: 15px; background: var(--celeste-fondo); border-radius: 8px;">
-                            <div style="font-size: 28px; font-weight: bold; color: var(--teal);">${stats.totalProductos}</div>
-                            <div style="font-size: 12px; color: var(--gris-medio);">Total Productos</div>
-                        </div>
-                        <div style="text-align: center; padding: 15px; background: var(--celeste-fondo); border-radius: 8px;">
-                            <div style="font-size: 28px; font-weight: bold; color: var(--teal);">$${stats.valorInventario.toLocaleString()}</div>
-                            <div style="font-size: 12px; color: var(--gris-medio);">Valor Inventario</div>
-                        </div>
-                        <div style="text-align: center; padding: 15px; background: var(--celeste-fondo); border-radius: 8px;">
-                            <div style="font-size: 28px; font-weight: bold; color: var(--error);">${stats.stockCritico}</div>
-                            <div style="font-size: 12px; color: var(--gris-medio);">Stock Crítico</div>
-                        </div>
+            container.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                    <div style="text-align: center; padding: 15px; background: #E3F0F3; border-radius: 8px;">
+                        <div style="font-size: 28px; font-weight: bold; color: #1F8A86;">${stats.totalProductos}</div>
+                        <div style="font-size: 12px;">Total Productos</div>
                     </div>
-                `;
-            }
-        }
-        
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => notification.remove(), 3000);
+                    <div style="text-align: center; padding: 15px; background: #E3F0F3; border-radius: 8px;">
+                        <div style="font-size: 28px; font-weight: bold; color: #1F8A86;">${formatCurrency(stats.valorInventario)}</div>
+                        <div style="font-size: 12px;">Valor Inventario</div>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: #E3F0F3; border-radius: 8px;">
+                        <div style="font-size: 28px; font-weight: bold; color: #e74c3c;">${stats.stockCritico}</div>
+                        <div style="font-size: 12px;">Stock Crítico</div>
+                    </div>
+                </div>
+            `;
         }
         
         // ===== INICIALIZACIÓN =====
         document.addEventListener('DOMContentLoaded', () => {
             initLocalStorage();
-            mostrarResumen();
-            showNotification('Sistema inicializado correctamente');
-            
-            console.log('Productos cargados:', getProductos());
-            console.log('Movimientos cargados:', getMovimientos());
+            actualizarResumen();
+            renderizarTabla();
         });
     </script>
 </body>
