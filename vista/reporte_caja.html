@@ -106,6 +106,17 @@
         .formula-text { font-size: 13px; color: var(--gris-oscuro); line-height: 1.5; }
         .formula-highlight { background: var(--total-caja); color: white; padding: 2px 8px; border-radius: 4px; font-weight: 600; margin: 0 3px; }
         
+        .form-container { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+        .form-title { font-size: 20px; color: var(--teal); display: flex; align-items: center; gap: 10px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-label { font-size: 14px; color: var(--gris-oscuro); font-weight: 500; }
+        .form-input, .form-select, .form-textarea { padding: 12px 15px; border: 2px solid var(--gris-claro); border-radius: 8px; font-size: 14px; transition: all 0.3s; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(31,138,134,0.1); }
+        .form-textarea { min-height: 100px; resize: vertical; }
+        .form-actions { display: flex; gap: 15px; justify-content: flex-end; margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--gris-claro); }
+        
         .tablas-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 25px; margin-bottom: 25px; }
         .tabla-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .tabla-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -121,14 +132,14 @@
         .monto-egreso { color: var(--error); }
         .fecha-cell { font-size: 13px; color: var(--gris-medio); }
         .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-        .badge-venta { background: rgba(39, 174, 96, 0.1); color: var(--exito); }
-        .badge-servicio { background: rgba(52, 152, 219, 0.1); color: var(--info); }
-        .badge-insumo { background: rgba(192, 138, 103, 0.1); color: var(--terracota); }
-        .badge-salario { background: rgba(231, 76, 60, 0.1); color: var(--error); }
-        .badge-alquiler { background: rgba(155, 89, 182, 0.1); color: #9b59b6; }
-        .badge-auxiliar { background: rgba(31, 138, 134, 0.1); color: var(--teal); }
-        .badge-proveedor { background: rgba(217, 201, 53, 0.1); color: var(--mostaza); }
-        .badge-otros { background: rgba(149, 165, 166, 0.1); color: var(--gris-medio); }
+        .badge-venta { background: rgba(39,174,96,0.1); color: var(--exito); }
+        .badge-servicio { background: rgba(52,152,219,0.1); color: var(--info); }
+        .badge-insumo { background: rgba(192,138,103,0.1); color: var(--terracota); }
+        .badge-salario { background: rgba(231,76,60,0.1); color: var(--error); }
+        .badge-alquiler { background: rgba(155,89,182,0.1); color: #9b59b6; }
+        .badge-auxiliar { background: rgba(31,138,134,0.1); color: var(--teal); }
+        .badge-proveedor { background: rgba(217,201,53,0.1); color: var(--mostaza); }
+        .badge-otros { background: rgba(149,165,166,0.1); color: var(--gris-medio); }
         
         .table-empty { text-align: center; padding: 40px; color: var(--gris-medio); }
         .table-empty i { font-size: 48px; margin-bottom: 15px; opacity: 0.5; display: block; }
@@ -139,26 +150,29 @@
         .page-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
         .page-btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
         
-        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s; }
         .btn-sm { padding: 6px 12px !important; font-size: 12px !important; }
         .btn-secondary { background: var(--gris-claro); color: var(--gris-oscuro); }
         .btn-danger { background: var(--error); color: white; }
         .btn-primary { background: var(--teal); color: white; }
         .btn-success { background: var(--exito); color: white; }
+        .btn-warning { background: var(--advertencia); color: white; }
         
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); display: flex; justify-content: center; align-items: center; z-index: 9999; display: none; }
         .spinner { width: 50px; height: 50px; border: 5px solid var(--gris-claro); border-top: 5px solid var(--teal); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 9999; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease; }
+        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 9999; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease; max-width: 400px; }
         .notification-success { background: var(--exito); color: white; }
         .notification-error { background: var(--error); color: white; }
         .notification-warning { background: var(--advertencia); color: white; }
         .notification-info { background: var(--info); color: white; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         
+        .btn-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s ease-in-out infinite; margin-right: 8px; }
+        
         @media (max-width: 1200px) { .dashboard-container { grid-template-columns: repeat(2, 1fr); } .card-lg { grid-column: span 2; } }
-        @media (max-width: 768px) { .top-header { flex-direction: column; gap: 20px; text-align: center; } .periodo-buttons { flex-wrap: wrap; justify-content: center; } .dashboard-container { grid-template-columns: 1fr; } .card-lg { grid-column: span 1; } .tablas-container { grid-template-columns: 1fr; } .date-range { flex-direction: column; } }
+        @media (max-width: 768px) { .top-header { flex-direction: column; gap: 20px; text-align: center; } .periodo-buttons { flex-wrap: wrap; justify-content: center; } .dashboard-container { grid-template-columns: 1fr; } .card-lg { grid-column: span 1; } .tablas-container { grid-template-columns: 1fr; } .date-range { flex-direction: column; } .form-actions { flex-direction: column; } .btn { width: 100%; justify-content: center; } }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -312,6 +326,65 @@
             </div>
         </div>
         
+        <div class="form-container">
+            <div class="form-header">
+                <h2 class="form-title"><i class="fas fa-plus-circle"></i> Registrar Movimiento de Caja</h2>
+                <div class="btn-group">
+                    <button class="btn btn-success" id="btnNuevoIngreso"><i class="fas fa-plus"></i> Nuevo Ingreso</button>
+                    <button class="btn btn-danger" id="btnNuevoEgreso"><i class="fas fa-minus"></i> Nuevo Egreso</button>
+                </div>
+            </div>
+            
+            <div id="formMovimiento" style="display: none;">
+                <form id="movimientoForm" onsubmit="return false;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="tipoMovimiento">Tipo de Movimiento *</label>
+                            <select class="form-select" id="tipoMovimiento" required>
+                                <option value="">Seleccionar tipo</option>
+                                <option value="ingreso">Ingreso</option>
+                                <option value="egreso">Egreso</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="montoMovimiento">Monto *</label>
+                            <input type="number" class="form-input" id="montoMovimiento" placeholder="0.00" min="0.01" step="0.01" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="categoriaMovimiento">Categoría *</label>
+                            <select class="form-select" id="categoriaMovimiento" required>
+                                <option value="venta">Venta de Productos</option>
+                                <option value="servicio">Servicio Veterinario</option>
+                                <option value="insumo">Compra de Insumos</option>
+                                <option value="salario">Pago de Salarios</option>
+                                <option value="alquiler">Pago de Alquiler</option>
+                                <option value="auxiliar">Pago de Auxiliares</option>
+                                <option value="proveedor">Pago de Proveedores</option>
+                                <option value="otros">Otros</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="fechaMovimiento">Fecha *</label>
+                            <input type="datetime-local" class="form-input" id="fechaMovimiento" required>
+                        </div>
+                        
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label class="form-label" for="razonMovimiento">Descripción / Razón *</label>
+                            <textarea class="form-textarea" id="razonMovimiento" placeholder="Describa el motivo del movimiento..." rows="3" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="btnCancelarMovimiento"><i class="fas fa-times"></i> Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btnGuardarMovimiento"><i class="fas fa-save"></i> <span id="btnGuardarText">Guardar Movimiento</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
         <div class="tablas-container">
             <div class="tabla-card">
                 <div class="tabla-header">
@@ -320,7 +393,7 @@
                 </div>
                 <table class="reporte-table ingresos-table" id="tablaIngresos">
                     <thead><tr><th width="20%">Fecha</th><th width="35%">Descripción</th><th width="15%">Categoría</th><th width="15%">Monto</th><th width="15%">Acciones</th></tr></thead>
-                    <tbody id="tbodyIngresos"><tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay ingresos manuales</h3><p>Registra un nuevo ingreso usando el botón "Nuevo Ingreso"</p></td></tr></tbody>
+                    <tbody id="tbodyIngresos"><tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay ingresos manuales</h3><p>Registra un nuevo ingreso usando el botón "Nuevo Ingreso"</p></tr></tr></tbody>
                 </table>
                 <div class="pagination" id="paginationIngresos"></div>
             </div>
@@ -346,6 +419,8 @@
         let periodoActual = "hoy";
         let sidebarCollapsed = false;
         let movimientosData = [];
+        let movimientoEditandoId = null;
+        let isSubmitting = false;
         
         const MOCK_MOVIMIENTOS = [
             { id: 1, tipo: 'ingreso', monto: 150000, categoria: 'venta', razon: 'Venta de productos agrícolas', fecha: new Date().toISOString().slice(0, 19).replace('T', ' ') },
@@ -489,7 +564,7 @@
         function renderTablaEgresos(egresos) {
             const tbody = document.getElementById('tbodyEgresos');
             if (!egresos || egresos.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay egresos</h3></td></td>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="table-empty"><i class="fas fa-coins"></i><h3>No hay egresos</h3></td></tr>`;
                 return;
             }
             tbody.innerHTML = '';
@@ -565,6 +640,81 @@
             actualizarDashboardUI();
         }
         
+        function setSubmittingState(submitting) {
+            const btnGuardar = document.getElementById('btnGuardarMovimiento');
+            const btnText = document.getElementById('btnGuardarText');
+            if (submitting) {
+                isSubmitting = true;
+                btnGuardar.disabled = true;
+                btnText.innerHTML = '<span class="btn-spinner"></span> Procesando...';
+            } else {
+                isSubmitting = false;
+                btnGuardar.disabled = false;
+                btnText.textContent = movimientoEditandoId ? 'Actualizar Movimiento' : 'Guardar Movimiento';
+            }
+        }
+        
+        function mostrarFormularioMovimiento(tipo) {
+            document.getElementById('formMovimiento').style.display = 'block';
+            document.getElementById('tipoMovimiento').value = tipo;
+            const ahora = new Date();
+            const fechaLocal = new Date(ahora.getTime() - (ahora.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+            document.getElementById('fechaMovimiento').value = fechaLocal;
+            document.getElementById('montoMovimiento').value = '';
+            document.getElementById('razonMovimiento').value = '';
+            document.getElementById('categoriaMovimiento').value = tipo === 'ingreso' ? 'venta' : 'insumo';
+            movimientoEditandoId = null;
+            document.getElementById('formMovimiento').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function editarMovimiento(id) {
+            const movimiento = movimientosData.find(m => m.id === id);
+            if (!movimiento) return;
+            document.getElementById('formMovimiento').style.display = 'block';
+            document.getElementById('tipoMovimiento').value = movimiento.tipo;
+            document.getElementById('montoMovimiento').value = movimiento.monto;
+            document.getElementById('categoriaMovimiento').value = movimiento.categoria;
+            const fechaObj = new Date(movimiento.fecha);
+            if (!isNaN(fechaObj.getTime())) {
+                const fechaLocal = new Date(fechaObj.getTime() - (fechaObj.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+                document.getElementById('fechaMovimiento').value = fechaLocal;
+            }
+            document.getElementById('razonMovimiento').value = movimiento.razon;
+            movimientoEditandoId = id;
+            document.getElementById('formMovimiento').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function procesarMovimiento() {
+            if (isSubmitting) { showNotification('Espere...', 'warning'); return; }
+            const tipo = document.getElementById('tipoMovimiento').value;
+            const monto = parseFloat(document.getElementById('montoMovimiento').value);
+            const categoria = document.getElementById('categoriaMovimiento').value;
+            const fechaInput = document.getElementById('fechaMovimiento').value;
+            const razon = document.getElementById('razonMovimiento').value.trim();
+            if (!monto || monto <= 0) { showNotification('Monto inválido', 'error'); return; }
+            if (!razon) { showNotification('Descripción requerida', 'error'); return; }
+            if (!fechaInput) { showNotification('Fecha requerida', 'error'); return; }
+            let fechaMySQL = fechaInput.replace('T', ' ') + ':00';
+            setSubmittingState(true);
+            if (movimientoEditandoId) {
+                const index = movimientosData.findIndex(m => m.id === movimientoEditandoId);
+                if (index !== -1) {
+                    movimientosData[index] = { ...movimientosData[index], tipo, monto, categoria, razon, fecha: fechaMySQL };
+                    guardarMovimientos();
+                    showNotification('Movimiento actualizado correctamente', 'success');
+                }
+            } else {
+                const nuevoId = Date.now();
+                movimientosData.push({ id: nuevoId, tipo, monto, categoria, razon, fecha: fechaMySQL });
+                guardarMovimientos();
+                showNotification('Movimiento creado correctamente', 'success');
+            }
+            document.getElementById('formMovimiento').style.display = 'none';
+            movimientoEditandoId = null;
+            actualizarDatos();
+            setSubmittingState(false);
+        }
+        
         function eliminarMovimiento(id) {
             if (!confirm('¿Está seguro de eliminar este movimiento?')) return;
             const index = movimientosData.findIndex(m => m.id === id);
@@ -574,10 +724,6 @@
                 actualizarDatos();
                 showNotification('Movimiento eliminado correctamente', 'success');
             }
-        }
-        
-        function editarMovimiento(id) {
-            showNotification('Función de edición disponible en próximo sprint', 'info');
         }
         
         function getPeriodoNombre(periodo) {
@@ -628,6 +774,14 @@
             document.getElementById('toggleSidebar').addEventListener('click', toggleSidebar);
             document.getElementById('toggleSidebarCollapsed').addEventListener('click', toggleSidebar);
             document.getElementById('periodoActual').textContent = `(${getPeriodoNombre(periodoActual)})`;
+            document.getElementById('btnNuevoIngreso').addEventListener('click', () => mostrarFormularioMovimiento('ingreso'));
+            document.getElementById('btnNuevoEgreso').addEventListener('click', () => mostrarFormularioMovimiento('egreso'));
+            document.getElementById('btnCancelarMovimiento').addEventListener('click', () => {
+                document.getElementById('formMovimiento').style.display = 'none';
+                movimientoEditandoId = null;
+                setSubmittingState(false);
+            });
+            document.getElementById('movimientoForm').addEventListener('submit', (e) => { e.preventDefault(); procesarMovimiento(); });
             
             document.querySelectorAll('.periodo-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
