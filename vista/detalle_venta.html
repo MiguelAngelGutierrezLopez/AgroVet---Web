@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventario - Agrovet Yacuanquer</title>
+    <title>Agrovet Yacuanquer - POS</title>
     <style>
         * {
             margin: 0;
@@ -16,8 +16,200 @@
             color: #2c3e50;
             display: flex;
             min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        /* ===== SIDEBAR ===== */
         .sidebar {
             width: 250px;
-            background: #1
+            background: #1F8A86;
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        .logo-container {
+            text-align: center;
+            padding: 20px 15px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        
+        .logo-agro { color: white; }
+        .logo-vet { color: #D9C357; }
+        .slogan {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        .nav-menu {
+            padding: 0 15px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .nav-item:hover {
+            background: rgba(255,255,255,0.15);
+        }
+        
+        .nav-item.active {
+            background: rgba(255,255,255,0.2);
+            border-left: 4px solid #D9C357;
+        }
+        
+        .nav-icon { font-size: 18px; width: 24px; }
+        .nav-text { font-size: 15px; font-weight: 500; }
+        
+        /* ===== CONTENIDO PRINCIPAL ===== */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 30px;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        /* ===== HEADER ===== */
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .header h1 {
+            color: #1F8A86;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        /* ===== CONTENEDORES PRINCIPALES ===== */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            color: #1F8A86;
+            margin-bottom: 20px;
+        }
+        
+        .placeholder {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+            background: #F7F7F4;
+            border-radius: 8px;
+            font-style: italic;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <div class="logo">
+                <span class="logo-agro">AGRO</span>
+                <span class="logo-vet">VET</span>
+            </div>
+            <div class="slogan">Yacuanquer - Sistema POS</div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="/" class="nav-item">
+                <i class="nav-icon fas fa-home"></i>
+                <span class="nav-text">Inicio</span>
+            </a>
+            <a href="/venta" class="nav-item">
+                <i class="nav-icon fas fa-cash-register"></i>
+                <span class="nav-text">Nueva Venta</span>
+            </a>
+            <a href="/productos" class="nav-item">
+                <i class="nav-icon fas fa-boxes"></i>
+                <span class="nav-text">Productos</span>
+            </a>
+            <a href="/usuarios" class="nav-item">
+                <i class="nav-icon fas fa-users"></i>
+                <span class="nav-text">Clientes</span>
+            </a>
+            <a href="/historial" class="nav-item">
+                <i class="nav-icon fas fa-history"></i>
+                <span class="nav-text">Historial</span>
+            </a>
+            <a href="/inventario" class="nav-item active">
+                <i class="nav-icon fas fa-warehouse"></i>
+                <span class="nav-text">Inventario</span>
+            </a>
+            <a href="/reportes" class="nav-item">
+                <i class="nav-icon fas fa-chart-bar"></i>
+                <span class="nav-text">Reportes</span>
+            </a>
+        </nav>
+    </div>
+    
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-content">
+        <div class="header">
+            <h1><i class="fas fa-warehouse"></i> Inventario</h1>
+            <p>Gestión de stock, productos y movimientos</p>
+        </div>
+        
+        <!-- SECCIÓN DE ESTADÍSTICAS -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-chart-pie"></i> Resumen del Inventario</h2>
+            <div class="placeholder">
+                <i class="fas fa-chart-line" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                <p>Gráficos y estadísticas se mostrarán aquí</p>
+            </div>
+        </div>
+        
+        <!-- SECCIÓN DE FILTROS -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-filter"></i> Filtros de Búsqueda</h2>
+            <div class="placeholder">
+                <i class="fas fa-search" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                <p>Controles de filtrado y búsqueda</p>
+            </div>
+        </div>
+        
+        <!-- TABLA DE INVENTARIO -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-list-alt"></i> Listado de Productos</h2>
+            <div class="placeholder">
+                <i class="fas fa-table" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                <p>Tabla de inventario se mostrará aquí</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
