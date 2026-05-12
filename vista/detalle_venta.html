@@ -188,11 +188,6 @@
             color: white;
         }
         
-        .btn-warning {
-            background: linear-gradient(135deg, var(--advertencia) 0%, #d68910 100%);
-            color: white;
-        }
-        
         .btn-secondary {
             background: var(--gris-claro);
             color: var(--gris-oscuro);
@@ -267,6 +262,114 @@
         
         .btn-edit:hover { background: var(--info); color: white; }
         .btn-delete:hover { background: var(--error); color: white; }
+        
+        /* ===== FILTROS ===== */
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .filter-label {
+            font-size: 12px;
+            color: var(--gris-medio);
+            font-weight: 500;
+        }
+        
+        .filter-select, .filter-input {
+            padding: 10px 12px;
+            border: 2px solid var(--gris-claro);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .filter-select:focus, .filter-input:focus {
+            outline: none;
+            border-color: var(--teal);
+        }
+        
+        /* ===== PAGINACIÓN ===== */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--gris-claro);
+            flex-wrap: wrap;
+        }
+        
+        .page-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--gris-claro);
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .page-btn:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+        
+        .page-btn.active {
+            background: var(--teal);
+            color: white;
+            border-color: var(--teal);
+        }
+        
+        .page-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .pagination-info {
+            margin-left: 15px;
+            font-size: 13px;
+            color: var(--gris-medio);
+        }
+        
+        .items-per-page {
+            margin-left: 15px;
+            padding: 6px 10px;
+            border: 1px solid var(--gris-claro);
+            border-radius: 6px;
+        }
+        
+        /* ===== RESUMEN ===== */
+        .resumen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .resumen-card {
+            text-align: center;
+            padding: 20px;
+            background: var(--celeste-fondo);
+            border-radius: 10px;
+        }
+        
+        .resumen-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--teal);
+        }
+        
+        .resumen-title {
+            font-size: 12px;
+            color: var(--gris-medio);
+            margin-top: 5px;
+        }
         
         /* ===== MODALES ===== */
         .modal {
@@ -367,32 +470,6 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
-        
-        /* ===== RESUMEN ===== */
-        .resumen-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .resumen-card {
-            text-align: center;
-            padding: 20px;
-            background: var(--celeste-fondo);
-            border-radius: 10px;
-        }
-        
-        .resumen-value {
-            font-size: 28px;
-            font-weight: bold;
-            color: var(--teal);
-        }
-        
-        .resumen-title {
-            font-size: 12px;
-            color: var(--gris-medio);
-            margin-top: 5px;
-        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -449,6 +526,43 @@
             </button>
         </div>
         
+        <!-- SECCIÓN DE FILTROS -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-filter"></i> Filtros de Búsqueda</h2>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label class="filter-label">Buscar producto</label>
+                    <input type="text" id="searchInput" class="filter-input" placeholder="Nombre o código...">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Categoría</label>
+                    <select id="categoriaFilter" class="filter-select">
+                        <option value="">Todas</option>
+                        <option value="ALIMENTOS">Alimentos</option>
+                        <option value="MEDICAMENTOS">Medicamentos</option>
+                        <option value="SUPLEMENTOS">Suplementos</option>
+                        <option value="VACUNAS">Vacunas</option>
+                        <option value="EQUIPOS">Equipos</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Estado de Stock</label>
+                    <select id="stockFilter" class="filter-select">
+                        <option value="">Todos</option>
+                        <option value="alto">Stock Alto (≥75)</option>
+                        <option value="medio">Stock Medio (25-74)</option>
+                        <option value="bajo">Stock Bajo (10-24)</option>
+                        <option value="critico">Stock Crítico (<10)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">&nbsp;</label>
+                    <button id="limpiarFiltros" class="btn btn-secondary">Limpiar Filtros</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- RESUMEN -->
         <div class="section">
             <h2 class="section-title"><i class="fas fa-chart-pie"></i> Resumen del Inventario</h2>
             <div id="resumenContainer" class="resumen-grid">
@@ -456,6 +570,7 @@
             </div>
         </div>
         
+        <!-- TABLA DE INVENTARIO -->
         <div class="section">
             <h2 class="section-title"><i class="fas fa-list-alt"></i> Listado de Productos</h2>
             <div class="table-container">
@@ -474,10 +589,11 @@
                         </tr>
                     </thead>
                     <tbody id="inventarioBody">
-                        <tr><td colspan="9" style="text-align: center;">Cargando productos...</td><tr>
+                        <tr><td colspan="9" style="text-align: center;">Cargando productos...</td></tr>
                     </tbody>
                 </table>
             </div>
+            <div id="paginationContainer" class="pagination-container"></div>
         </div>
     </div>
     
@@ -552,10 +668,17 @@
             { id: 2, nombre: "Antiparasitario Interno", categoria: "MEDICAMENTOS", stock: 12, precio_costo: 18000, precio_venta: 28000, proveedor: "Veterinaria Central" },
             { id: 3, nombre: "Shampoo Antipulgas", categoria: "EQUIPOS", stock: 8, precio_costo: 15000, precio_venta: 25000, proveedor: "PetCare" },
             { id: 4, nombre: "Vitamina B12", categoria: "SUPLEMENTOS", stock: 90, precio_costo: 5000, precio_venta: 10000, proveedor: "Labovet" },
-            { id: 5, nombre: "Jeringas 3ml", categoria: "EQUIPOS", stock: 150, precio_costo: 800, precio_venta: 1500, proveedor: "Medical Supplies" }
+            { id: 5, nombre: "Jeringas 3ml", categoria: "EQUIPOS", stock: 150, precio_costo: 800, precio_venta: 1500, proveedor: "Medical Supplies" },
+            { id: 6, nombre: "Antibiótico Oral", categoria: "MEDICAMENTOS", stock: 3, precio_costo: 32000, precio_venta: 45000, proveedor: "Labovet" },
+            { id: 7, nombre: "Collar Antipulgas", categoria: "EQUIPOS", stock: 22, precio_costo: 12000, precio_venta: 18000, proveedor: "PetCare" },
+            { id: 8, nombre: "Suplemento Articular", categoria: "SUPLEMENTOS", stock: 55, precio_costo: 28000, precio_venta: 42000, proveedor: "Veterinaria Central" }
         ];
         
         let productoAEliminar = null;
+        let paginaActual = 1;
+        let itemsPorPagina = 10;
+        let productosFiltradosCache = [];
+        let filtrosActuales = { busqueda: '', categoria: '', estadoStock: '' };
         
         // ===== LOCALSTORAGE =====
         function initLocalStorage() {
@@ -596,6 +719,13 @@
             return 'ALTO';
         }
         
+        function getStockEstadoParaFiltro(stock) {
+            if (stock < 10) return 'critico';
+            if (stock < 25) return 'bajo';
+            if (stock < 75) return 'medio';
+            return 'alto';
+        }
+        
         function showNotification(message, isError = false) {
             const notification = document.createElement('div');
             notification.className = `notification ${isError ? 'error' : ''}`;
@@ -604,42 +734,131 @@
             setTimeout(() => notification.remove(), 3000);
         }
         
-        // ===== CRUD OPERACIONES =====
-        function agregarProducto(producto) {
-            const productos = getProductos();
-            producto.id = getNextId();
-            productos.push(producto);
-            saveProductos(productos);
-            actualizarUI();
-            showNotification('Producto agregado correctamente');
+        // ===== FILTROS =====
+        function aplicarFiltros() {
+            filtrosActuales = {
+                busqueda: document.getElementById('searchInput').value.toLowerCase(),
+                categoria: document.getElementById('categoriaFilter').value,
+                estadoStock: document.getElementById('stockFilter').value
+            };
+            paginaActual = 1;
+            renderizarTablaConPaginacion();
+            actualizarResumenConFiltros();
         }
         
-        function actualizarProducto(id, datosActualizados) {
+        function limpiarFiltros() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoriaFilter').value = '';
+            document.getElementById('stockFilter').value = '';
+            filtrosActuales = { busqueda: '', categoria: '', estadoStock: '' };
+            paginaActual = 1;
+            renderizarTablaConPaginacion();
+            actualizarResumenConFiltros();
+        }
+        
+        function filtrarProductos(productos) {
+            return productos.filter(prod => {
+                if (filtrosActuales.busqueda) {
+                    const busca = filtrosActuales.busqueda;
+                    const coincideNombre = prod.nombre.toLowerCase().includes(busca);
+                    const coincideCodigo = `#${prod.id}`.includes(busca);
+                    if (!coincideNombre && !coincideCodigo) return false;
+                }
+                if (filtrosActuales.categoria && prod.categoria !== filtrosActuales.categoria) return false;
+                if (filtrosActuales.estadoStock) {
+                    const estadoProd = getStockEstadoParaFiltro(prod.stock);
+                    if (estadoProd !== filtrosActuales.estadoStock) return false;
+                }
+                return true;
+            });
+        }
+        
+        // ===== PAGINACIÓN =====
+        function renderizarTablaConPaginacion() {
             const productos = getProductos();
-            const index = productos.findIndex(p => p.id === id);
-            if (index !== -1) {
-                productos[index] = { ...productos[index], ...datosActualizados };
-                saveProductos(productos);
-                actualizarUI();
-                showNotification('Producto actualizado correctamente');
+            const productosFiltrados = filtrarProductos(productos);
+            productosFiltradosCache = productosFiltrados;
+            
+            const totalItems = productosFiltrados.length;
+            const totalPaginas = Math.ceil(totalItems / itemsPorPagina);
+            
+            if (paginaActual > totalPaginas) paginaActual = 1;
+            
+            const inicio = (paginaActual - 1) * itemsPorPagina;
+            const fin = inicio + itemsPorPagina;
+            const productosPagina = productosFiltrados.slice(inicio, fin);
+            
+            renderizarTablaConDatos(productosPagina);
+            renderizarPaginacion(totalPaginas, totalItems);
+        }
+        
+        function renderizarPaginacion(totalPaginas, totalItems) {
+            const container = document.getElementById('paginationContainer');
+            if (totalPaginas <= 1 && totalItems <= itemsPorPagina) {
+                container.innerHTML = '';
+                return;
             }
+            
+            let html = `
+                <button class="page-btn" onclick="cambiarPagina(1)" ${paginaActual === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-angle-double-left"></i>
+                </button>
+                <button class="page-btn" onclick="cambiarPagina(${paginaActual - 1})" ${paginaActual === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            `;
+            
+            const maxBotones = 5;
+            let inicioPag = Math.max(1, paginaActual - Math.floor(maxBotones / 2));
+            let finPag = Math.min(totalPaginas, inicioPag + maxBotones - 1);
+            
+            if (finPag - inicioPag + 1 < maxBotones) {
+                inicioPag = Math.max(1, finPag - maxBotones + 1);
+            }
+            
+            for (let i = inicioPag; i <= finPag; i++) {
+                html += `<button class="page-btn ${i === paginaActual ? 'active' : ''}" onclick="cambiarPagina(${i})">${i}</button>`;
+            }
+            
+            html += `
+                <button class="page-btn" onclick="cambiarPagina(${paginaActual + 1})" ${paginaActual === totalPaginas ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button class="page-btn" onclick="cambiarPagina(${totalPaginas})" ${paginaActual === totalPaginas ? 'disabled' : ''}>
+                    <i class="fas fa-angle-double-right"></i>
+                </button>
+                <span class="pagination-info">
+                    Mostrando ${((paginaActual-1)*itemsPorPagina)+1} - ${Math.min(paginaActual*itemsPorPagina, totalItems)} de ${totalItems}
+                </span>
+                <select class="items-per-page" onchange="cambiarItemsPorPagina(this.value)">
+                    <option value="5" ${itemsPorPagina === 5 ? 'selected' : ''}>5 por página</option>
+                    <option value="10" ${itemsPorPagina === 10 ? 'selected' : ''}>10 por página</option>
+                    <option value="25" ${itemsPorPagina === 25 ? 'selected' : ''}>25 por página</option>
+                    <option value="50" ${itemsPorPagina === 50 ? 'selected' : ''}>50 por página</option>
+                </select>
+            `;
+            
+            container.innerHTML = html;
         }
         
-        function eliminarProducto(id) {
-            const productos = getProductos();
-            const nuevosProductos = productos.filter(p => p.id !== id);
-            saveProductos(nuevosProductos);
-            actualizarUI();
-            showNotification('Producto eliminado correctamente');
+        function cambiarPagina(pagina) {
+            const totalPaginas = Math.ceil(productosFiltradosCache.length / itemsPorPagina);
+            if (pagina < 1 || pagina > totalPaginas) return;
+            paginaActual = pagina;
+            renderizarTablaConPaginacion();
         }
         
-        // ===== RENDERIZADO =====
-        function renderizarTabla() {
-            const productos = getProductos();
+        function cambiarItemsPorPagina(cantidad) {
+            itemsPorPagina = parseInt(cantidad);
+            paginaActual = 1;
+            renderizarTablaConPaginacion();
+        }
+        
+        function renderizarTablaConDatos(productos) {
             const tbody = document.getElementById('inventarioBody');
             
             if (!productos.length) {
-                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No hay productos registrados</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No hay productos que coincidan con los filtros</td></tr>';
                 return;
             }
             
@@ -660,12 +879,8 @@
                         <td class="precio-cell">${formatCurrency(prod.precio_venta)}</td>
                         <td class="precio-cell">${formatCurrency(valorTotal)}</td>
                         <td class="action-cell">
-                            <button class="action-btn btn-edit" onclick="editarProducto(${prod.id})" title="Editar">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="action-btn btn-delete" onclick="confirmarEliminar(${prod.id})" title="Eliminar">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <button class="action-btn btn-edit" onclick="editarProducto(${prod.id})"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn btn-delete" onclick="confirmarEliminar(${prod.id})"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
@@ -674,32 +889,62 @@
             tbody.innerHTML = html;
         }
         
-        function actualizarResumen() {
+        function actualizarResumenConFiltros() {
             const productos = getProductos();
-            const totalProductos = productos.length;
-            const valorInventario = productos.reduce((sum, p) => sum + (p.stock * p.precio_costo), 0);
-            const stockCritico = productos.filter(p => p.stock < 10).length;
+            const productosFiltrados = filtrarProductos(productos);
+            const totalProductos = productosFiltrados.length;
+            const valorInventario = productosFiltrados.reduce((sum, p) => sum + (p.stock * p.precio_costo), 0);
+            const stockCritico = productosFiltrados.filter(p => p.stock < 10).length;
             
             const container = document.getElementById('resumenContainer');
             container.innerHTML = `
                 <div class="resumen-card">
                     <div class="resumen-value">${totalProductos}</div>
-                    <div class="resumen-title">Total Productos</div>
+                    <div class="resumen-title">Productos mostrados</div>
                 </div>
                 <div class="resumen-card">
                     <div class="resumen-value">${formatCurrency(valorInventario)}</div>
-                    <div class="resumen-title">Valor Inventario</div>
+                    <div class="resumen-title">Valor total</div>
                 </div>
                 <div class="resumen-card">
                     <div class="resumen-value">${stockCritico}</div>
-                    <div class="resumen-title">Stock Crítico</div>
+                    <div class="resumen-title">Stock crítico</div>
                 </div>
             `;
         }
         
-        function actualizarUI() {
-            renderizarTabla();
-            actualizarResumen();
+        // ===== CRUD OPERACIONES =====
+        function agregarProducto(producto) {
+            const productos = getProductos();
+            producto.id = getNextId();
+            productos.push(producto);
+            saveProductos(productos);
+            actualizarUICompleta();
+            showNotification('Producto agregado correctamente');
+        }
+        
+        function actualizarProducto(id, datosActualizados) {
+            const productos = getProductos();
+            const index = productos.findIndex(p => p.id === id);
+            if (index !== -1) {
+                productos[index] = { ...productos[index], ...datosActualizados };
+                saveProductos(productos);
+                actualizarUICompleta();
+                showNotification('Producto actualizado correctamente');
+            }
+        }
+        
+        function eliminarProducto(id) {
+            const productos = getProductos();
+            const nuevosProductos = productos.filter(p => p.id !== id);
+            saveProductos(nuevosProductos);
+            actualizarUICompleta();
+            showNotification('Producto eliminado correctamente');
+        }
+        
+        function actualizarUICompleta() {
+            renderizarTablaConPaginacion();
+            actualizarResumenConFiltros();
         }
         
         // ===== MODALES =====
@@ -790,8 +1035,11 @@
         document.getElementById('cancelarModal').addEventListener('click', cerrarModalProducto);
         document.getElementById('closeConfirmModal').addEventListener('click', cerrarModalConfirmar);
         document.getElementById('cancelarEliminar').addEventListener('click', cerrarModalConfirmar);
+        document.getElementById('searchInput').addEventListener('input', aplicarFiltros);
+        document.getElementById('categoriaFilter').addEventListener('change', aplicarFiltros);
+        document.getElementById('stockFilter').addEventListener('change', aplicarFiltros);
+        document.getElementById('limpiarFiltros').addEventListener('click', limpiarFiltros);
         
-        // Cerrar modal al hacer clic fuera
         window.addEventListener('click', (e) => {
             if (e.target === document.getElementById('modalProducto')) cerrarModalProducto();
             if (e.target === document.getElementById('modalConfirmar')) cerrarModalConfirmar();
@@ -800,7 +1048,7 @@
         // ===== INICIALIZACIÓN =====
         document.addEventListener('DOMContentLoaded', () => {
             initLocalStorage();
-            actualizarUI();
+            actualizarUICompleta();
         });
     </script>
 </body>
