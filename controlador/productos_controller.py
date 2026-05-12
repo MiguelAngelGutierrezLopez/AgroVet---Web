@@ -15,31 +15,11 @@ productos_bp = Blueprint('productos', __name__, url_prefix='/api/productos')
 @productos_bp.route('/proveedores', methods=['GET'])
 def obtener_proveedores():
     """Obtener lista de proveedores"""
-    try:
-        logger.info("Obteniendo lista de proveedores")
-        
-        proveedores = ProductoModel.obtener_proveedores()
-        
-        # Formatear para el select (mostrar empresa + nombre del contacto)
-        proveedores_formateados = [
-            {
-                'telefono': p['telefono'],
-                'nombre': f"{p['nombre_empresa']} - {p['nombre_proveedor']}"
-            }
-            for p in proveedores
-        ]
-        
-        return jsonify({
-            'success': True,
-            'proveedores': proveedores_formateados
-        })
-        
-    except Exception as e:
-        logger.error(f"Error al obtener proveedores: {str(e)}")
-        return jsonify({
-            'success': False,
-            'message': f'Error al obtener proveedores: {str(e)}'
-        }), 500
+    return jsonify({
+        'success': False,
+        'message': 'Proximamente podras usar estos datos',
+        'proveedores': []
+    }), 200
     
 @productos_bp.route('/', methods=['GET'])
 def obtener_productos():

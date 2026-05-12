@@ -233,23 +233,10 @@ def buscar_productos():
 @ventas_bp.route('/clientes/buscar', methods=['GET'])
 def buscar_clientes():
     """Buscar clientes"""
-    try:
-        busqueda = request.args.get('q', '')
-        logger.debug(f"Buscando clientes: '{busqueda}'")
-        
-        clientes = ClienteModel.buscar_clientes(busqueda)
-        
-        return jsonify({
-            'success': True,
-            'clientes': clientes
-        })
-        
-    except Exception as e:
-        logger.error(f"Error al buscar clientes: {str(e)}")
-        return jsonify({
-            'success': False,
-            'message': f'Error al buscar clientes: {str(e)}'
-        }), 500
+    return jsonify({
+        'success': False,
+        'message': 'Proximamente podras usar estos datos'
+    }), 200
 
 @ventas_bp.route('/test', methods=['GET'])
 def test_ventas():
