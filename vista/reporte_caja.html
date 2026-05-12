@@ -3,44 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Caja - En proceso</title>
+    <title>Reporte de Caja - Agrovet Yacuanquer</title>
     <style>
-        :root { font-family: Arial, sans-serif; color: #333; background: #f5f5f7; }
-        body { margin: 0; display: flex; min-height: 100vh; }
-        .sidebar { width: 240px; background: #1e2a38; color: #f5f7fb; padding: 20px; box-sizing: border-box; }
-        .logo { font-size: 1.6rem; font-weight: 700; margin-bottom: 30px; }
-        .nav-item { display: block; color: #cfd8e3; text-decoration: none; margin-bottom: 12px; padding: 10px 14px; border-radius: 8px; }
-        .nav-item:hover, .nav-item.active { background: #33414f; color: #fff; }
-        .nav-item i { margin-right: 10px; }
-        .main-content { flex: 1; padding: 40px; background: #eef2f6; }
-        .header h1 { margin: 0 0 10px; font-size: 2rem; }
-        .placeholder-box { background: #fff; border: 1px solid #d2d8e2; border-radius: 16px; padding: 40px; box-shadow: 0 8px 24px rgba(15,23,42,0.08); max-width: 860px; }
-        .placeholder-box h2 { margin-top: 0; }
+        :root {
+            --teal: #1F8A86;
+            --terracota: #C08A67;
+            --mostaza: #D9C357;
+            --turquesa: #3FA6A0;
+            --celeste-fondo: #E3F0F3;
+            --blanco-hueso: #F7F7F4;
+            --gris-oscuro: #2c3e50;
+            --gris-medio: #7f8c8d;
+            --gris-claro: #ecf0f1;
+            --exito: #27ae60;
+            --error: #e74c3c;
+            --advertencia: #f39c12;
+            --info: #3498db;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { background-color: var(--blanco-hueso); color: var(--gris-oscuro); display: flex; min-height: 100vh; overflow-x: hidden; }
+        
+        .sidebar { width: 250px; background: var(--teal); color: white; position: fixed; height: 100vh; transition: 0.3s ease; z-index: 1000; left: 0; }
+        .sidebar.collapsed { width: 0; transform: translateX(-100%); opacity: 0; pointer-events: none; }
+        .logo-container { text-align: center; padding: 20px 15px; border-bottom: 2px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+        .logo { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 22px; font-weight: 700; }
+        .logo-agro { color: white; }
+        .logo-vet { color: var(--mostaza); }
+        .slogan { font-size: 11px; opacity: 0.8; margin-top: 5px; }
+        .nav-menu { padding: 0 15px; }
+        .nav-item { display: flex; align-items: center; gap: 10px; padding: 12px 15px; color: white; text-decoration: none; border-radius: 6px; margin-bottom: 6px; background: rgba(255,255,255,0.05); }
+        .nav-item:hover { background: rgba(255,255,255,0.15); }
+        .nav-item.active { background: rgba(255,255,255,0.2); border-left: 3px solid var(--mostaza); }
+        .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+        .nav-text { font-size: 14px; font-weight: 500; }
+        
+        .toggle-sidebar-btn { position: absolute; top: 50%; right: -15px; background: var(--mostaza); color: var(--gris-oscuro); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 1001; }
+        .toggle-sidebar-btn:hover { background: var(--terracota); color: white; }
+        .toggle-sidebar-collapsed { position: fixed; top: 20px; left: 20px; width: 40px; height: 40px; background: var(--teal); color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; cursor: pointer; border: none; box-shadow: 0 3px 10px rgba(0,0,0,0.2); z-index: 999; }
+        .toggle-sidebar-collapsed.show { display: flex; }
+        
+        .main-content { flex: 1; margin-left: 250px; padding: 30px; min-height: 100vh; transition: margin-left 0.3s ease; }
+        .main-content.expanded { margin-left: 0; width: 100%; }
+        
+        .top-header { background: white; border-radius: 12px; padding: 20px 30px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--terracota); }
+        .header-left h1 { color: var(--teal); font-size: 28px; margin-bottom: 5px; }
+        .header-left p { color: var(--gris-medio); font-size: 14px; }
+        .header-stats { display: flex; gap: 20px; }
+        .stat-badge { background: var(--celeste-fondo); padding: 10px 20px; border-radius: 8px; text-align: center; min-width: 140px; }
+        .stat-value { font-size: 18px; font-weight: bold; color: var(--teal); }
+        .stat-label { font-size: 12px; color: var(--gris-medio); }
+        
+        .periodo-container { background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .periodo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+        .periodo-title { font-size: 20px; color: var(--teal); display: flex; align-items: center; gap: 10px; }
+        .periodo-actions { display: flex; gap: 15px; align-items: center; }
+        .periodo-buttons { display: flex; gap: 10px; }
+        .periodo-btn { padding: 10px 20px; border: 2px solid var(--gris-claro); background: white; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .periodo-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
+        
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); display: flex; justify-content: center; align-items: center; z-index: 9999; display: none; }
+        .spinner { width: 50px; height: 50px; border: 5px solid var(--gris-claro); border-top: 5px solid var(--teal); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 9999; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease; }
+        .notification-success { background: var(--exito); color: white; }
+        .notification-error { background: var(--error); color: white; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        
+        @media (max-width: 768px) {
+            .top-header { flex-direction: column; gap: 20px; text-align: center; }
+            .periodo-buttons { flex-wrap: wrap; justify-content: center; }
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <aside class="sidebar">
-        <div class="logo">AGROVET</div>
-        <nav>
-            <a href="/" class="nav-item"><i class="fas fa-home"></i> Inicio</a>
-            <a href="/venta" class="nav-item"><i class="fas fa-cash-register"></i> Nueva Venta</a>
-            <a href="/productos" class="nav-item"><i class="fas fa-boxes"></i> Productos</a>
-            <a href="/usuarios" class="nav-item"><i class="fas fa-users"></i> Clientes</a>
-            <a href="/historial_venta" class="nav-item"><i class="fas fa-history"></i> Historial</a>
-            <a href="/inventario" class="nav-item"><i class="fas fa-warehouse"></i> Inventario</a>
-            <a href="/reporte_caja" class="nav-item active"><i class="fas fa-chart-bar"></i> Reportes</a>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div style="margin-left: 15px; color: var(--teal); font-weight: bold;">Cargando datos...</div>
+    </div>
+    
+    <button class="toggle-sidebar-collapsed" id="toggleSidebarCollapsed">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <div class="sidebar" id="sidebar">
+        <button class="toggle-sidebar-btn" id="toggleSidebar">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="logo-container">
+            <div class="logo">
+                <span class="logo-agro">AGRO</span>
+                <span class="logo-vet">VET</span>
+            </div>
+            <div class="slogan">Yacuanquer - Sistema POS</div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="/" class="nav-item"><i class="nav-icon fas fa-home"></i><span class="nav-text">Inicio</span></a>
+            <a href="/venta" class="nav-item"><i class="nav-icon fas fa-cash-register"></i><span class="nav-text">Nueva Venta</span></a>
+            <a href="/productos" class="nav-item"><i class="nav-icon fas fa-boxes"></i><span class="nav-text">Productos</span></a>
+            <a href="/usuarios" class="nav-item"><i class="nav-icon fas fa-users"></i><span class="nav-text">Clientes</span></a>
+            <a href="/historial_venta" class="nav-item"><i class="nav-icon fas fa-history"></i><span class="nav-text">Historial</span></a>
+            <a href="/inventario" class="nav-item"><i class="nav-icon fas fa-warehouse"></i><span class="nav-text">Inventario</span></a>
+            <a href="/reporte_caja" class="nav-item active"><i class="nav-icon fas fa-chart-bar"></i><span class="nav-text">Reportes</span></a>
         </nav>
-    </aside>
-    <main class="main-content">
-        <header>
-            <h1>Reporte de Caja</h1>
-            <p>Esta sección está en construcción.</p>
+    </div>
+    
+    <div class="main-content" id="mainContent">
+        <header class="top-header">
+            <div class="header-left">
+                <h1><i class="fas fa-chart-bar"></i> Reporte de Caja</h1>
+                <p>Control de ingresos, egresos y balance financiero</p>
+            </div>
+            <div class="header-stats">
+                <div class="stat-badge"><div class="stat-value ingresos" id="totalIngresos">$0</div><div class="stat-label">Ingresos Manuales</div></div>
+                <div class="stat-badge"><div class="stat-value egresos" id="totalEgresos">$0</div><div class="stat-label">Egresos Manuales</div></div>
+                <div class="stat-badge"><div class="stat-value total-caja" id="totalCajaHeader">$0</div><div class="stat-label">Total Caja</div></div>
+            </div>
         </header>
-        <section class="placeholder-box">
-            <h2>En proceso de creación</h2>
-            <p>Pronto podrás acceder a los reportes de caja desde aquí.</p>
-        </section>
-    </main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+        
+        <div class="periodo-container">
+            <div class="periodo-header">
+                <h2 class="periodo-title"><i class="fas fa-calendar-alt"></i> Seleccionar Período de Reporte</h2>
+                <div class="periodo-actions">
+                    <div class="periodo-buttons">
+                        <button class="periodo-btn active" data-periodo="hoy">Hoy</button>
+                        <button class="periodo-btn" data-periodo="semana">Esta Semana</button>
+                        <button class="periodo-btn" data-periodo="mes">Este Mes</button>
+                        <button class="periodo-btn" data-periodo="anio">Este Año</button>
+                        <button class="periodo-btn" data-periodo="personalizado">Personalizado</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let periodoActual = "hoy";
+        let sidebarCollapsed = false;
+        
+        function showNotification(msg, type) {
+            const n = document.createElement('div');
+            n.className = `notification notification-${type}`;
+            n.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>${msg}`;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
+        }
+        
+        function showLoading(mostrar) {
+            document.getElementById('loadingOverlay').style.display = mostrar ? 'flex' : 'none';
+        }
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const btn = document.getElementById('toggleSidebar');
+            const tbc = document.getElementById('toggleSidebarCollapsed');
+            sidebarCollapsed = !sidebarCollapsed;
+            if (sidebarCollapsed) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+                if (btn) btn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                if (tbc) tbc.classList.add('show');
+                localStorage.setItem('sidebarCollapsed', 'true');
+            } else {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+                if (btn) btn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                if (tbc) tbc.classList.remove('show');
+                localStorage.setItem('sidebarCollapsed', 'false');
+            }
+        }
+        
+        function cargarEstadoSidebar() {
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                sidebarCollapsed = true;
+                document.getElementById('sidebar')?.classList.add('collapsed');
+                document.getElementById('mainContent')?.classList.add('expanded');
+                const btn = document.getElementById('toggleSidebar');
+                if (btn) btn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                document.getElementById('toggleSidebarCollapsed')?.classList.add('show');
+            }
+        }
+        
+        function getPeriodoNombre(periodo) {
+            switch(periodo) {
+                case 'hoy': return 'Hoy';
+                case 'semana': return 'Esta Semana';
+                case 'mes': return 'Este Mes';
+                case 'anio': return 'Este Año';
+                default: return 'Período Personalizado';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarEstadoSidebar();
+            document.getElementById('toggleSidebar').addEventListener('click', toggleSidebar);
+            document.getElementById('toggleSidebarCollapsed').addEventListener('click', toggleSidebar);
+            
+            document.querySelectorAll('.periodo-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.periodo-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    periodoActual = this.dataset.periodo;
+                    showNotification(`Período cambiado a ${getPeriodoNombre(periodoActual)}`, 'success');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
