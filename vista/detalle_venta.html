@@ -53,6 +53,67 @@
             height: 100vh;
             box-shadow: 3px 0 10px rgba(0,0,0,0.1);
             z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        
+        .sidebar.collapsed .logo span,
+        .sidebar.collapsed .slogan,
+        .sidebar.collapsed .nav-text {
+            display: none;
+        }
+        
+        .sidebar.collapsed .nav-item {
+            justify-content: center;
+            padding: 12px;
+        }
+        
+        .sidebar-toggle {
+            position: absolute;
+            bottom: 20px;
+            right: -15px;
+            width: 30px;
+            height: 30px;
+            background: var(--mostaza);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--teal);
+            z-index: 1001;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .sidebar-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .sidebar-toggle-collapsed {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--teal);
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-toggle-collapsed:hover {
+            transform: scale(1.05);
+            background: #1a7572;
         }
         
         .logo-container {
@@ -60,6 +121,7 @@
             padding: 15px 20px;
             border-bottom: 2px solid rgba(255,255,255,0.1);
             margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
         
         .logo {
@@ -110,6 +172,11 @@
             margin-left: 250px;
             padding: 25px;
             min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        .main-content.expanded {
+            margin-left: 70px;
         }
         
         /* ===== HEADER ===== */
@@ -572,21 +639,72 @@
             border-top: 1px solid var(--gris-claro);
         }
         
-        /* ===== NOTIFICACIONES ===== */
-        .notification {
+        /* ===== NOTIFICACIONES AVANZADAS ===== */
+        .notification-container {
             position: fixed;
             top: 20px;
             right: 20px;
-            padding: 12px 20px;
-            border-radius: 8px;
-            background: var(--exito);
-            color: white;
             z-index: 3000;
-            animation: slideIn 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         
-        .notification.error {
-            background: var(--error);
+        .notification {
+            padding: 14px 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 280px;
+            max-width: 400px;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid;
+        }
+        
+        .notification-success {
+            border-left-color: var(--exito);
+            background: linear-gradient(135deg, #fff, #f0fff4);
+        }
+        .notification-success i { color: var(--exito); }
+        
+        .notification-error {
+            border-left-color: var(--error);
+            background: linear-gradient(135deg, #fff, #fff5f5);
+        }
+        .notification-error i { color: var(--error); }
+        
+        .notification-warning {
+            border-left-color: var(--advertencia);
+            background: linear-gradient(135deg, #fff, #fffbeb);
+        }
+        .notification-warning i { color: var(--advertencia); }
+        
+        .notification-info {
+            border-left-color: var(--info);
+            background: linear-gradient(135deg, #fff, #ebf8ff);
+        }
+        .notification-info i { color: var(--info); }
+        
+        .notification-message {
+            flex: 1;
+            font-size: 14px;
+            color: var(--gris-oscuro);
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gris-medio);
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .notification-close:hover {
+            color: var(--gris-oscuro);
         }
         
         @keyframes slideIn {
@@ -594,17 +712,35 @@
             to { transform: translateX(0); opacity: 1; }
         }
         
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
         .placeholder {
             text-align: center;
             padding: 40px;
             color: var(--gris-medio);
+        }
+        
+        /* ===== RESPONSIVE SIDEBAR ===== */
+        @media (max-width: 768px) {
+            .sidebar.collapsed {
+                width: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+            .main-content.expanded {
+                margin-left: 0;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="sidebar">
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
         <div class="logo-container">
             <div class="logo">
                 <span class="logo-agro">AGRO</span>
@@ -643,9 +779,17 @@
                 <span class="nav-text">Reportes</span>
             </a>
         </nav>
+        
+        <div class="sidebar-toggle" id="toggleSidebar">
+            <i class="fas fa-chevron-left"></i>
+        </div>
     </div>
     
-    <div class="main-content">
+    <div class="sidebar-toggle-collapsed" id="toggleSidebarCollapsed" style="display: none;">
+        <i class="fas fa-bars"></i>
+    </div>
+    
+    <div class="main-content" id="mainContent">
         <div class="top-header">
             <div>
                 <h1><i class="fas fa-warehouse"></i> Inventario</h1>
@@ -767,7 +911,10 @@
         </div>
     </div>
     
-    <!-- MODAL PARA PRODUCTO -->
+    <!-- NOTIFICATION CONTAINER -->
+    <div id="notificationContainer" class="notification-container"></div>
+    
+    <!-- MODALES (iguales a commit anterior) -->
     <div class="modal" id="modalProducto">
         <div class="modal-content">
             <div class="modal-header">
@@ -815,7 +962,6 @@
         </div>
     </div>
     
-    <!-- MODAL DE CONFIRMACIÓN PARA ELIMINAR -->
     <div class="modal" id="modalConfirmar">
         <div class="modal-content">
             <div class="modal-header">
@@ -831,7 +977,6 @@
         </div>
     </div>
     
-    <!-- MODAL AJUSTE DE STOCK -->
     <div class="modal" id="modalAjusteStock">
         <div class="modal-content">
             <div class="modal-header">
@@ -905,11 +1050,101 @@
         let filtrosActuales = { busqueda: '', categoria: '', estadoStock: '' };
         let categoriaChart = null;
         let stockStatusChart = null;
+        let sidebarCollapsed = false;
+        
+        // ===== NOTIFICACIONES AVANZADAS =====
+        function showNotification(message, type = 'success', duration = 3000) {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            
+            const iconos = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            
+            notification.innerHTML = `
+                <i class="fas ${iconos[type] || 'fa-info-circle'}"></i>
+                <span class="notification-message">${message}</span>
+                <button class="notification-close"><i class="fas fa-times"></i></button>
+            `;
+            
+            container.appendChild(notification);
+            
+            const closeBtn = notification.querySelector('.notification-close');
+            closeBtn.addEventListener('click', () => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            });
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, duration);
+        }
+        
+        // ===== SIDEBAR TOGGLE =====
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const toggleBtn = document.getElementById('toggleSidebar');
+            const toggleBtnCollapsed = document.getElementById('toggleSidebarCollapsed');
+            
+            sidebarCollapsed = !sidebarCollapsed;
+            
+            if (sidebarCollapsed) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+                toggleBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                toggleBtnCollapsed.style.display = 'flex';
+                localStorage.setItem('sidebarCollapsed', 'true');
+            } else {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+                toggleBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                toggleBtnCollapsed.style.display = 'none';
+                localStorage.setItem('sidebarCollapsed', 'false');
+            }
+            
+            setTimeout(() => {
+                if (categoriaChart) categoriaChart.resize();
+                if (stockStatusChart) stockStatusChart.resize();
+            }, 300);
+        }
+        
+        function cargarEstadoSidebar() {
+            const saved = localStorage.getItem('sidebarCollapsed');
+            if (saved === 'true') {
+                document.getElementById('sidebar').classList.add('collapsed');
+                document.getElementById('mainContent').classList.add('expanded');
+                document.getElementById('toggleSidebar').innerHTML = '<i class="fas fa-chevron-right"></i>';
+                document.getElementById('toggleSidebarCollapsed').style.display = 'flex';
+                sidebarCollapsed = true;
+            }
+        }
+        
+        // ===== VERIFICAR ALERTAS DE STOCK =====
+        function verificarAlertasStock() {
+            const productos = getProductos();
+            const productosCriticos = productos.filter(p => p.stock < 10);
+            const productosBajos = productos.filter(p => p.stock >= 10 && p.stock < 25);
+            
+            if (productosCriticos.length > 0) {
+                showNotification(`⚠️ ${productosCriticos.length} producto(s) con stock crítico (menos de 10 unidades)`, 'warning', 5000);
+            } else if (productosBajos.length > 0) {
+                showNotification(`📦 ${productosBajos.length} producto(s) con stock bajo`, 'info', 4000);
+            }
+        }
         
         // ===== LOCALSTORAGE =====
         function initLocalStorage() {
             if (!localStorage.getItem('productos')) {
                 localStorage.setItem('productos', JSON.stringify(productosMock));
+                showNotification('Datos de ejemplo cargados correctamente', 'info', 3000);
             }
             if (!localStorage.getItem('movimientos')) {
                 localStorage.setItem('movimientos', JSON.stringify(movimientosMock));
@@ -963,14 +1198,6 @@
             return 'alto';
         }
         
-        function showNotification(message, isError = false) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${isError ? 'error' : ''}`;
-            notification.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${message}`;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
-        }
-        
         // ===== SISTEMA DE MOVIMIENTOS =====
         function registrarMovimiento(productoId, productoNombre, tipo, cantidad, motivo, observaciones = '') {
             const movimientos = getMovimientos();
@@ -994,7 +1221,7 @@
             const productos = getProductos();
             const productoIndex = productos.findIndex(p => p.id === productoId);
             if (productoIndex === -1) {
-                showNotification('Producto no encontrado', true);
+                showNotification('Producto no encontrado', 'error');
                 return false;
             }
             const producto = productos[productoIndex];
@@ -1003,7 +1230,7 @@
                 case 'entrada': nuevaCantidad += cantidad; break;
                 case 'salida':
                     if (producto.stock < cantidad) {
-                        showNotification(`Stock insuficiente. Solo hay ${producto.stock} unidades`, true);
+                        showNotification(`Stock insuficiente. Solo hay ${producto.stock} unidades`, 'error');
                         return false;
                     }
                     nuevaCantidad -= cantidad;
@@ -1013,7 +1240,7 @@
             productos[productoIndex].stock = nuevaCantidad;
             saveProductos(productos);
             registrarMovimiento(productoId, producto.nombre, tipo, cantidad, motivo, observaciones);
-            showNotification(`Stock de "${producto.nombre}" actualizado a ${nuevaCantidad} unidades`);
+            showNotification(`Stock de "${producto.nombre}" actualizado a ${nuevaCantidad} unidades`, 'success');
             return true;
         }
         
@@ -1100,7 +1327,7 @@
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
-            showNotification(`Exportados ${productosFiltrados.length} productos`);
+            showNotification(`Exportados ${productosFiltrados.length} productos`, 'success');
         }
         
         // ===== GRÁFICOS =====
@@ -1149,6 +1376,7 @@
             paginaActual = 1;
             renderizarTablaConPaginacion();
             actualizarResumenConFiltros();
+            showNotification('Filtros limpiados', 'info');
         }
         
         function filtrarProductos(productos) {
@@ -1212,6 +1440,7 @@
             itemsPorPagina = parseInt(cantidad);
             paginaActual = 1;
             renderizarTablaConPaginacion();
+            showNotification(`Mostrando ${itemsPorPagina} productos por página`, 'info');
         }
         
         function renderizarTablaConDatos(productos) {
@@ -1223,20 +1452,20 @@
                 const estadoLabel = getStockLabel(prod.stock);
                 const valorTotal = prod.stock * prod.precio_costo;
                 html += `<tr>
-                            <td>#${String(prod.id).padStart(4, '0')}</td>
-                            <td><strong>${prod.nombre}</strong><br><small>${prod.proveedor || 'Sin proveedor'}</small></td>
-                            <td>${prod.categoria}</td>
-                            <td>${prod.stock} und</td>
-                            <td><span class="stock-badge ${estadoClase}">${estadoLabel}</span></td>
-                            <td class="precio-cell">${formatCurrency(prod.precio_costo)}</td>
-                            <td class="precio-cell">${formatCurrency(prod.precio_venta)}</td>
-                            <td class="precio-cell">${formatCurrency(valorTotal)}</td>
-                            <td class="action-cell">
-                                <button class="action-btn btn-adjust" onclick="abrirModalAjuste(${prod.id})"><i class="fas fa-adjust"></i></button>
-                                <button class="action-btn btn-edit" onclick="editarProducto(${prod.id})"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn btn-delete" onclick="confirmarEliminar(${prod.id})"><i class="fas fa-trash"></i></button>
-                            </td>
-                          </tr>`;
+                             <td>#${String(prod.id).padStart(4, '0')}</td>
+                             <td><strong>${prod.nombre}</strong><br><small>${prod.proveedor || 'Sin proveedor'}</small></td>
+                             <td>${prod.categoria}</td>
+                             <td>${prod.stock} und</td>
+                             <td><span class="stock-badge ${estadoClase}">${estadoLabel}</span></td>
+                             <td class="precio-cell">${formatCurrency(prod.precio_costo)}</td>
+                             <td class="precio-cell">${formatCurrency(prod.precio_venta)}</td>
+                             <td class="precio-cell">${formatCurrency(valorTotal)}</td>
+                             <td class="action-cell">
+                                 <button class="action-btn btn-adjust" onclick="abrirModalAjuste(${prod.id})"><i class="fas fa-adjust"></i></button>
+                                 <button class="action-btn btn-edit" onclick="editarProducto(${prod.id})"><i class="fas fa-edit"></i></button>
+                                 <button class="action-btn btn-delete" onclick="confirmarEliminar(${prod.id})"><i class="fas fa-trash"></i></button>
+                             </td>
+                           </tr>`;
             });
             tbody.innerHTML = html;
         }
@@ -1247,11 +1476,12 @@
             const totalProductos = productosFiltrados.length;
             const valorInventario = productosFiltrados.reduce((sum, p) => sum + (p.stock * p.precio_costo), 0);
             const stockCritico = productosFiltrados.filter(p => p.stock < 10).length;
+            const topProductos = calcularProductosMasVendidos();
             document.getElementById('resumenContainer').innerHTML = `
                 <div class="resumen-card"><div class="resumen-value">${totalProductos}</div><div class="resumen-title">Productos</div></div>
                 <div class="resumen-card"><div class="resumen-value">${formatCurrency(valorInventario)}</div><div class="resumen-title">Valor total</div></div>
                 <div class="resumen-card"><div class="resumen-value">${stockCritico}</div><div class="resumen-title">Stock crítico</div></div>
-                <div class="resumen-card"><div class="resumen-value">${topProductos?.[0]?.cantidad || 0}</div><div class="resumen-title">Más vendido (und)</div></div>`;
+                <div class="resumen-card"><div class="resumen-value">${topProductos[0]?.cantidad || 0}</div><div class="resumen-title">Más vendido (und)</div></div>`;
         }
         
         // ===== CRUD =====
@@ -1261,24 +1491,29 @@
             productos.push(producto);
             saveProductos(productos);
             actualizarUICompleta();
-            showNotification('Producto agregado correctamente');
+            showNotification(`Producto "${producto.nombre}" agregado correctamente`, 'success');
+            verificarAlertasStock();
         }
         
         function actualizarProducto(id, datosActualizados) {
             const productos = getProductos();
             const index = productos.findIndex(p => p.id === id);
             if (index !== -1) {
+                const nombreAnterior = productos[index].nombre;
                 productos[index] = { ...productos[index], ...datosActualizados };
                 saveProductos(productos);
                 actualizarUICompleta();
-                showNotification('Producto actualizado correctamente');
+                showNotification(`Producto "${nombreAnterior}" actualizado correctamente`, 'success');
+                verificarAlertasStock();
             }
         }
         
         function eliminarProducto(id) {
-            saveProductos(getProductos().filter(p => p.id !== id));
+            const productos = getProductos();
+            const producto = productos.find(p => p.id === id);
+            saveProductos(productos.filter(p => p.id !== id));
             actualizarUICompleta();
-            showNotification('Producto eliminado correctamente');
+            showNotification(`Producto "${producto?.nombre}" eliminado correctamente`, 'warning');
         }
         
         function actualizarUICompleta() {
@@ -1350,15 +1585,19 @@
             const cantidad = parseInt(document.getElementById('ajusteCantidad').value);
             const motivo = document.getElementById('ajusteMotivo').value;
             const observaciones = document.getElementById('ajusteObservaciones').value;
-            if (!productoId) { showNotification('Seleccione un producto', true); return; }
-            if (!cantidad || cantidad <= 0) { showNotification('Ingrese una cantidad válida', true); return; }
+            if (!productoId) { showNotification('Seleccione un producto', 'error'); return; }
+            if (!cantidad || cantidad <= 0) { showNotification('Ingrese una cantidad válida', 'error'); return; }
             if (ajustarStock(productoId, tipo, cantidad, motivo, observaciones)) {
                 cerrarModalAjuste();
                 actualizarUICompleta();
+                verificarAlertasStock();
             }
         }
         
         // ===== EVENTOS =====
+        document.getElementById('toggleSidebar').addEventListener('click', toggleSidebar);
+        document.getElementById('toggleSidebarCollapsed').addEventListener('click', toggleSidebar);
+        
         document.getElementById('productoForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const id = document.getElementById('productoId').value;
@@ -1368,8 +1607,8 @@
             const precio_costo = parseFloat(document.getElementById('precioCosto').value);
             const precio_venta = parseFloat(document.getElementById('precioVenta').value);
             const proveedor = document.getElementById('proveedor').value;
-            if (!nombre || !categoria || !precio_costo || !precio_venta) { showNotification('Complete todos los campos requeridos', true); return; }
-            if (precio_venta <= precio_costo) { showNotification('El precio de venta debe ser mayor al precio de costo', true); return; }
+            if (!nombre || !categoria || !precio_costo || !precio_venta) { showNotification('Complete todos los campos requeridos', 'error'); return; }
+            if (precio_venta <= precio_costo) { showNotification('El precio de venta debe ser mayor al precio de costo', 'error'); return; }
             const productoData = { nombre, categoria, stock, precio_costo, precio_venta, proveedor };
             if (id) actualizarProducto(parseInt(id), productoData);
             else agregarProducto(productoData);
@@ -1399,10 +1638,12 @@
         });
         
         // ===== INICIALIZACIÓN =====
-        let topProductos = [];
         document.addEventListener('DOMContentLoaded', () => {
+            cargarEstadoSidebar();
             initLocalStorage();
             actualizarUICompleta();
+            verificarAlertasStock();
+            showNotification('Bienvenido al Sistema de Inventario', 'success', 3000);
         });
     </script>
 </body>
