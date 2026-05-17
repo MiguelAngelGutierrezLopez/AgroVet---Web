@@ -1097,7 +1097,7 @@
                 <i class="nav-icon fas fa-home"></i>
                 <span class="nav-text">Inicio</span>
             </a>
-            <a href="/venta" class="nav-item active">
+            <a href="/venta" class="nav-item">
                 <i class="nav-icon fas fa-cash-register"></i>
                 <span class="nav-text">Nueva Venta</span>
             </a>
@@ -1273,11 +1273,6 @@
                     <label class="form-label">Categoría *</label>
                     <select class="form-control" id="categoria" required>
                         <option value="">Seleccionar...</option>
-                        <option value="ALIMENTOS">Alimentos</option>
-                        <option value="MEDICAMENTOS">Medicamentos</option>
-                        <option value="SUPLEMENTOS">Suplementos</option>
-                        <option value="VACUNAS">Vacunas</option>
-                        <option value="EQUIPOS">Equipos</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -1294,7 +1289,8 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Proveedor</label>
-                    <input type="text" class="form-control" id="proveedor" autocomplete="off">
+                    <input type="text" class="form-control" id="proveedor" list="proveedorList" autocomplete="off">
+                    <datalist id="proveedorList"></datalist>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="cancelarModal">Cancelar</button>
@@ -1363,28 +1359,6 @@
     </div>
     
     <script>
-        // ===== DATOS MOCK =====
-        const productosMock = [
-            { id: 1, nombre: "Vacuna Triple Felina", categoria: "VACUNAS", stock: 45, precio_costo: 25000, precio_venta: 35000, proveedor: "Labovet" },
-            { id: 2, nombre: "Antiparasitario Interno", categoria: "MEDICAMENTOS", stock: 12, precio_costo: 18000, precio_venta: 28000, proveedor: "Veterinaria Central" },
-            { id: 3, nombre: "Shampoo Antipulgas", categoria: "EQUIPOS", stock: 8, precio_costo: 15000, precio_venta: 25000, proveedor: "PetCare" },
-            { id: 4, nombre: "Vitamina B12", categoria: "SUPLEMENTOS", stock: 90, precio_costo: 5000, precio_venta: 10000, proveedor: "Labovet" },
-            { id: 5, nombre: "Jeringas 3ml", categoria: "EQUIPOS", stock: 150, precio_costo: 800, precio_venta: 1500, proveedor: "Medical Supplies" },
-            { id: 6, nombre: "Antibiótico Oral", categoria: "MEDICAMENTOS", stock: 3, precio_costo: 32000, precio_venta: 45000, proveedor: "Labovet" },
-            { id: 7, nombre: "Collar Antipulgas", categoria: "EQUIPOS", stock: 22, precio_costo: 12000, precio_venta: 18000, proveedor: "PetCare" },
-            { id: 8, nombre: "Suplemento Articular", categoria: "SUPLEMENTOS", stock: 55, precio_costo: 28000, precio_venta: 42000, proveedor: "Veterinaria Central" }
-        ];
-        
-        const movimientosMock = [
-            { id: 1, producto_id: 1, producto_nombre: "Vacuna Triple Felina", tipo: "salida", cantidad: 8, fecha: "2026-05-10", hora: "10:30", motivo: "venta", observaciones: "" },
-            { id: 2, producto_id: 2, producto_nombre: "Antiparasitario Interno", tipo: "entrada", cantidad: 20, fecha: "2026-05-09", hora: "14:15", motivo: "compra", observaciones: "" },
-            { id: 3, producto_id: 3, producto_nombre: "Shampoo Antipulgas", tipo: "salida", cantidad: 3, fecha: "2026-05-08", hora: "09:45", motivo: "venta", observaciones: "" },
-            { id: 4, producto_id: 1, producto_nombre: "Vacuna Triple Felina", tipo: "salida", cantidad: 5, fecha: "2026-05-07", hora: "16:20", motivo: "venta", observaciones: "" },
-            { id: 5, producto_id: 5, producto_nombre: "Jeringas 3ml", tipo: "entrada", cantidad: 50, fecha: "2026-05-07", hora: "11:20", motivo: "compra", observaciones: "" },
-            { id: 6, producto_id: 2, producto_nombre: "Antiparasitario Interno", tipo: "salida", cantidad: 4, fecha: "2026-05-06", hora: "13:00", motivo: "venta", observaciones: "" },
-            { id: 7, producto_id: 7, producto_nombre: "Collar Antipulgas", tipo: "salida", cantidad: 2, fecha: "2026-05-05", hora: "10:15", motivo: "venta", observaciones: "" }
-        ];
-        
         let productoAEliminar = null;
         let paginaActual = 1;
         let itemsPorPagina = 10;
@@ -1482,31 +1456,100 @@
             }
         }
         
-        // ===== LOCALSTORAGE =====
-        function initLocalStorage() {
-            if (!localStorage.getItem('productos')) {
-                localStorage.setItem('productos', JSON.stringify(productosMock));
-                showNotification('Datos de ejemplo cargados correctamente', 'info', 3000);
+        // ===== DATOS EN MEMORIA =====
+        let productosCache = [];
+        let movimientosCache = [];
+        let filtrosDisponibles = { categorias: [], proveedores: [] };
+
+        async function fetchInventarioAPI(ruta) {
+            const response = await fetch(ruta, { headers: { 'Accept': 'application/json' } });
+            if (!response.ok) {
+                const text = await response.text();
+                throw new Error(`Error ${response.status}: ${text}`);
             }
-            if (!localStorage.getItem('movimientos')) {
-                localStorage.setItem('movimientos', JSON.stringify(movimientosMock));
+            const data = await response.json();
+            if (data.success === false) {
+                throw new Error(data.message || 'Error en la API de inventario');
+            }
+            return data;
+        }
+
+        async function cargarDatosInventario() {
+            try {
+                const [productosResp, filtrosResp, movimientosResp] = await Promise.all([
+                    fetchInventarioAPI('/api/inventario/'),
+                    fetchInventarioAPI('/api/inventario/filtros'),
+                    fetchInventarioAPI('/api/inventario/movimientos?limite=20')
+                ]);
+
+                productosCache = (productosResp.productos || []).map(p => ({
+                    ...p,
+                    stock: p.stock_actual != null ? p.stock_actual : (p.cantidad != null ? p.cantidad : p.stock),
+                    precio_costo: p.precio_costo != null ? p.precio_costo : 0,
+                    precio_venta: p.precio_venta != null ? p.precio_venta : 0
+                }));
+                movimientosCache = movimientosResp.movimientos || [];
+                filtrosDisponibles = {
+                    categorias: filtrosResp.categorias || [],
+                    proveedores: filtrosResp.proveedores || []
+                };
+
+                actualizarSelectCategorias();
+                actualizarProveedores();
+                actualizarUICompleta();
+                showNotification('Inventario cargado desde la base de datos', 'success', 3000);
+            } catch (error) {
+                console.error('Error cargando datos de inventario:', error);
+                showNotification('No se pudieron cargar los datos del inventario desde la base de datos', 'error', 5000);
             }
         }
-        
+
+        function actualizarSelectCategorias() {
+            const filtroSelect = document.getElementById('categoriaFilter');
+            const modalSelect = document.getElementById('categoria');
+            if (filtroSelect) {
+                const opcionesFiltro = ['<option value="">Todas</option>'];
+                filtrosDisponibles.categorias.forEach(c => {
+                    opcionesFiltro.push(`<option value="${c}">${c}</option>`);
+                });
+                filtroSelect.innerHTML = opcionesFiltro.join('');
+            }
+            if (modalSelect) {
+                const opcionesModal = ['<option value="">Seleccionar...</option>'];
+                filtrosDisponibles.categorias.forEach(c => {
+                    opcionesModal.push(`<option value="${c}">${c}</option>`);
+                });
+                modalSelect.innerHTML = opcionesModal.join('');
+            }
+        }
+
+        function actualizarProveedores() {
+            const proveedorList = document.getElementById('proveedorList');
+            if (!proveedorList) return;
+            proveedorList.innerHTML = '';
+            (filtrosDisponibles.proveedores || []).forEach(proveedor => {
+                if (proveedor.nombre_empresa) {
+                    const option = document.createElement('option');
+                    option.value = proveedor.nombre_empresa;
+                    proveedorList.appendChild(option);
+                }
+            });
+        }
+
         function getProductos() {
-            return JSON.parse(localStorage.getItem('productos')) || [];
+            return productosCache;
         }
-        
+
         function saveProductos(productos) {
-            localStorage.setItem('productos', JSON.stringify(productos));
+            productosCache = productos;
         }
-        
+
         function getMovimientos() {
-            return JSON.parse(localStorage.getItem('movimientos')) || [];
+            return movimientosCache;
         }
-        
+
         function saveMovimientos(movimientos) {
-            localStorage.setItem('movimientos', JSON.stringify(movimientos));
+            movimientosCache = movimientos;
         }
         
         function getNextId() {
@@ -1880,17 +1923,25 @@
             document.getElementById('modalProducto').style.display = 'flex';
         }
         
-        window.editarProducto = function(id) {
-            const producto = getProductos().find(p => p.id === id);
+        window.editarProducto = async function(id) {
+            let producto = getProductos().find(p => p.id === id);
+            try {
+                const detalle = await fetchInventarioAPI(`/api/inventario/${id}`);
+                if (detalle && detalle.producto) {
+                    producto = detalle.producto;
+                }
+            } catch (error) {
+                console.warn('No se pudo cargar detalle de producto desde DB, usando caché:', error);
+            }
             if (producto) {
                 document.getElementById('modalTitle').textContent = 'Editar Producto';
                 document.getElementById('productoId').value = producto.id;
-                document.getElementById('nombre').value = producto.nombre;
-                document.getElementById('categoria').value = producto.categoria;
-                document.getElementById('stock').value = producto.stock;
-                document.getElementById('precioCosto').value = producto.precio_costo;
-                document.getElementById('precioVenta').value = producto.precio_venta;
-                document.getElementById('proveedor').value = producto.proveedor || '';
+                document.getElementById('nombre').value = producto.nombre || '';
+                document.getElementById('categoria').value = producto.categoria || '';
+                document.getElementById('stock').value = producto.stock != null ? producto.stock : (producto.cantidad != null ? producto.cantidad : '0');
+                document.getElementById('precioCosto').value = producto.precio_costo != null ? producto.precio_costo : '';
+                document.getElementById('precioVenta').value = producto.precio_venta != null ? producto.precio_venta : '';
+                document.getElementById('proveedor').value = producto.proveedor || producto.nombre_proveedor || '';
                 document.getElementById('modalProducto').style.display = 'flex';
             }
         };
@@ -2005,13 +2056,22 @@
         });
         
         // ===== INICIALIZACIÓN =====
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             cargarEstadoSidebar();
-            initLocalStorage();
-            actualizarUICompleta();
+            actualizarNavActiva();
+            await cargarDatosInventario();
             verificarAlertasStock();
             showNotification('Bienvenido al Sistema de Inventario', 'success', 3000);
             showNotification('Atajos: Ctrl+N (nuevo), Ctrl+F (buscar), Esc (cerrar)', 'info', 5000);
+
+            function actualizarNavActiva() {
+                const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+                const activePath = currentPath === '/detalle_venta' ? '/inventario' : currentPath;
+                document.querySelectorAll('.nav-item').forEach(link => {
+                    const linkHref = link.getAttribute('href')?.replace(/\/$/, '') || '/';
+                    link.classList.toggle('active', linkHref === activePath);
+                });
+            }
             
             // Añadir tooltips a elementos dinámicos después de renderizar
             const observer = new MutationObserver(() => {
