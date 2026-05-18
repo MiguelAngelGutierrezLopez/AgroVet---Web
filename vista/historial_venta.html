@@ -21,317 +21,109 @@
             --info: #3498db;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--blanco-hueso); color: var(--gris-oscuro); display: flex; min-height: 100vh; }
         
-        body {
-            background-color: var(--blanco-hueso);
-            color: var(--gris-oscuro);
-            display: flex;
-            min-height: 100vh;
-        }
-        
-        .sidebar {
-            width: 250px;
-            background: var(--teal);
-            color: white;
-            padding: 20px 0;
-            position: fixed;
-            height: 100vh;
-            z-index: 1000;
-        }
-        
-        .logo-container {
-            text-align: center;
-            padding: 20px 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 22px;
-            font-weight: 700;
-        }
-        
+        .sidebar { width: 250px; background: var(--teal); color: white; padding: 20px 0; position: fixed; height: 100vh; z-index: 1000; }
+        .logo-container { text-align: center; padding: 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+        .logo { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 22px; font-weight: 700; }
         .logo-agro { color: white; }
         .logo-vet { color: var(--mostaza); }
-        .slogan {
-            font-size: 11px;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-        
-        .nav-menu {
-            padding: 0 15px;
-        }
-        
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 15px;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            margin-bottom: 6px;
-            background: rgba(255,255,255,0.05);
-        }
-        
-        .nav-item:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .nav-item.active {
-            background: rgba(255,255,255,0.15);
-            border-left: 3px solid var(--mostaza);
-        }
-        
+        .slogan { font-size: 11px; opacity: 0.8; margin-top: 5px; }
+        .nav-menu { padding: 0 15px; }
+        .nav-item { display: flex; align-items: center; gap: 10px; padding: 12px 15px; color: white; text-decoration: none; border-radius: 6px; margin-bottom: 6px; background: rgba(255,255,255,0.05); }
+        .nav-item:hover { background: rgba(255,255,255,0.1); }
+        .nav-item.active { background: rgba(255,255,255,0.15); border-left: 3px solid var(--mostaza); }
         .nav-icon { font-size: 16px; width: 20px; text-align: center; }
         .nav-text { font-size: 14px; font-weight: 500; }
         
-        .main-content {
-            flex: 1;
-            margin-left: 250px;
-            padding: 30px;
-            min-height: 100vh;
-        }
-        
-        .top-header {
-            background: white;
-            border-radius: 8px;
-            padding: 20px 30px;
-            margin-bottom: 30px;
-            border: 1px solid var(--gris-claro);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 5px solid var(--terracota);
-        }
-        
-        .header-left h1 {
-            color: var(--teal);
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        
-        .header-left p {
-            color: var(--gris-medio);
-            font-size: 14px;
-        }
-        
-        .header-stats {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .stat-badge {
-            background: var(--celeste-fondo);
-            padding: 10px 15px;
-            border-radius: 6px;
-            text-align: center;
-            min-width: 120px;
-        }
-        
-        .stat-value {
-            font-size: 16px;
-            font-weight: bold;
-            color: var(--teal);
-        }
-        
+        .main-content { flex: 1; margin-left: 250px; padding: 30px; min-height: 100vh; }
+        .top-header { background: white; border-radius: 8px; padding: 20px 30px; margin-bottom: 30px; border: 1px solid var(--gris-claro); display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--terracota); }
+        .header-left h1 { color: var(--teal); font-size: 24px; margin-bottom: 5px; }
+        .header-left p { color: var(--gris-medio); font-size: 14px; }
+        .header-stats { display: flex; gap: 15px; }
+        .stat-badge { background: var(--celeste-fondo); padding: 10px 15px; border-radius: 6px; text-align: center; min-width: 120px; }
+        .stat-value { font-size: 16px; font-weight: bold; color: var(--teal); }
         .stat-value.ingresos { color: var(--exito); }
         .stat-value.utilidad { color: var(--turquesa); }
-        .stat-label {
-            font-size: 12px;
-            color: var(--gris-medio);
-        }
+        .stat-label { font-size: 12px; color: var(--gris-medio); }
         
-        .periodo-container {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-            border: 1px solid var(--gris-claro);
-        }
+        .periodo-container { background: white; border-radius: 8px; padding: 20px; margin-bottom: 25px; border: 1px solid var(--gris-claro); }
+        .periodo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+        .periodo-title { font-size: 18px; color: var(--teal); display: flex; align-items: center; gap: 10px; }
+        .periodo-buttons { display: flex; gap: 8px; }
+        .periodo-btn { padding: 8px 15px; border: 1px solid var(--gris-claro); background: white; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .periodo-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
         
-        .periodo-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
+        .filters-container { background: white; border-radius: 8px; padding: 20px; margin-bottom: 25px; border: 1px solid var(--gris-claro); }
+        .filters-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+        .filters-title { font-size: 16px; color: var(--teal); display: flex; align-items: center; gap: 10px; }
+        .filters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .filter-group { display: flex; flex-direction: column; gap: 6px; }
+        .filter-label { font-size: 13px; color: var(--gris-oscuro); font-weight: 500; }
+        .filter-select, .filter-input { padding: 10px 12px; border: 1px solid var(--gris-claro); border-radius: 6px; font-size: 13px; background: white; }
+        .filtros-activos { background: var(--celeste-fondo); border: 1px solid var(--teal); border-radius: 4px; padding: 6px 10px; font-size: 11px; color: var(--teal); display: flex; align-items: center; gap: 6px; }
         
-        .periodo-title {
-            font-size: 18px;
-            color: var(--teal);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .periodo-buttons {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .periodo-btn {
-            padding: 8px 15px;
-            border: 1px solid var(--gris-claro);
-            background: white;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .periodo-btn.active {
-            background: var(--teal);
-            color: white;
-            border-color: var(--teal);
-        }
-        
-        .dashboard-container {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-            border: 1px solid var(--gris-claro);
-        }
-        
-        .dashboard-title {
-            font-size: 18px;
-            color: var(--teal);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        
-        .dashboard-card {
-            background: var(--blanco-hueso);
-            border-radius: 8px;
-            padding: 20px;
-            border-top: 4px solid;
-            border: 1px solid var(--gris-claro);
-        }
-        
+        .dashboard-container { background: white; border-radius: 8px; padding: 20px; margin-bottom: 25px; border: 1px solid var(--gris-claro); }
+        .dashboard-title { font-size: 18px; color: var(--teal); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .dashboard-card { background: var(--blanco-hueso); border-radius: 8px; padding: 20px; border-top: 4px solid; border: 1px solid var(--gris-claro); }
         .card-1 { border-top-color: var(--exito); }
         .card-2 { border-top-color: var(--info); }
         .card-3 { border-top-color: var(--advertencia); }
         .card-4 { border-top-color: var(--turquesa); }
-        
-        .dashboard-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            margin-bottom: 15px;
-        }
-        
+        .dashboard-icon { width: 50px; height: 50px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; margin-bottom: 15px; }
         .icon-1 { background: var(--exito); }
         .icon-2 { background: var(--info); }
         .icon-3 { background: var(--advertencia); }
         .icon-4 { background: var(--turquesa); }
+        .dashboard-label { font-size: 12px; color: var(--gris-medio); text-transform: uppercase; margin-bottom: 6px; font-weight: 600; }
+        .dashboard-value { font-size: 24px; font-weight: bold; color: var(--gris-oscuro); margin: 8px 0; }
+        .dashboard-description { font-size: 11px; color: var(--gris-medio); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--gris-claro); }
         
-        .dashboard-label {
-            font-size: 12px;
-            color: var(--gris-medio);
-            text-transform: uppercase;
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
+        .table-container { background: white; border-radius: 8px; padding: 20px; border: 1px solid var(--gris-claro); overflow-x: auto; }
+        .historial-table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        .historial-table th { background: var(--gris-claro); padding: 14px 12px; text-align: left; font-weight: 600; font-size: 13px; border-bottom: 2px solid var(--teal); }
+        .historial-table td { padding: 16px 12px; border-bottom: 1px solid var(--gris-claro); }
+        .historial-table tr:hover { background: var(--blanco-hueso); }
         
-        .dashboard-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--gris-oscuro);
-            margin: 8px 0;
-        }
-        
-        .dashboard-description {
-            font-size: 11px;
-            color: var(--gris-medio);
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid var(--gris-claro);
-        }
-        
-        .table-container {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            border: 1px solid var(--gris-claro);
-            overflow-x: auto;
-        }
-        
-        .historial-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 1000px;
-        }
-        
-        .historial-table th {
-            background: var(--gris-claro);
-            padding: 14px 12px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 13px;
-            border-bottom: 2px solid var(--teal);
-        }
-        
-        .historial-table td {
-            padding: 16px 12px;
-            border-bottom: 1px solid var(--gris-claro);
-        }
-        
-        .historial-table tr:hover {
-            background: var(--blanco-hueso);
-        }
-        
-        .pago-badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        
+        .pago-badge { display: inline-block; padding: 5px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; }
         .pago-contado { background: rgba(39, 174, 96, 0.1); color: var(--exito); }
         .pago-credito { background: rgba(52, 152, 219, 0.1); color: var(--info); }
+        .pago-nequi { background: rgba(155, 89, 182, 0.1); color: #9b59b6; }
+        .pago-transferencia { background: rgba(241, 196, 15, 0.1); color: var(--advertencia); }
         
-        .btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-        }
+        .btn { padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .btn-primary { background: var(--teal); color: white; }
+        .btn-secondary { background: var(--gris-claro); color: var(--gris-oscuro); }
         
-        .btn-primary {
-            background: var(--teal);
-            color: white;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
+        .modal-content { background: white; border-radius: 8px; width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { background: var(--teal); color: white; padding: 20px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { font-size: 20px; font-weight: 600; }
+        .modal-close { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+        .modal-body { padding: 25px; }
+        
+        .detalle-section { margin-bottom: 25px; }
+        .section-title { font-size: 16px; color: var(--teal); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--gris-claro); }
+        .detalle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .detalle-item { display: flex; flex-direction: column; gap: 4px; }
+        .detalle-label { font-size: 12px; color: var(--gris-medio); font-weight: 500; }
+        .detalle-value { font-size: 14px; color: var(--gris-oscuro); font-weight: 500; }
+        
+        .productos-detalle { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .productos-detalle th { background: var(--gris-claro); padding: 10px; text-align: left; font-weight: 600; font-size: 12px; }
+        .productos-detalle td { padding: 12px 10px; border-bottom: 1px solid var(--gris-claro); }
+        .total-section { background: var(--blanco-hueso); border-radius: 6px; padding: 15px; margin-top: 15px; display: flex; justify-content: flex-end; }
+        .total-label { font-size: 16px; color: var(--gris-oscuro); font-weight: 600; margin-right: 15px; }
+        .total-valor { font-size: 20px; color: var(--teal); font-weight: bold; }
+        
+        .porcentajes-utilidad { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; padding: 12px; background: var(--blanco-hueso); border-radius: 6px; }
+        .porcentaje-item { text-align: center; padding: 8px; border-radius: 4px; background: white; }
+        .porcentaje-label { font-size: 11px; color: var(--gris-medio); margin-bottom: 4px; }
+        .porcentaje-valor { font-size: 16px; font-weight: bold; color: var(--teal); }
+        .porcentaje-valor.margen { color: var(--turquesa); }
+        .porcentaje-valor.rentabilidad { color: var(--exito); }
         
         @media (max-width: 768px) {
             .top-header { flex-direction: column; text-align: center; }
@@ -339,6 +131,8 @@
             .periodo-header { flex-direction: column; align-items: flex-start; }
             .periodo-buttons { flex-wrap: wrap; }
             .dashboard-grid { grid-template-columns: 1fr; }
+            .filters-grid { grid-template-columns: 1fr; }
+            .detalle-grid { grid-template-columns: 1fr; }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -346,73 +140,33 @@
 <body>
     <div class="sidebar">
         <div class="logo-container">
-            <div class="logo">
-                <span class="logo-agro">AGRO</span>
-                <span class="logo-vet">VET</span>
-            </div>
+            <div class="logo"><span class="logo-agro">AGRO</span><span class="logo-vet">VET</span></div>
             <div class="slogan">Yacuanquer - Sistema POS</div>
         </div>
-        
         <nav class="nav-menu">
-            <a href="/" class="nav-item">
-                <i class="nav-icon fas fa-home"></i>
-                <span class="nav-text">Inicio</span>
-            </a>
-            <a href="/venta" class="nav-item">
-                <i class="nav-icon fas fa-cash-register"></i>
-                <span class="nav-text">Nueva Venta</span>
-            </a>
-            <a href="/productos" class="nav-item">
-                <i class="nav-icon fas fa-boxes"></i>
-                <span class="nav-text">Productos</span>
-            </a>
-            <a href="/usuarios" class="nav-item">
-                <i class="nav-icon fas fa-users"></i>
-                <span class="nav-text">Clientes</span>
-            </a>
-            <a href="/historial_venta" class="nav-item active">
-                <i class="nav-icon fas fa-history"></i>
-                <span class="nav-text">Historial</span>
-            </a>
-            <a href="/inventario" class="nav-item">
-                <i class="nav-icon fas fa-warehouse"></i>
-                <span class="nav-text">Inventario</span>
-            </a>
-            <a href="/reporte_caja" class="nav-item">
-                <i class="nav-icon fas fa-chart-bar"></i>
-                <span class="nav-text">Reportes</span>
-            </a>
+            <a href="/" class="nav-item"><i class="nav-icon fas fa-home"></i><span class="nav-text">Inicio</span></a>
+            <a href="/venta" class="nav-item"><i class="nav-icon fas fa-cash-register"></i><span class="nav-text">Nueva Venta</span></a>
+            <a href="/productos" class="nav-item"><i class="nav-icon fas fa-boxes"></i><span class="nav-text">Productos</span></a>
+            <a href="/usuarios" class="nav-item"><i class="nav-icon fas fa-users"></i><span class="nav-text">Clientes</span></a>
+            <a href="/historial_venta" class="nav-item active"><i class="nav-icon fas fa-history"></i><span class="nav-text">Historial</span></a>
+            <a href="/inventario" class="nav-item"><i class="nav-icon fas fa-warehouse"></i><span class="nav-text">Inventario</span></a>
+            <a href="/reporte_caja" class="nav-item"><i class="nav-icon fas fa-chart-bar"></i><span class="nav-text">Reportes</span></a>
         </nav>
     </div>
     
     <div class="main-content">
         <header class="top-header">
-            <div class="header-left">
-                <h1>Historial de Ventas</h1>
-                <p>Registro completo de todas las transacciones realizadas</p>
-            </div>
+            <div class="header-left"><h1>Historial de Ventas</h1><p>Registro completo de todas las transacciones realizadas</p></div>
             <div class="header-stats">
-                <div class="stat-badge">
-                    <div class="stat-value" id="totalVentas">0</div>
-                    <div class="stat-label">Ventas Totales</div>
-                </div>
-                <div class="stat-badge">
-                    <div class="stat-value ingresos" id="totalIngresos">$0</div>
-                    <div class="stat-label">Total Ingresos</div>
-                </div>
-                <div class="stat-badge">
-                    <div class="stat-value utilidad" id="totalUtilidad">$0</div>
-                    <div class="stat-label">Utilidad Total</div>
-                </div>
+                <div class="stat-badge"><div class="stat-value" id="totalVentas">0</div><div class="stat-label">Ventas Totales</div></div>
+                <div class="stat-badge"><div class="stat-value ingresos" id="totalIngresos">$0</div><div class="stat-label">Total Ingresos</div></div>
+                <div class="stat-badge"><div class="stat-value utilidad" id="totalUtilidad">$0</div><div class="stat-label">Utilidad Total</div></div>
             </div>
         </header>
         
         <div class="periodo-container">
             <div class="periodo-header">
-                <h2 class="periodo-title">
-                    <i class="fas fa-calendar-alt"></i>
-                    Seleccionar Período
-                </h2>
+                <h2 class="periodo-title"><i class="fas fa-calendar-alt"></i> Seleccionar Período</h2>
                 <div class="periodo-buttons">
                     <button class="periodo-btn active" data-periodo="hoy">Hoy</button>
                     <button class="periodo-btn" data-periodo="semana">Esta Semana</button>
@@ -422,82 +176,81 @@
             </div>
         </div>
         
+        <div class="filters-container">
+            <div class="filters-header">
+                <h3 class="filters-title"><i class="fas fa-filter"></i> Filtros de Búsqueda</h3>
+                <div style="display: flex; gap: 10px;">
+                    <div class="filtros-activos" id="filtrosActivos" style="display: none;"><i class="fas fa-filter"></i> <span>Filtros: Ninguno</span></div>
+                    <button class="btn btn-secondary" id="limpiarFiltros"><i class="fas fa-broom"></i> Limpiar Filtros</button>
+                </div>
+            </div>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label class="filter-label">Tipo de Pago</label>
+                    <select class="filter-select" id="filterTipoPago">
+                        <option value="">Todos los tipos</option>
+                        <option value="CONTADO">CONTADO</option>
+                        <option value="CRÉDITO">CRÉDITO</option>
+                        <option value="NEQUI">NEQUI</option>
+                        <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Cliente</label>
+                    <select class="filter-select" id="filterCliente">
+                        <option value="">Todos los clientes</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Producto</label>
+                    <select class="filter-select" id="filterProducto">
+                        <option value="">Todos los productos</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
         <div class="dashboard-container">
-            <h2 class="dashboard-title">
-                <i class="fas fa-chart-line"></i>
-                Dashboard Financiero
-                <span id="periodoActual" style="font-size: 14px; color: var(--gris-medio);">(Hoy)</span>
-            </h2>
+            <h2 class="dashboard-title"><i class="fas fa-chart-line"></i> Dashboard Financiero <span id="periodoActual" style="font-size: 14px; color: var(--gris-medio);">(Hoy)</span></h2>
             <div class="dashboard-grid" id="dashboardGrid">
-                <div class="dashboard-card card-1">
-                    <div class="dashboard-icon icon-1"><i class="fas fa-money-bill-wave"></i></div>
-                    <div class="dashboard-label">Ingresos Cobrados</div>
-                    <div class="dashboard-value" id="ingresosCobrados">$0</div>
-                    <div class="dashboard-description">Dinero que ya entró al negocio</div>
-                </div>
-                <div class="dashboard-card card-2">
-                    <div class="dashboard-icon icon-2"><i class="fas fa-credit-card"></i></div>
-                    <div class="dashboard-label">Pendientes por Cobrar</div>
-                    <div class="dashboard-value" id="pendientesCobrar">$0</div>
-                    <div class="dashboard-description">Ventas a crédito pendientes de pago</div>
-                </div>
-                <div class="dashboard-card card-3">
-                    <div class="dashboard-icon icon-3"><i class="fas fa-chart-line"></i></div>
-                    <div class="dashboard-label">Utilidad Realizada</div>
-                    <div class="dashboard-value" id="utilidadRealizada">$0</div>
-                    <div class="dashboard-description">Ganancia real de ventas de contado</div>
-                </div>
-                <div class="dashboard-card card-4">
-                    <div class="dashboard-icon icon-4"><i class="fas fa-chart-bar"></i></div>
-                    <div class="dashboard-label">Utilidad Proyectada</div>
-                    <div class="dashboard-value" id="utilidadProyectada">$0</div>
-                    <div class="dashboard-description">Ganancia esperada de créditos</div>
-                </div>
+                <div class="dashboard-card card-1"><div class="dashboard-icon icon-1"><i class="fas fa-money-bill-wave"></i></div><div class="dashboard-label">Ingresos Cobrados</div><div class="dashboard-value" id="ingresosCobrados">$0</div><div class="dashboard-description">Dinero que ya entró al negocio</div></div>
+                <div class="dashboard-card card-2"><div class="dashboard-icon icon-2"><i class="fas fa-credit-card"></i></div><div class="dashboard-label">Pendientes por Cobrar</div><div class="dashboard-value" id="pendientesCobrar">$0</div><div class="dashboard-description">Ventas a crédito pendientes de pago</div></div>
+                <div class="dashboard-card card-3"><div class="dashboard-icon icon-3"><i class="fas fa-chart-line"></i></div><div class="dashboard-label">Utilidad Realizada</div><div class="dashboard-value" id="utilidadRealizada">$0</div><div class="dashboard-description">Ganancia real de ventas de contado</div></div>
+                <div class="dashboard-card card-4"><div class="dashboard-icon icon-4"><i class="fas fa-chart-bar"></i></div><div class="dashboard-label">Utilidad Proyectada</div><div class="dashboard-value" id="utilidadProyectada">$0</div><div class="dashboard-description">Ganancia esperada de créditos</div></div>
             </div>
         </div>
         
         <div class="table-container">
             <table class="historial-table">
-                <thead>
-                    <tr>
-                        <th>ID Venta</th>
-                        <th>Cliente</th>
-                        <th>Fecha y Hora</th>
-                        <th>Productos</th>
-                        <th>Total</th>
-                        <th>Utilidad</th>
-                        <th>Método de Pago</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>ID Venta</th><th>Cliente</th><th>Fecha y Hora</th><th>Productos</th><th>Total</th><th>Utilidad</th><th>Método de Pago</th><th>Acciones</th></tr></thead>
                 <tbody id="tablaBody"></tbody>
             </table>
         </div>
     </div>
     
+    <div class="modal-overlay" id="modalDetalle">
+        <div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title">Detalle de Venta</h2><button class="modal-close" id="cerrarModal">&times;</button></div>
+            <div class="modal-body" id="modalDetalleBody"></div>
+        </div>
+    </div>
+    
     <script>
-        // Mock de datos con costos para calcular utilidad
+        // Mock de datos con más variedad
         const ventasMock = [
-            { id: 1, numero_venta: "000001", nombre_cliente: "Juan Pérez", fecha_dia: new Date().toISOString().split('T')[0], fecha_hora: "10:30:00", total: 70000, costo_total: 45000, tipo_pago: "CONTADO", productos: [{ nombre: "Vacuna Triple Felina", cantidad: 2, precio_unitario: 35000, costo_unitario: 22500 }] },
-            { id: 2, numero_venta: "000002", nombre_cliente: "María Gómez", fecha_dia: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], fecha_hora: "15:20:00", total: 28000, costo_total: 18000, tipo_pago: "CRÉDITO", productos: [{ nombre: "Antiparasitario Interno", cantidad: 1, precio_unitario: 28000, costo_unitario: 18000 }] },
-            { id: 3, numero_venta: "000003", nombre_cliente: "Carlos López", fecha_dia: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], fecha_hora: "09:15:00", total: 45000, costo_total: 32000, tipo_pago: "CONTADO", productos: [{ nombre: "Antibiótico Oral", cantidad: 1, precio_unitario: 45000, costo_unitario: 32000 }] },
-            { id: 4, numero_venta: "000004", nombre_cliente: "Ana Martínez", fecha_dia: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], fecha_hora: "14:45:00", total: 18000, costo_total: 15000, tipo_pago: "CRÉDITO", productos: [{ nombre: "Shampoo Antipulgas", cantidad: 1, precio_unitario: 18000, costo_unitario: 15000 }] },
-            { id: 5, numero_venta: "000005", nombre_cliente: "Luis Rodríguez", fecha_dia: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], fecha_hora: "11:00:00", total: 125000, costo_total: 80000, tipo_pago: "CONTADO", productos: [{ nombre: "Suplemento Articular", cantidad: 2, precio_unitario: 62500, costo_unitario: 40000 }] }
+            { id: 1, numero_venta: "000001", nombre_cliente: "Juan Pérez", telefono_cliente: "3123456789", direccion_cliente: "Calle 123", fecha_dia: new Date().toISOString().split('T')[0], fecha_hora: "10:30:00", total: 70000, costo_total: 45000, tipo_pago: "CONTADO", productos: [{ nombre: "Vacuna Triple Felina", categoria: "VACUNAS", cantidad: 2, precio_unitario: 35000, costo_unitario: 22500 }] },
+            { id: 2, numero_venta: "000002", nombre_cliente: "María Gómez", telefono_cliente: "3209876543", direccion_cliente: "Carrera 45", fecha_dia: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], fecha_hora: "15:20:00", total: 28000, costo_total: 18000, tipo_pago: "CRÉDITO", productos: [{ nombre: "Antiparasitario Interno", categoria: "MEDICAMENTOS", cantidad: 1, precio_unitario: 28000, costo_unitario: 18000 }] },
+            { id: 3, numero_venta: "000003", nombre_cliente: "Carlos López", telefono_cliente: "3112345678", direccion_cliente: "Avenida 7", fecha_dia: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], fecha_hora: "09:15:00", total: 45000, costo_total: 32000, tipo_pago: "NEQUI", productos: [{ nombre: "Antibiótico Oral", categoria: "MEDICAMENTOS", cantidad: 1, precio_unitario: 45000, costo_unitario: 32000 }] },
+            { id: 4, numero_venta: "000004", nombre_cliente: "Ana Martínez", telefono_cliente: "3056789012", direccion_cliente: "Calle 89", fecha_dia: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], fecha_hora: "14:45:00", total: 18000, costo_total: 15000, tipo_pago: "TRANSFERENCIA", productos: [{ nombre: "Shampoo Antipulgas", categoria: "EQUIPOS", cantidad: 1, precio_unitario: 18000, costo_unitario: 15000 }] },
+            { id: 5, numero_venta: "000005", nombre_cliente: "Luis Rodríguez", telefono_cliente: "3001234567", direccion_cliente: "Calle 50", fecha_dia: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], fecha_hora: "11:00:00", total: 125000, costo_total: 80000, tipo_pago: "CONTADO", productos: [{ nombre: "Suplemento Articular", categoria: "SUPLEMENTOS", cantidad: 2, precio_unitario: 62500, costo_unitario: 40000 }] }
         ];
         
         function initLocalStorage() {
-            if (!localStorage.getItem('ventas')) {
-                localStorage.setItem('ventas', JSON.stringify(ventasMock));
-            }
+            if (!localStorage.getItem('ventas')) localStorage.setItem('ventas', JSON.stringify(ventasMock));
         }
         
-        function getVentas() {
-            return JSON.parse(localStorage.getItem('ventas')) || [];
-        }
-        
-        function formatCurrency(valor) {
-            return `$ ${valor.toLocaleString('es-CO')}`;
-        }
+        function getVentas() { return JSON.parse(localStorage.getItem('ventas')) || []; }
+        function formatCurrency(valor) { return `$ ${valor.toLocaleString('es-CO')}`; }
         
         function formatDateTime(fecha, hora) {
             if (!fecha) return 'Sin fecha';
@@ -511,34 +264,79 @@
                     let fechaFormateada = `${dia.toString().padStart(2, '0')} ${mesesAbr[mes]} ${año}`;
                     if (hora && hora !== '00:00:00') {
                         const horaPartes = hora.split(':');
-                        if (horaPartes.length >= 2) {
-                            fechaFormateada += ` ${horaPartes[0]}:${horaPartes[1]}`;
-                        }
+                        if (horaPartes.length >= 2) fechaFormateada += ` ${horaPartes[0]}:${horaPartes[1]}`;
                     }
                     return fechaFormateada;
                 }
                 return fecha;
-            } catch {
-                return fecha;
-            }
+            } catch { return fecha; }
         }
         
         function getPagoBadgeClass(tipoPago) {
-            const clases = { 'CONTADO': 'pago-contado', 'CRÉDITO': 'pago-credito' };
+            const clases = { 'CONTADO': 'pago-contado', 'CRÉDITO': 'pago-credito', 'NEQUI': 'pago-nequi', 'TRANSFERENCIA': 'pago-transferencia' };
             return clases[tipoPago] || 'pago-contado';
         }
         
+        function calcularPorcentajesUtilidad(total, costo) {
+            if (!total || total === 0) return { margenVenta: 0, rentabilidadCosto: 0 };
+            const utilidad = total - costo;
+            return { margenVenta: parseFloat(((utilidad / total) * 100).toFixed(1)), rentabilidadCosto: parseFloat(((utilidad / costo) * 100).toFixed(1)) };
+        }
+        
+        function getClientesUnicos(ventas) {
+            const clientesMap = new Map();
+            ventas.forEach(v => { if (v.nombre_cliente) clientesMap.set(v.nombre_cliente, v.nombre_cliente); });
+            return Array.from(clientesMap.values());
+        }
+        
+        function getProductosUnicos(ventas) {
+            const productosSet = new Set();
+            ventas.forEach(v => { v.productos.forEach(p => { if (p.nombre) productosSet.add(p.nombre); }); });
+            return Array.from(productosSet);
+        }
+        
+        function cargarOpcionesFiltros(ventas) {
+            const clientes = getClientesUnicos(ventas);
+            const productos = getProductosUnicos(ventas);
+            
+            const clienteSelect = document.getElementById('filterCliente');
+            clienteSelect.innerHTML = '<option value="">Todos los clientes</option>' + clientes.map(c => `<option value="${c}">${c}</option>`).join('');
+            
+            const productoSelect = document.getElementById('filterProducto');
+            productoSelect.innerHTML = '<option value="">Todos los productos</option>' + productos.map(p => `<option value="${p}">${p}</option>`).join('');
+        }
+        
+        function aplicarFiltros(ventas, tipoPago, cliente, producto) {
+            return ventas.filter(venta => {
+                if (tipoPago && venta.tipo_pago !== tipoPago) return false;
+                if (cliente && venta.nombre_cliente !== cliente) return false;
+                if (producto && !venta.productos.some(p => p.nombre === producto)) return false;
+                return true;
+            });
+        }
+        
+        function actualizarIndicadorFiltros(tipoPago, cliente, producto) {
+            const indicador = document.getElementById('filtrosActivos');
+            const filtrosActivos = [];
+            if (tipoPago) filtrosActivos.push('Tipo Pago');
+            if (cliente) filtrosActivos.push('Cliente');
+            if (producto) filtrosActivos.push('Producto');
+            
+            if (filtrosActivos.length > 0) {
+                indicador.querySelector('span').textContent = `Filtros: ${filtrosActivos.join(', ')}`;
+                indicador.style.display = 'flex';
+            } else {
+                indicador.style.display = 'none';
+            }
+        }
+        
         function filtrarPorPeriodo(ventas, periodo) {
-            const hoy = new Date();
-            hoy.setHours(0, 0, 0, 0);
-            const inicioSemana = new Date(hoy);
-            inicioSemana.setDate(hoy.getDate() - hoy.getDay());
+            const hoy = new Date(); hoy.setHours(0,0,0,0);
+            const inicioSemana = new Date(hoy); inicioSemana.setDate(hoy.getDate() - hoy.getDay());
             const inicioMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
             const inicioAnio = new Date(hoy.getFullYear(), 0, 1);
-            
             return ventas.filter(venta => {
-                const fechaVenta = new Date(venta.fecha_dia);
-                fechaVenta.setHours(0, 0, 0, 0);
+                const fechaVenta = new Date(venta.fecha_dia); fechaVenta.setHours(0,0,0,0);
                 switch(periodo) {
                     case 'hoy': return fechaVenta.getTime() === hoy.getTime();
                     case 'semana': return fechaVenta >= inicioSemana;
@@ -550,20 +348,12 @@
         }
         
         function calcularEstadisticas(ventas) {
-            let totalVentas = 0;
-            let totalIngresos = 0;
-            let totalUtilidad = 0;
-            let ingresosCobrados = 0;
-            let pendientesCobrar = 0;
-            let utilidadRealizada = 0;
-            let utilidadProyectada = 0;
-            
+            let totalVentas = 0, totalIngresos = 0, totalUtilidad = 0, ingresosCobrados = 0, pendientesCobrar = 0, utilidadRealizada = 0, utilidadProyectada = 0;
             ventas.forEach(venta => {
                 totalVentas++;
                 totalIngresos += venta.total;
-                const utilidad = (venta.total - (venta.costo_total || 0));
+                const utilidad = venta.total - (venta.costo_total || 0);
                 totalUtilidad += utilidad;
-                
                 if (venta.tipo_pago === 'CONTADO') {
                     ingresosCobrados += venta.total;
                     utilidadRealizada += utilidad;
@@ -572,33 +362,28 @@
                     utilidadProyectada += utilidad;
                 }
             });
-            
             return { totalVentas, totalIngresos, totalUtilidad, ingresosCobrados, pendientesCobrar, utilidadRealizada, utilidadProyectada };
         }
         
         function renderizarDashboard(ventas, periodo) {
             const stats = calcularEstadisticas(ventas);
-            
             document.getElementById('ingresosCobrados').textContent = formatCurrency(stats.ingresosCobrados);
             document.getElementById('pendientesCobrar').textContent = formatCurrency(stats.pendientesCobrar);
             document.getElementById('utilidadRealizada').textContent = formatCurrency(stats.utilidadRealizada);
             document.getElementById('utilidadProyectada').textContent = formatCurrency(stats.utilidadProyectada);
-            
             const nombrePeriodo = { 'hoy': 'Hoy', 'semana': 'Esta Semana', 'mes': 'Este Mes', 'anio': 'Este Año' };
             document.getElementById('periodoActual').textContent = `(${nombrePeriodo[periodo] || periodo})`;
         }
         
         function renderizarTabla(ventas) {
             const tbody = document.getElementById('tablaBody');
-            
             if (!ventas.length) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No hay ventas en este período</td>';
+                tbody.innerHTML = '<td><td colspan="8" style="text-align: center;">No hay ventas en este período</td></tr>';
                 document.getElementById('totalVentas').textContent = '0';
                 document.getElementById('totalIngresos').textContent = formatCurrency(0);
                 document.getElementById('totalUtilidad').textContent = formatCurrency(0);
                 return;
             }
-            
             const stats = calcularEstadisticas(ventas);
             document.getElementById('totalVentas').textContent = stats.totalVentas;
             document.getElementById('totalIngresos').textContent = formatCurrency(stats.totalIngresos);
@@ -609,43 +394,123 @@
                 const productosText = venta.productos.map(p => `${p.nombre} (${p.cantidad}x)`).join(', ');
                 const fechaFormateada = formatDateTime(venta.fecha_dia, venta.fecha_hora);
                 const utilidad = venta.total - (venta.costo_total || 0);
-                
-                html += `
-                    <tr>
-                        <td>#${venta.numero_venta || String(venta.id).padStart(6, '0')}</td>
-                        <td>${venta.nombre_cliente || 'CLIENTE FINAL'}</td>
-                        <td>${fechaFormateada}</td>
-                        <td>${productosText}</td>
-                        <td>${formatCurrency(venta.total)}</td>
-                        <td style="color: var(--exito);">${formatCurrency(utilidad)}</td>
-                        <td><span class="pago-badge ${getPagoBadgeClass(venta.tipo_pago)}">${venta.tipo_pago || 'CONTADO'}</span></td>
-                        <td><button class="btn btn-primary" onclick="alert('Detalle de venta #${venta.id}')">Ver</button></td>
-                    </tr>
-                `;
+                html += `<tr>
+                            <td>#${venta.numero_venta || String(venta.id).padStart(6, '0')}</td>
+                            <td>${venta.nombre_cliente || 'CLIENTE FINAL'}</td>
+                            <td>${fechaFormateada}</td>
+                            <td>${productosText}</td>
+                            <td>${formatCurrency(venta.total)}</td>
+                            <td style="color: var(--exito);">${formatCurrency(utilidad)}</td>
+                            <td><span class="pago-badge ${getPagoBadgeClass(venta.tipo_pago)}">${venta.tipo_pago || 'CONTADO'}</span></td>
+                            <td><button class="btn btn-primary" onclick="verDetalleVenta(${venta.id})"><i class="fas fa-eye"></i> Ver</button></td>
+                          </tr>`;
             });
-            
             tbody.innerHTML = html;
         }
         
-        function cargarPeriodo(periodo) {
+        function verDetalleVenta(id) {
+            const ventas = getVentas();
+            const venta = ventas.find(v => v.id === id);
+            if (!venta) return;
+            
+            const subtotal = venta.total;
+            const descuento = venta.descuento || 0;
+            const total = venta.total;
+            const costoTotal = venta.costo_total || 0;
+            const utilidadTotal = total - costoTotal;
+            const porcentajes = calcularPorcentajesUtilidad(total, costoTotal);
+            const fechaHora = formatDateTime(venta.fecha_dia, venta.fecha_hora);
+            
+            const modalBody = document.getElementById('modalDetalleBody');
+            modalBody.innerHTML = `
+                <div class="detalle-section"><h3 class="section-title"><i class="fas fa-info-circle"></i> Información de la Venta</h3>
+                    <div class="detalle-grid">
+                        <div class="detalle-item"><div class="detalle-label">ID de Venta</div><div class="detalle-value">#${venta.numero_venta || String(venta.id).padStart(6, '0')}</div></div>
+                        <div class="detalle-item"><div class="detalle-label">Fecha y Hora</div><div class="detalle-value">${fechaHora}</div></div>
+                        <div class="detalle-item"><div class="detalle-label">Método de Pago</div><div class="detalle-value"><span class="pago-badge ${getPagoBadgeClass(venta.tipo_pago)}">${venta.tipo_pago || 'CONTADO'}</span></div></div>
+                    </div>
+                </div>
+                <div class="detalle-section"><h3 class="section-title"><i class="fas fa-user"></i> Información del Cliente</h3>
+                    <div class="detalle-grid">
+                        <div class="detalle-item"><div class="detalle-label">Nombre</div><div class="detalle-value">${venta.nombre_cliente || 'CLIENTE FINAL'}</div></div>
+                        <div class="detalle-item"><div class="detalle-label">Teléfono</div><div class="detalle-value">${venta.telefono_cliente || 'No registrado'}</div></div>
+                        <div class="detalle-item"><div class="detalle-label">Dirección</div><div class="detalle-value">${venta.direccion_cliente || 'No registrada'}</div></div>
+                    </div>
+                </div>
+                <div class="detalle-section"><h3 class="section-title"><i class="fas fa-boxes"></i> Productos Vendidos</h3>
+                    <table class="productos-detalle"><thead><tr><th>Producto</th><th>Categoría</th><th>Cantidad</th><th>Precio Unitario</th><th>Costo Unitario</th><th>Subtotal</th></tr></thead>
+                    <tbody>${venta.productos.map(p => `<tr><td><strong>${p.nombre}</strong></td><td>${p.categoria || ''}</td><td>${p.cantidad}</td><td>${formatCurrency(p.precio_unitario)}</td><td>${formatCurrency(p.costo_unitario)}</td><td>${formatCurrency(p.precio_unitario * p.cantidad)}</td></tr>`).join('')}</tbody>
+                    </table>
+                </div>
+                <div class="detalle-section"><h3 class="section-title"><i class="fas fa-calculator"></i> Resumen Financiero</h3>
+                    <div class="detalle-grid">
+                        <div class="detalle-item"><div class="detalle-label">Subtotal</div><div class="detalle-value">${formatCurrency(subtotal)}</div></div>
+                        <div class="detalle-item"><div class="detalle-label">Descuento</div><div class="detalle-value">${formatCurrency(descuento)}</div></div>
+                    </div>
+                    <div class="total-section"><div class="total-label">TOTAL VENTA</div><div class="total-valor">${formatCurrency(total)}</div></div>
+                </div>
+                <div class="detalle-section"><h3 class="section-title"><i class="fas fa-money-bill-wave"></i> Análisis de Utilidad</h3>
+                    <div class="detalle-grid">
+                        <div class="detalle-item"><div class="detalle-label">Ingresos (Venta)</div><div class="detalle-value" style="color: var(--exito);">${formatCurrency(total)}</div></div>
+                        <div class="detalle-item"><div class="detalle-label">Costos Totales</div><div class="detalle-value" style="color: var(--error);">${formatCurrency(costoTotal)}</div></div>
+                        <div class="detalle-item"><div class="detalle-label">Utilidad Total</div><div class="detalle-value" style="color: var(--turquesa); font-weight: bold;">${formatCurrency(utilidadTotal)}</div></div>
+                    </div>
+                    <div class="porcentajes-utilidad">
+                        <div class="porcentaje-item"><div class="porcentaje-label">Margen sobre Venta</div><div class="porcentaje-valor margen">${porcentajes.margenVenta}%</div></div>
+                        <div class="porcentaje-item"><div class="porcentaje-label">Rentabilidad sobre Costo</div><div class="porcentaje-valor rentabilidad">${porcentajes.rentabilidadCosto}%</div></div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; margin-top: 20px;"><button class="btn btn-secondary" onclick="cerrarModalDetalle()"><i class="fas fa-times"></i> Cerrar</button></div>
+            `;
+            document.getElementById('modalDetalle').style.display = 'flex';
+        }
+        
+        function cerrarModalDetalle() { document.getElementById('modalDetalle').style.display = 'none'; }
+        
+        let periodoActual = 'hoy';
+        let filtrosActuales = { tipoPago: '', cliente: '', producto: '' };
+        
+        function cargarDatos() {
             const todasVentas = getVentas();
-            const ventasFiltradas = filtrarPorPeriodo(todasVentas, periodo);
-            renderizarDashboard(ventasFiltradas, periodo);
+            const ventasPeriodo = filtrarPorPeriodo(todasVentas, periodoActual);
+            const ventasFiltradas = aplicarFiltros(ventasPeriodo, filtrosActuales.tipoPago, filtrosActuales.cliente, filtrosActuales.producto);
+            renderizarDashboard(ventasFiltradas, periodoActual);
             renderizarTabla(ventasFiltradas);
+            actualizarIndicadorFiltros(filtrosActuales.tipoPago, filtrosActuales.cliente, filtrosActuales.producto);
+            cargarOpcionesFiltros(ventasPeriodo);
+        }
+        
+        function limpiarFiltros() {
+            document.getElementById('filterTipoPago').value = '';
+            document.getElementById('filterCliente').value = '';
+            document.getElementById('filterProducto').value = '';
+            filtrosActuales = { tipoPago: '', cliente: '', producto: '' };
+            cargarDatos();
         }
         
         document.addEventListener('DOMContentLoaded', () => {
             initLocalStorage();
-            cargarPeriodo('hoy');
+            cargarDatos();
             
             document.querySelectorAll('.periodo-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.periodo-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
-                    cargarPeriodo(this.dataset.periodo);
+                    periodoActual = this.dataset.periodo;
+                    cargarDatos();
                 });
             });
+            
+            document.getElementById('filterTipoPago').addEventListener('change', (e) => { filtrosActuales.tipoPago = e.target.value; cargarDatos(); });
+            document.getElementById('filterCliente').addEventListener('change', (e) => { filtrosActuales.cliente = e.target.value; cargarDatos(); });
+            document.getElementById('filterProducto').addEventListener('change', (e) => { filtrosActuales.producto = e.target.value; cargarDatos(); });
+            document.getElementById('limpiarFiltros').addEventListener('click', limpiarFiltros);
+            document.getElementById('cerrarModal').addEventListener('click', cerrarModalDetalle);
+            document.getElementById('modalDetalle').addEventListener('click', function(e) { if (e.target === this) cerrarModalDetalle(); });
         });
+        
+        window.verDetalleVenta = verDetalleVenta;
+        window.cerrarModalDetalle = cerrarModalDetalle;
     </script>
 </body>
 </html>
