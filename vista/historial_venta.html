@@ -3,44 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de Ventas - En proceso</title>
+    <title>Historial de Ventas - Agrovet Yacuanquer</title>
     <style>
-        :root { font-family: Arial, sans-serif; color: #333; background: #f5f5f7; }
-        body { margin: 0; display: flex; min-height: 100vh; }
-        .sidebar { width: 240px; background: #1e2a38; color: #f5f7fb; padding: 20px; box-sizing: border-box; }
-        .logo { font-size: 1.6rem; font-weight: 700; margin-bottom: 30px; }
-        .nav-item { display: block; color: #cfd8e3; text-decoration: none; margin-bottom: 12px; padding: 10px 14px; border-radius: 8px; }
-        .nav-item:hover, .nav-item.active { background: #33414f; color: #fff; }
-        .nav-item i { margin-right: 10px; }
-        .main-content { flex: 1; padding: 40px; background: #eef2f6; }
-        .header h1 { margin: 0 0 10px; font-size: 2rem; }
-        .placeholder-box { background: #fff; border: 1px solid #d2d8e2; border-radius: 16px; padding: 40px; box-shadow: 0 8px 24px rgba(15,23,42,0.08); max-width: 860px; }
-        .placeholder-box h2 { margin-top: 0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #F7F7F4;
+            color: #2c3e50;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: #1F8A86;
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            text-align: center;
+            padding: 20px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 700;
+        }
+        
+        .logo-agro { color: white; }
+        .logo-vet { color: #D9C357; }
+        .slogan {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        .nav-menu {
+            padding: 0 15px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .nav-item.active {
+            background: rgba(255,255,255,0.15);
+            border-left: 3px solid #D9C357;
+        }
+        
+        .nav-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .nav-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .top-header {
+            background: white;
+            border-radius: 8px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            border: 1px solid #ecf0f1;
+            border-left: 5px solid #C08A67;
+        }
+        
+        .header-left h1 {
+            color: #1F8A86;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .header-left p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .placeholder {
+            background: white;
+            border-radius: 8px;
+            padding: 60px;
+            text-align: center;
+            border: 1px solid #ecf0f1;
+            color: #7f8c8d;
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <aside class="sidebar">
-        <div class="logo">AGROVET</div>
-        <nav>
-            <a href="/" class="nav-item"><i class="fas fa-home"></i> Inicio</a>
-            <a href="/venta" class="nav-item"><i class="fas fa-cash-register"></i> Nueva Venta</a>
-            <a href="/productos" class="nav-item"><i class="fas fa-boxes"></i> Productos</a>
-            <a href="/usuarios" class="nav-item"><i class="fas fa-users"></i> Clientes</a>
-            <a href="/historial_venta" class="nav-item active"><i class="fas fa-history"></i> Historial</a>
-            <a href="/inventario" class="nav-item"><i class="fas fa-warehouse"></i> Inventario</a>
-            <a href="/reporte_caja" class="nav-item"><i class="fas fa-chart-bar"></i> Reportes</a>
+    <div class="sidebar">
+        <div class="logo-container">
+            <div class="logo">
+                <span class="logo-agro">AGRO</span>
+                <span class="logo-vet">VET</span>
+            </div>
+            <div class="slogan">Yacuanquer - Sistema POS</div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="/" class="nav-item">
+                <i class="nav-icon fas fa-home"></i>
+                <span class="nav-text">Inicio</span>
+            </a>
+            <a href="/venta" class="nav-item">
+                <i class="nav-icon fas fa-cash-register"></i>
+                <span class="nav-text">Nueva Venta</span>
+            </a>
+            <a href="/productos" class="nav-item">
+                <i class="nav-icon fas fa-boxes"></i>
+                <span class="nav-text">Productos</span>
+            </a>
+            <a href="/usuarios" class="nav-item">
+                <i class="nav-icon fas fa-users"></i>
+                <span class="nav-text">Clientes</span>
+            </a>
+            <a href="/historial_venta" class="nav-item active">
+                <i class="nav-icon fas fa-history"></i>
+                <span class="nav-text">Historial</span>
+            </a>
+            <a href="/inventario" class="nav-item">
+                <i class="nav-icon fas fa-warehouse"></i>
+                <span class="nav-text">Inventario</span>
+            </a>
+            <a href="/reporte_caja" class="nav-item">
+                <i class="nav-icon fas fa-chart-bar"></i>
+                <span class="nav-text">Reportes</span>
+            </a>
         </nav>
-    </aside>
-    <main class="main-content">
-        <header>
-            <h1>Historial de Ventas</h1>
-            <p>Esta sección está en construcción.</p>
+    </div>
+    
+    <div class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <h1>Historial de Ventas</h1>
+                <p>Registro completo de todas las transacciones realizadas</p>
+            </div>
         </header>
-        <section class="placeholder-box">
-            <h2>En proceso de creación</h2>
-            <p>Pronto podrás revisar el historial de ventas desde esta sección.</p>
-        </section>
-    </main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+        
+        <div class="placeholder">
+            <i class="fas fa-chart-line" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+            <p>Módulo de Historial de Ventas en construcción</p>
+        </div>
+    </div>
 </body>
 </html>
