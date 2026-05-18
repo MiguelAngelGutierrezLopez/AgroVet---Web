@@ -127,6 +127,155 @@
             font-size: 14px;
         }
         
+        .header-stats {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .stat-badge {
+            background: var(--celeste-fondo);
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .stat-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--teal);
+        }
+        
+        .stat-value.ingresos { color: var(--exito); }
+        .stat-value.utilidad { color: var(--turquesa); }
+        .stat-label {
+            font-size: 12px;
+            color: var(--gris-medio);
+        }
+        
+        .periodo-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--gris-claro);
+        }
+        
+        .periodo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .periodo-title {
+            font-size: 18px;
+            color: var(--teal);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .periodo-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .periodo-btn {
+            padding: 8px 15px;
+            border: 1px solid var(--gris-claro);
+            background: white;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .periodo-btn.active {
+            background: var(--teal);
+            color: white;
+            border-color: var(--teal);
+        }
+        
+        .dashboard-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--gris-claro);
+        }
+        
+        .dashboard-title {
+            font-size: 18px;
+            color: var(--teal);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .dashboard-card {
+            background: var(--blanco-hueso);
+            border-radius: 8px;
+            padding: 20px;
+            border-top: 4px solid;
+            border: 1px solid var(--gris-claro);
+        }
+        
+        .card-1 { border-top-color: var(--exito); }
+        .card-2 { border-top-color: var(--info); }
+        .card-3 { border-top-color: var(--advertencia); }
+        .card-4 { border-top-color: var(--turquesa); }
+        
+        .dashboard-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .icon-1 { background: var(--exito); }
+        .icon-2 { background: var(--info); }
+        .icon-3 { background: var(--advertencia); }
+        .icon-4 { background: var(--turquesa); }
+        
+        .dashboard-label {
+            font-size: 12px;
+            color: var(--gris-medio);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        
+        .dashboard-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--gris-oscuro);
+            margin: 8px 0;
+        }
+        
+        .dashboard-description {
+            font-size: 11px;
+            color: var(--gris-medio);
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--gris-claro);
+        }
+        
         .table-container {
             background: white;
             border-radius: 8px;
@@ -146,7 +295,6 @@
             padding: 14px 12px;
             text-align: left;
             font-weight: 600;
-            color: var(--gris-oscuro);
             font-size: 13px;
             border-bottom: 2px solid var(--teal);
         }
@@ -170,6 +318,28 @@
         
         .pago-contado { background: rgba(39, 174, 96, 0.1); color: var(--exito); }
         .pago-credito { background: rgba(52, 152, 219, 0.1); color: var(--info); }
+        
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: var(--teal);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .top-header { flex-direction: column; text-align: center; }
+            .header-stats { justify-content: center; flex-wrap: wrap; }
+            .periodo-header { flex-direction: column; align-items: flex-start; }
+            .periodo-buttons { flex-wrap: wrap; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -221,7 +391,70 @@
                 <h1>Historial de Ventas</h1>
                 <p>Registro completo de todas las transacciones realizadas</p>
             </div>
+            <div class="header-stats">
+                <div class="stat-badge">
+                    <div class="stat-value" id="totalVentas">0</div>
+                    <div class="stat-label">Ventas Totales</div>
+                </div>
+                <div class="stat-badge">
+                    <div class="stat-value ingresos" id="totalIngresos">$0</div>
+                    <div class="stat-label">Total Ingresos</div>
+                </div>
+                <div class="stat-badge">
+                    <div class="stat-value utilidad" id="totalUtilidad">$0</div>
+                    <div class="stat-label">Utilidad Total</div>
+                </div>
+            </div>
         </header>
+        
+        <div class="periodo-container">
+            <div class="periodo-header">
+                <h2 class="periodo-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    Seleccionar Período
+                </h2>
+                <div class="periodo-buttons">
+                    <button class="periodo-btn active" data-periodo="hoy">Hoy</button>
+                    <button class="periodo-btn" data-periodo="semana">Esta Semana</button>
+                    <button class="periodo-btn" data-periodo="mes">Este Mes</button>
+                    <button class="periodo-btn" data-periodo="anio">Este Año</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-container">
+            <h2 class="dashboard-title">
+                <i class="fas fa-chart-line"></i>
+                Dashboard Financiero
+                <span id="periodoActual" style="font-size: 14px; color: var(--gris-medio);">(Hoy)</span>
+            </h2>
+            <div class="dashboard-grid" id="dashboardGrid">
+                <div class="dashboard-card card-1">
+                    <div class="dashboard-icon icon-1"><i class="fas fa-money-bill-wave"></i></div>
+                    <div class="dashboard-label">Ingresos Cobrados</div>
+                    <div class="dashboard-value" id="ingresosCobrados">$0</div>
+                    <div class="dashboard-description">Dinero que ya entró al negocio</div>
+                </div>
+                <div class="dashboard-card card-2">
+                    <div class="dashboard-icon icon-2"><i class="fas fa-credit-card"></i></div>
+                    <div class="dashboard-label">Pendientes por Cobrar</div>
+                    <div class="dashboard-value" id="pendientesCobrar">$0</div>
+                    <div class="dashboard-description">Ventas a crédito pendientes de pago</div>
+                </div>
+                <div class="dashboard-card card-3">
+                    <div class="dashboard-icon icon-3"><i class="fas fa-chart-line"></i></div>
+                    <div class="dashboard-label">Utilidad Realizada</div>
+                    <div class="dashboard-value" id="utilidadRealizada">$0</div>
+                    <div class="dashboard-description">Ganancia real de ventas de contado</div>
+                </div>
+                <div class="dashboard-card card-4">
+                    <div class="dashboard-icon icon-4"><i class="fas fa-chart-bar"></i></div>
+                    <div class="dashboard-label">Utilidad Proyectada</div>
+                    <div class="dashboard-value" id="utilidadProyectada">$0</div>
+                    <div class="dashboard-description">Ganancia esperada de créditos</div>
+                </div>
+            </div>
+        </div>
         
         <div class="table-container">
             <table class="historial-table">
@@ -232,32 +465,187 @@
                         <th>Fecha y Hora</th>
                         <th>Productos</th>
                         <th>Total</th>
+                        <th>Utilidad</th>
                         <th>Método de Pago</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>#0001</td>
-                        <td>Juan Pérez</td>
-                        <td>15 may 2026 10:30</td>
-                        <td>Vacuna Triple (2x)</td>
-                        <td>$ 70,000</td>
-                        <td><span class="pago-badge pago-contado">CONTADO</span></td>
-                        <td><button class="btn btn-primary">Ver</button></td>
-                    </tr>
-                    <tr>
-                        <td>#0002</td>
-                        <td>María Gómez</td>
-                        <td>14 may 2026 15:20</td>
-                        <td>Antiparasitario (1x)</td>
-                        <td>$ 28,000</td>
-                        <td><span class="pago-badge pago-credito">CRÉDITO</span></td>
-                        <td><button class="btn btn-primary">Ver</button></td>
-                    </tr>
-                </tbody>
+                <tbody id="tablaBody"></tbody>
             </table>
         </div>
     </div>
+    
+    <script>
+        // Mock de datos con costos para calcular utilidad
+        const ventasMock = [
+            { id: 1, numero_venta: "000001", nombre_cliente: "Juan Pérez", fecha_dia: new Date().toISOString().split('T')[0], fecha_hora: "10:30:00", total: 70000, costo_total: 45000, tipo_pago: "CONTADO", productos: [{ nombre: "Vacuna Triple Felina", cantidad: 2, precio_unitario: 35000, costo_unitario: 22500 }] },
+            { id: 2, numero_venta: "000002", nombre_cliente: "María Gómez", fecha_dia: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], fecha_hora: "15:20:00", total: 28000, costo_total: 18000, tipo_pago: "CRÉDITO", productos: [{ nombre: "Antiparasitario Interno", cantidad: 1, precio_unitario: 28000, costo_unitario: 18000 }] },
+            { id: 3, numero_venta: "000003", nombre_cliente: "Carlos López", fecha_dia: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], fecha_hora: "09:15:00", total: 45000, costo_total: 32000, tipo_pago: "CONTADO", productos: [{ nombre: "Antibiótico Oral", cantidad: 1, precio_unitario: 45000, costo_unitario: 32000 }] },
+            { id: 4, numero_venta: "000004", nombre_cliente: "Ana Martínez", fecha_dia: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], fecha_hora: "14:45:00", total: 18000, costo_total: 15000, tipo_pago: "CRÉDITO", productos: [{ nombre: "Shampoo Antipulgas", cantidad: 1, precio_unitario: 18000, costo_unitario: 15000 }] },
+            { id: 5, numero_venta: "000005", nombre_cliente: "Luis Rodríguez", fecha_dia: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], fecha_hora: "11:00:00", total: 125000, costo_total: 80000, tipo_pago: "CONTADO", productos: [{ nombre: "Suplemento Articular", cantidad: 2, precio_unitario: 62500, costo_unitario: 40000 }] }
+        ];
+        
+        function initLocalStorage() {
+            if (!localStorage.getItem('ventas')) {
+                localStorage.setItem('ventas', JSON.stringify(ventasMock));
+            }
+        }
+        
+        function getVentas() {
+            return JSON.parse(localStorage.getItem('ventas')) || [];
+        }
+        
+        function formatCurrency(valor) {
+            return `$ ${valor.toLocaleString('es-CO')}`;
+        }
+        
+        function formatDateTime(fecha, hora) {
+            if (!fecha) return 'Sin fecha';
+            try {
+                const mesesAbr = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+                const partes = fecha.split('-');
+                if (partes.length === 3) {
+                    const dia = parseInt(partes[2], 10);
+                    const mes = parseInt(partes[1], 10) - 1;
+                    const año = parseInt(partes[0], 10);
+                    let fechaFormateada = `${dia.toString().padStart(2, '0')} ${mesesAbr[mes]} ${año}`;
+                    if (hora && hora !== '00:00:00') {
+                        const horaPartes = hora.split(':');
+                        if (horaPartes.length >= 2) {
+                            fechaFormateada += ` ${horaPartes[0]}:${horaPartes[1]}`;
+                        }
+                    }
+                    return fechaFormateada;
+                }
+                return fecha;
+            } catch {
+                return fecha;
+            }
+        }
+        
+        function getPagoBadgeClass(tipoPago) {
+            const clases = { 'CONTADO': 'pago-contado', 'CRÉDITO': 'pago-credito' };
+            return clases[tipoPago] || 'pago-contado';
+        }
+        
+        function filtrarPorPeriodo(ventas, periodo) {
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
+            const inicioSemana = new Date(hoy);
+            inicioSemana.setDate(hoy.getDate() - hoy.getDay());
+            const inicioMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+            const inicioAnio = new Date(hoy.getFullYear(), 0, 1);
+            
+            return ventas.filter(venta => {
+                const fechaVenta = new Date(venta.fecha_dia);
+                fechaVenta.setHours(0, 0, 0, 0);
+                switch(periodo) {
+                    case 'hoy': return fechaVenta.getTime() === hoy.getTime();
+                    case 'semana': return fechaVenta >= inicioSemana;
+                    case 'mes': return fechaVenta >= inicioMes;
+                    case 'anio': return fechaVenta >= inicioAnio;
+                    default: return true;
+                }
+            });
+        }
+        
+        function calcularEstadisticas(ventas) {
+            let totalVentas = 0;
+            let totalIngresos = 0;
+            let totalUtilidad = 0;
+            let ingresosCobrados = 0;
+            let pendientesCobrar = 0;
+            let utilidadRealizada = 0;
+            let utilidadProyectada = 0;
+            
+            ventas.forEach(venta => {
+                totalVentas++;
+                totalIngresos += venta.total;
+                const utilidad = (venta.total - (venta.costo_total || 0));
+                totalUtilidad += utilidad;
+                
+                if (venta.tipo_pago === 'CONTADO') {
+                    ingresosCobrados += venta.total;
+                    utilidadRealizada += utilidad;
+                } else {
+                    pendientesCobrar += venta.total;
+                    utilidadProyectada += utilidad;
+                }
+            });
+            
+            return { totalVentas, totalIngresos, totalUtilidad, ingresosCobrados, pendientesCobrar, utilidadRealizada, utilidadProyectada };
+        }
+        
+        function renderizarDashboard(ventas, periodo) {
+            const stats = calcularEstadisticas(ventas);
+            
+            document.getElementById('ingresosCobrados').textContent = formatCurrency(stats.ingresosCobrados);
+            document.getElementById('pendientesCobrar').textContent = formatCurrency(stats.pendientesCobrar);
+            document.getElementById('utilidadRealizada').textContent = formatCurrency(stats.utilidadRealizada);
+            document.getElementById('utilidadProyectada').textContent = formatCurrency(stats.utilidadProyectada);
+            
+            const nombrePeriodo = { 'hoy': 'Hoy', 'semana': 'Esta Semana', 'mes': 'Este Mes', 'anio': 'Este Año' };
+            document.getElementById('periodoActual').textContent = `(${nombrePeriodo[periodo] || periodo})`;
+        }
+        
+        function renderizarTabla(ventas) {
+            const tbody = document.getElementById('tablaBody');
+            
+            if (!ventas.length) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No hay ventas en este período</td>';
+                document.getElementById('totalVentas').textContent = '0';
+                document.getElementById('totalIngresos').textContent = formatCurrency(0);
+                document.getElementById('totalUtilidad').textContent = formatCurrency(0);
+                return;
+            }
+            
+            const stats = calcularEstadisticas(ventas);
+            document.getElementById('totalVentas').textContent = stats.totalVentas;
+            document.getElementById('totalIngresos').textContent = formatCurrency(stats.totalIngresos);
+            document.getElementById('totalUtilidad').textContent = formatCurrency(stats.totalUtilidad);
+            
+            let html = '';
+            ventas.forEach(venta => {
+                const productosText = venta.productos.map(p => `${p.nombre} (${p.cantidad}x)`).join(', ');
+                const fechaFormateada = formatDateTime(venta.fecha_dia, venta.fecha_hora);
+                const utilidad = venta.total - (venta.costo_total || 0);
+                
+                html += `
+                    <tr>
+                        <td>#${venta.numero_venta || String(venta.id).padStart(6, '0')}</td>
+                        <td>${venta.nombre_cliente || 'CLIENTE FINAL'}</td>
+                        <td>${fechaFormateada}</td>
+                        <td>${productosText}</td>
+                        <td>${formatCurrency(venta.total)}</td>
+                        <td style="color: var(--exito);">${formatCurrency(utilidad)}</td>
+                        <td><span class="pago-badge ${getPagoBadgeClass(venta.tipo_pago)}">${venta.tipo_pago || 'CONTADO'}</span></td>
+                        <td><button class="btn btn-primary" onclick="alert('Detalle de venta #${venta.id}')">Ver</button></td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+        
+        function cargarPeriodo(periodo) {
+            const todasVentas = getVentas();
+            const ventasFiltradas = filtrarPorPeriodo(todasVentas, periodo);
+            renderizarDashboard(ventasFiltradas, periodo);
+            renderizarTabla(ventasFiltradas);
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            initLocalStorage();
+            cargarPeriodo('hoy');
+            
+            document.querySelectorAll('.periodo-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.periodo-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    cargarPeriodo(this.dataset.periodo);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
